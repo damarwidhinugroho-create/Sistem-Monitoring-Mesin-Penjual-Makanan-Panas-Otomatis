@@ -1,5 +1,8 @@
 import './bootstrap';
 import Chart from 'chart.js/auto';
+import './periodPicker';
+import './riwayatAlert';
+import './laporanPenjualan';
 
 const theme = getComputedStyle(document.documentElement);
 const colors = {

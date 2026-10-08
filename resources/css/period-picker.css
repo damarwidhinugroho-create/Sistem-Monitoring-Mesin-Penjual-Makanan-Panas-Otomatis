@@ -1,0 +1,18 @@
+.period-picker { position: relative; display: inline-flex; }
+.period-picker__trigger { display: inline-flex; min-height: 32px; align-items: center; justify-content: center; gap: 7px; white-space: nowrap; }
+.period-picker__trigger svg { width: 15px; height: 15px; flex: 0 0 15px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4; }
+.period-picker__chevron { transition: transform 120ms ease; }
+.period-picker__trigger[aria-expanded="true"] .period-picker__chevron { transform: rotate(180deg); }
+.period-picker__panel { position: absolute; z-index: 8; top: calc(100% + 5px); right: 0; display: grid; width: min(570px, calc(100vw - 32px)); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; border: var(--border-width) solid var(--border); border-radius: var(--radius-card); padding: 14px; background: var(--white); box-shadow: 0 8px 24px rgb(36 32 29 / 14%); }
+.period-picker__group { min-width: 0; }
+.period-picker__group h2 { margin: 0 0 8px; font-size: var(--font-size-xs); font-weight: 600; }
+.period-picker__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.period-picker__grid button { min-height: 28px; overflow: hidden; border: var(--border-width) solid var(--border-light); border-radius: var(--radius-sm); padding: 3px 4px; background: var(--white); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.period-picker__grid button:hover { border-color: var(--brand-orange); }
+.period-picker__grid button.is-selected { border-color: var(--brand-orange); background: var(--brand-orange); color: var(--white); }
+.period-picker__clear { grid-column: 1 / -1; justify-self: end; border: 0; padding: 4px 2px; background: transparent; color: var(--brand-orange); font-size: var(--font-size-xs); text-decoration: underline; }
+@media (max-width: 560px) {
+    .period-picker__panel { left: auto; right: -8px; width: min(420px, calc(100vw - 24px)); gap: 10px; padding: 10px; }
+    .period-picker__grid { gap: 3px; }
+    .period-picker__grid button { padding-inline: 2px; font-size: 9px; }
+}

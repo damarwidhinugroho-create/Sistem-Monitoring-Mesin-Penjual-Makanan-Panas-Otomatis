@@ -1,1 +1,49 @@
-.empty-page { min-height: calc(100vh - var(--navbar-height) - (2 * var(--content-padding))); }
+@import './period-picker.css';
+
+.history-alert__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+.history-alert__toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
+.history-alert__period-button { border: var(--border-width) solid var(--border); border-radius: var(--radius-sm); padding: 5px 10px; background: var(--white); font-size: var(--font-size-xs); }
+.history-alert__filters { display: flex; align-items: stretch; }
+.history-alert__filter { min-height: 32px; border: var(--border-width) solid var(--border); border-right: 0; padding: 5px 11px; background: var(--white); font-size: var(--font-size-xs); white-space: nowrap; }
+.history-alert__filter:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.history-alert__filter:last-child { border-right: var(--border-width) solid var(--border); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.history-alert__filter.is-active { border-color: var(--brand-orange); background: var(--brand-orange); color: var(--white); }
+.history-alert__filter.is-active + .history-alert__filter { border-left-color: var(--brand-orange); }
+.history-alert__surface { overflow: visible; }
+.history-alert__table { border-collapse: separate; border-spacing: 0; }
+.history-alert__table thead th { border-bottom: var(--border-width) solid var(--border-light); background: var(--card); color: var(--text-secondary); font-size: 9px; letter-spacing: .02em; }
+.history-alert__table thead th:first-child { border-radius: var(--radius-card) 0 0 0; }
+.history-alert__table thead th:last-child { border-radius: 0 var(--radius-card) 0 0; }
+.history-alert__table tbody td { white-space: normal; }
+.history-alert__table tbody td:first-child { width: 43%; }
+.history-alert__table tbody td:nth-child(2) { width: 25%; }
+.history-alert__table tbody td:nth-child(3) { width: 16%; }
+.history-alert__table tbody td:last-child { width: 16%; }
+.history-alert__alert-cell { display: flex; flex-direction: column; gap: 3px; }
+.history-alert__alert-type { font-weight: 600; }
+.history-alert__alert-source { color: var(--text-secondary); }
+.history-alert__alert-message { color: var(--text-muted); }
+.history-alert__time-cell { display: flex; flex-direction: column; gap: 4px; white-space: nowrap; }
+.history-alert__time-cell span:last-child { color: var(--text-secondary); }
+.history-alert__table .badge { border-radius: var(--radius-pill); padding: 4px 8px; }
+.history-alert__table .badge--critical { background: var(--critical-light); color: var(--critical); }
+.history-alert__table .badge--warning { background: var(--warning-light); color: var(--warning-text); }
+.history-alert__status--resolved { color: var(--safe); }
+.history-alert__status--unresolved { color: var(--critical); }
+.history-alert__empty { height: 90px; color: var(--text-secondary); text-align: center; }
+.history-alert__pagination { display: flex; justify-content: flex-end; gap: 4px; border-top: var(--border-width) solid var(--border-light); border-radius: 0 0 var(--radius-card) var(--radius-card); padding: 8px 12px; }
+.history-alert__pagination button { min-width: 24px; height: 24px; border: var(--border-width) solid var(--border); border-radius: var(--radius-sm); background: var(--card); font-size: 9px; }
+.history-alert__pagination span { align-self: center; font-size: 9px; }
+.history-alert__pagination button[aria-current="page"] { border-color: var(--brand-orange); background: var(--orange-light); color: var(--brand-orange); }
+.history-alert__pagination button:disabled { cursor: default; opacity: .45; }
+@media (max-width: 820px) {
+    .history-alert__heading { flex-direction: column; }
+    .history-alert__toolbar { width: 100%; flex-wrap: wrap; justify-content: flex-start; }
+    .history-alert__surface { overflow-x: auto; }
+    .history-alert__table { min-width: 620px; }
+}
+@media (max-width: 520px) {
+    .history-alert__toolbar { align-items: flex-start; flex-direction: column; }
+    .history-alert__filters { max-width: 100%; }
+    .history-alert__filter { padding-inline: 8px; }
+}
