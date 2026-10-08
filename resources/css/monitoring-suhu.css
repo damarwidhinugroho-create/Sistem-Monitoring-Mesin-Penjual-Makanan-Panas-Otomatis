@@ -1,0 +1,7 @@
+.temperature__heading { margin: 0 0 14px; }
+.temperature__alert { margin-bottom: 18px; }
+.temperature__grid { display: grid; grid-template-columns: 1fr 1.7fr; gap: 18px; }
+.temperature__reading { display: flex; min-height: 180px; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.temperature__value { margin: 5px 0; font-size: 34px; font-weight: 700; }
+.temperature__update, .temperature__safe { font-size: 9px; }
+.temperature__chart { min-height: 180px; }

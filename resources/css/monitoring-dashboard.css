@@ -1,0 +1,7 @@
+.dashboard__heading { display: flex; align-items: flex-end; justify-content: space-between; margin: 16px 0; }
+.dashboard__heading .page-title { font-size: var(--font-size-sm); }
+.dashboard__life { margin-top: 18px; }
+.dashboard__life-header { padding: 13px 14px 9px; }
+.dashboard__charts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+.machine-status { display: flex; align-items: center; gap: 6px; font-size: var(--font-size-xs); }
+.dashboard__notice { margin: 0; }

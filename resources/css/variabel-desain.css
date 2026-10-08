@@ -1,0 +1,57 @@
+:root {
+    --brand-orange: #B84A0E;
+    --brand-orange-dark: #9E400B;
+    --canvas: #F9F6F3;
+    --card: #FFFBF9;
+    --white: #FFFFFF;
+    --text-primary: #24201D;
+    --text-secondary: #6D6762;
+    --text-muted: #96908B;
+    --border: #CFC8C2;
+    --border-light: #E5DED8;
+    --placeholder: #D6D6D6;
+    --safe: #398247;
+    --safe-light: #E7F3E9;
+    --warning: #DCA91A;
+    --warning-light: #FFF1C5;
+    --warning-border: #E3BE59;
+    --warning-text: #73580D;
+    --critical: #B84949;
+    --critical-light: #F8E7E7;
+    --orange-light: #F9EBE2;
+    --ink-overlay: rgb(30 25 22 / 45%);
+    --profile-muted: #DDD4CC;
+
+    --font-sans: Inter, Arial, Helvetica, sans-serif;
+    --font-size-xs: 11px;
+    --font-size-2xs: 9px;
+    --font-size-3xs: 8px;
+    --font-size-small: 10px;
+    --font-size-sm: 13px;
+    --font-size-base: 15px;
+    --font-size-lg: 18px;
+    --font-size-xl: 22px;
+    --font-size-title: 28px;
+
+    --radius-sm: 4px;
+    --radius-card: 14px;
+    --radius-pill: 16px;
+    --border-width: 1px;
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --size-icon: 16px;
+    --size-icon-large: 24px;
+    --size-login-card: 360px;
+    --size-login-avatar: 72px;
+    --sidebar-width: 245px;
+    --navbar-height: 64px;
+    --content-padding: 28px;
+}

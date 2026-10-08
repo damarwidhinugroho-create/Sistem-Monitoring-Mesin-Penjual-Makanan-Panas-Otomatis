@@ -1,0 +1,9 @@
+.sales__heading { display: flex; align-items: center; justify-content: space-between; margin: 0 0 14px; }
+.sales__periods { display: flex; gap: 4px; }
+.sales__metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 18px; }
+.sales__chart { margin-bottom: 18px; }
+.sales__products { margin-bottom: 18px; overflow: hidden; }
+.sales__transactions { overflow: hidden; }
+.sales__table-heading { padding: 11px 13px; }
+.sales__load-more { display: block; width: 100%; border: 0; border-top: var(--border-width) solid var(--border-light); padding: 8px; background: var(--card); color: var(--brand-orange); font-size: 10px; }
+.sales__date { border: 0; border-radius: var(--radius-pill); padding: 4px 9px; background: var(--safe-light); color: var(--safe); font-size: 9px; }

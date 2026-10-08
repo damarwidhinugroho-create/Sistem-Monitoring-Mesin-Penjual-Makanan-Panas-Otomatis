@@ -1,0 +1,13 @@
+.machine__hero { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; padding: 20px; }
+.machine__hero-title { font-size: var(--font-size-sm); }
+.machine__updated { margin-left: auto; font-size: 9px; text-align: right; }
+.machine__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.machine__card { min-height: 125px; padding: 12px; }
+.machine__card h2 { margin: 0 0 12px; font-size: var(--font-size-xs); font-weight: 400; }
+.machine__line { display: flex; justify-content: space-between; gap: 8px; border-bottom: var(--border-width) solid var(--border-light); padding: 7px 0; font-size: 9px; }
+.machine__line:last-child { border-bottom: 0; }
+.machine__line span { color: var(--text-muted); }
+.machine__temperature { font-size: var(--font-size-title); font-weight: 700; }
+.machine__problem { border-radius: var(--radius-sm); padding: 10px; background: var(--critical-light); color: var(--critical); font-size: 9px; }
+.machine__alerts { grid-column: 1 / -1; padding: 12px; }
+.machine__alerts-header { display: flex; justify-content: space-between; margin-bottom: 8px; }

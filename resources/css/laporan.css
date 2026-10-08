@@ -1,0 +1,1 @@
+.empty-page { min-height: calc(100vh - var(--navbar-height) - (2 * var(--content-padding))); }
