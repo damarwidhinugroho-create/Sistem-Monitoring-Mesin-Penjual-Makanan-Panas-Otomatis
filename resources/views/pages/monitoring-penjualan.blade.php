@@ -11,7 +11,7 @@
             @endforeach
         </nav>
     </div>
-
+{{--
     <section class="stat-grid sales__metrics" aria-label="Statistik penjualan">
         <x-kartu-ringkasan :label="$sales->report['transactions_label']" :value="$sales->report['transactions']" />
         <x-kartu-ringkasan :label="$sales->report['revenue_label']" :value="$sales->report['revenue']" />

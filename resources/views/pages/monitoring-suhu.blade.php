@@ -10,6 +10,7 @@
         link-label="Lihat Riwayat Alert"
         link-route="alerts"
     />
+{{--
     <section class="temperature__grid">
         <article class="surface temperature__reading">
             <x-ikon active large />

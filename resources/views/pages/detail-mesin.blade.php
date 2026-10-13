@@ -11,7 +11,7 @@
         </div>
         <div class="machine__updated">Terakhir diperbarui<br>{{ $machine->details['updated_at'] }}</div>
     </section>
-
+{{--
     <section class="machine__grid">
         <article class="surface machine__card">
             <h2>Informasi Mesin</h2>
