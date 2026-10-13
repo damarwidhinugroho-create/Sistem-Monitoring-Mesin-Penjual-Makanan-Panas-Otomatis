@@ -2,7 +2,7 @@
 
 @section('title', 'Laporan Penjualan')
 
-@section('content')
+{{-- @section('content')
     <div class="report__heading">
         <h1 class="page-title">Laporan Penjualan</h1>
         <div class="report__toolbar">
@@ -33,7 +33,7 @@
             </div>
         </div>
     </dialog>
-@endsection
+@endsection --}}
 
 @push('styles')
     @vite('resources/css/laporan.css')
