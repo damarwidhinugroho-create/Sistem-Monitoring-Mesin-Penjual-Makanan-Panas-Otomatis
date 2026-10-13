@@ -1,8 +1,9 @@
-@extends('layouts.tata-letak-panel')
+@extends('layouts.layout_dashboard')
 
 @section('title', 'Monitoring Penjualan')
 
 @section('content')
+{{--
     <div class="sales__heading">
         <h1 class="page-title">Monitoring Penjualan</h1>
         <nav class="sales__periods" aria-label="Periode penjualan">
@@ -11,7 +12,7 @@
             @endforeach
         </nav>
     </div>
-{{--
+
     <section class="stat-grid sales__metrics" aria-label="Statistik penjualan">
         <x-kartu-ringkasan :label="$sales->report['transactions_label']" :value="$sales->report['transactions']" />
         <x-kartu-ringkasan :label="$sales->report['revenue_label']" :value="$sales->report['revenue']" />
@@ -61,7 +62,7 @@
         <button class="sales__load-more" type="button">Muat Lebih Banyak <span aria-hidden="true">↓</span></button>
     </section>
 @endsection
-
+--}}
 @push('styles')
-    @vite('resources/css/monitoring-penjualan.css')
+    @vite('resources/css/monitoring_penjualan.css')
 @endpush

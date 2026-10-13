@@ -9,6 +9,6 @@ class AlertController extends Controller
 {
     public function __invoke(AlertService $service): View
     {
-        return view('pages.riwayat-alert', ['alerts' => $service->history()]);
+        return view('pages.riwayat_alert', ['alerts' => $service->history()]);
     }
 }

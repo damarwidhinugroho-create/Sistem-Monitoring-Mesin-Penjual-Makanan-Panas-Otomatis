@@ -9,6 +9,6 @@ class DashboardController extends Controller
 {
     public function __invoke(DashboardService $service): View
     {
-        return view('pages.monitoring-dashboard', ['dashboard' => $service->dashboard()]);
+        return view('pages.monitoring_dashboard', ['dashboard' => $service->dashboard()]);
     }
 }

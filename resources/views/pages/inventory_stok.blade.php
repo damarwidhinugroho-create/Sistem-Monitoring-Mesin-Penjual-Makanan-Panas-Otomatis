@@ -1,4 +1,4 @@
-@extends('layouts.tata-letak-panel')
+@extends('layouts.layout_dashboard')
 
 @section('title', 'Manajemen Stok')
 
@@ -91,5 +91,5 @@
 @endsection
 
 @push('styles')
-    @vite('resources/css/inventaris-stok.css')
+    @vite('resources/css/inventaris_stok.css')
 @endpush

@@ -1,4 +1,4 @@
-@extends('layouts.tata-letak-panel')
+@extends('layouts.layout_dashboard')
 
 @section('title', 'History Alert')
 
@@ -30,5 +30,5 @@
 @endsection --}}
 
 @push('styles')
-    @vite('resources/css/riwayat-alert.css')
+    @vite('resources/css/riwayat_alert.css')
 @endpush

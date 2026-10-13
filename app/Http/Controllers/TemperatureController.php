@@ -9,6 +9,6 @@ class TemperatureController extends Controller
 {
     public function __invoke(TemperatureService $service): View
     {
-        return view('pages.monitoring-suhu', ['temperature' => $service->monitor()]);
+        return view('pages.monitoring_suhu', ['temperature' => $service->monitor()]);
     }
 }

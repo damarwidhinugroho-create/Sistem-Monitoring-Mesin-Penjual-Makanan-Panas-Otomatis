@@ -1,7 +1,7 @@
-@extends('layouts.tata-letak-panel')
+@extends('layouts.layout_dashboard')
 
 @section('title', 'Monitoring Suhu')
-
+{{--
 @section('content')
     <div class="temperature__heading"><h1 class="page-title">Monitoring Suhu</h1></div>
     <x-banner-peringatan
@@ -10,7 +10,7 @@
         link-label="Lihat Riwayat Alert"
         link-route="alerts"
     />
-{{--
+
     <section class="temperature__grid">
         <article class="surface temperature__reading">
             <x-ikon active large />
@@ -30,7 +30,7 @@
         />
     </section>
 @endsection
-
+--}}
 @push('styles')
-    @vite('resources/css/monitoring-suhu.css')
+    @vite('resources/css/monitoring_suhu.css')
 @endpush

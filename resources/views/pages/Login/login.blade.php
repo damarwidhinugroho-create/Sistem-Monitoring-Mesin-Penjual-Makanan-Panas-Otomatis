@@ -1,4 +1,4 @@
-@extends('layouts.tata-letak-tamu')
+@extends('layouts.layout_login')
 
 @section('title', 'Login Operator')
 
@@ -7,7 +7,6 @@
         <form class="login-card__body" method="POST" action="{{ route('login.store') }}">
             @csrf
             <div class="login-card__avatar" aria-hidden="true">
-                <span class="login-card__avatar-logo" style="mask-image: url('{{ asset('images/logo.svg') }}'); -webkit-mask-image: url('{{ asset('images/logo.svg') }}')"></span>
             </div>
             <h1 class="login-card__title" id="login-title">LOGIN operator/UMKM</h1>
             <label class="login-field">
@@ -32,5 +31,5 @@
 @endsection
 
 @push('styles')
-    @vite('resources/css/masuk-operator.css')
+    @vite('resources/css/login.css')
 @endpush

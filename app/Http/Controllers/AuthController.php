@@ -13,12 +13,12 @@ class AuthController extends Controller
     {
         return Auth::guard('operator')->check()
             ? redirect()->route('dashboard')
-            : view('pages.autentikasi.masuk-operator');
+            : view('pages.Login.login');
     }
 
     public function forgotPassword(): View
     {
-        return view('pages.autentikasi.lupa-password');
+        return view('pages.Login.lupa_password');
     }
 
     public function store(LoginRequest $request): RedirectResponse

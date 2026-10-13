@@ -1,4 +1,4 @@
-@extends('layouts.tata-letak-panel')
+@extends('layouts.layout_dashboard')
 
 @section('title', 'Laporan Penjualan')
 

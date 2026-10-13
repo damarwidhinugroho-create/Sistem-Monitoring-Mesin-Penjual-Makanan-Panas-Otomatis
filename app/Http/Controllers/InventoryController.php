@@ -11,7 +11,7 @@ class InventoryController extends Controller
 {
     public function index(InventoryService $service): View
     {
-        return view('pages.inventaris-stok', ['inventory' => $service->inventory()]);
+        return view('pages.inventory_stok', ['inventory' => $service->inventory()]);
     }
 
     public function update(UpdateSlotRequest $request, string $slot, InventoryService $service): RedirectResponse

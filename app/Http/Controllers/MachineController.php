@@ -9,6 +9,6 @@ class MachineController extends Controller
 {
     public function __invoke(MachineService $service): View
     {
-        return view('pages.detail-mesin', ['machine' => $service->details()]);
+        return view('pages.detail_mesin', ['machine' => $service->details()]);
     }
 }

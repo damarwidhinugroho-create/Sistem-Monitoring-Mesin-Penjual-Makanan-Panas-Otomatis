@@ -1,8 +1,9 @@
-@extends('layouts.tata-letak-panel')
+@extends('layouts.layout_dashboard')
 
 @section('title', 'Detail Mesin')
 
 @section('content')
+{{--
     <section class="surface machine__hero">
         <x-ikon active large />
         <div>
@@ -11,7 +12,7 @@
         </div>
         <div class="machine__updated">Terakhir diperbarui<br>{{ $machine->details['updated_at'] }}</div>
     </section>
-{{--
+
     <section class="machine__grid">
         <article class="surface machine__card">
             <h2>Informasi Mesin</h2>
@@ -60,7 +61,7 @@
         </article>
     </section>
 @endsection
-
+--}}
 @push('styles')
-    @vite('resources/css/detail-mesin.css')
+    @vite('resources/css/detail_mesin.css')
 @endpush

@@ -1,4 +1,4 @@
-@extends('layouts.tata-letak-panel')
+@extends('layouts.layout_dashboard')
 
 @section("title", 'Dashboard Operator')
 
@@ -63,5 +63,5 @@
 @endsection
 
 @push('styles')
-    @vite('resources/css/monitoring-dashboard.css')
+    @vite('resources/css/monitoring_dashboard.css')
 @endpush

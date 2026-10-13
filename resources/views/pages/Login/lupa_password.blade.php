@@ -1,4 +1,4 @@
-@extends('layouts.tata-letak-tamu')
+@extends('layouts.layout_login')
 
 @section('title', 'Lupa Password')
 
@@ -6,7 +6,6 @@
     <section class="login-card" aria-labelledby="forgot-password-title">
         <form class="login-card__body" data-reset-form>
             <div class="login-card__avatar" aria-hidden="true">
-                <span class="login-card__avatar-logo" style="mask-image: url('{{ asset('images/logo.svg') }}'); -webkit-mask-image: url('{{ asset('images/logo.svg') }}')"></span>
             </div>
             <h1 class="login-card__title" id="forgot-password-title">LUPA PASSWORD</h1>
             <p class="page-subtitle">Masukkan username untuk memulihkan akses akun.</p>
@@ -22,5 +21,5 @@
 @endsection
 
 @push('styles')
-    @vite('resources/css/lupa-password.css')
+    @vite('resources/css/lupa_password.css')
 @endpush

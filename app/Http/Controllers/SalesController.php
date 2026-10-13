@@ -13,6 +13,6 @@ class SalesController extends Controller
     {
         $period = SalesPeriod::from($request->validated('period'));
 
-        return view('pages.monitoring-penjualan', ['sales' => $service->report($period)]);
+        return view('pages.monitoring_penjualan', ['sales' => $service->report($period)]);
     }
 }
