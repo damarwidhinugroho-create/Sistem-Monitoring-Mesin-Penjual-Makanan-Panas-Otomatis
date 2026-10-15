@@ -1,7 +1,7 @@
 @extends('layouts.layout_dashboard')
 
 @section('title', 'Monitoring Suhu')
-{{--
+
 @section('content')
     <div class="temperature__heading"><h1 class="page-title">Monitoring Suhu</h1></div>
     <x-banner-peringatan
@@ -30,7 +30,7 @@
         />
     </section>
 @endsection
---}}
+
 @push('styles')
     @vite('resources/css/monitoring_suhu.css')
 @endpush
