@@ -2,7 +2,7 @@
 
 @section('title', 'Laporan Penjualan')
 
-{{-- @section('content')
+@section('content')
     <div class="report__heading">
         <h1 class="page-title">Laporan Penjualan</h1>
         <div class="report__toolbar">
@@ -19,10 +19,6 @@
         </div>
     </div>
 
-    <section class="surface report__workspace" aria-label="Konten laporan">
-        <!-- TODO: Isi area laporan saat visualisasi dan detail laporan tersedia. -->
-    </section>
-
     <dialog class="report-dialog" aria-labelledby="report-dialog-title" data-export-dialog>
         <div class="report-dialog__content">
             <h2 id="report-dialog-title">Ekspor Laporan</h2>
@@ -33,7 +29,7 @@
             </div>
         </div>
     </dialog>
-@endsection --}}
+@endsection
 
 @push('styles')
     @vite('resources/css/laporan.css')
