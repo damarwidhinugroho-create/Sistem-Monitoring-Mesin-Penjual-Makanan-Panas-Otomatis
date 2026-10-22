@@ -16,7 +16,7 @@ class InventoryService
     public function inventory(): InventoryViewModel
     {
         $slots = array_map(function (array $slot): array {
-            $status = $this->stockService->statusFor($slot['stock'], $slot['capacity']);
+            $status = $this->stockService->statusFor($slot['stock'], $slot['capacity'], $slot['minimum_stock'] ?? null);
 
             return [
                 ...$slot,
@@ -28,8 +28,14 @@ class InventoryService
         $shelfLife = array_map(function (array $row): array {
             return [
                 ...$row,
-                'status' => $this->shelfLifeService->statusFor($row['remaining_minutes']),
-                'stock_status' => $this->stockService->statusFor($row['stock'], $row['capacity']),
+                'status' => isset($row['remaining_minutes'])
+                    ? $this->shelfLifeService->statusFor($row['remaining_minutes'])
+                    : null,
+                'stock_status' => $this->stockService->statusFor(
+                    $row['stock'],
+                    $row['capacity'],
+                    $row['minimum_stock'] ?? null,
+                ),
                 'stock_percent' => $this->stockService->percentage($row['stock'], $row['capacity']),
             ];
         }, $this->repository->shelfLifeRows());
