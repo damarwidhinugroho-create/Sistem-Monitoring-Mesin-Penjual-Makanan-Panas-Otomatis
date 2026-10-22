@@ -39,7 +39,7 @@
                             —
                         @endif
                     </td>
-                    <td><x-batang-progres :percentage="$row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity'].' '.$row['stock_percent'].'%'" /></td>
+                    <td><x-batang-progres :percentage="$row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity']" /></td>
                 </tr>
             @endforeach
         </x-tabel-data>
