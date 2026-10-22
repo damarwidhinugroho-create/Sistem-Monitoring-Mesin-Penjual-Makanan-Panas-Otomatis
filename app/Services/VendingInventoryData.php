@@ -10,10 +10,10 @@ class VendingInventoryData
 
     public function rows(): array
     {
-        $path = storage_path('app/vending.json');
+        $path = base_path('My Collection.postman_collection.json');
 
         if (! is_readable($path)) {
-            throw new RuntimeException('File storage/app/vending.json tidak ditemukan atau tidak dapat dibaca.');
+            throw new RuntimeException('File My Collection.postman_collection.json tidak ditemukan atau tidak dapat dibaca.');
         }
 
         $content = file_get_contents($path);

@@ -6,14 +6,14 @@ import './laporanPenjualan';
 
 const theme = getComputedStyle(document.documentElement);
 const colors = {
-    brand: theme.getPropertyValue('--brand-orange').trim(),
+    brand: theme.getPropertyValue('--brand-primary').trim(),
     safe: theme.getPropertyValue('--safe').trim(),
     border: theme.getPropertyValue('--border-light').trim(),
     muted: theme.getPropertyValue('--text-muted').trim(),
 };
 
 Chart.defaults.font.family = theme.getPropertyValue('--font-sans').trim();
-Chart.defaults.font.size = 9;
+Chart.defaults.font.size = 11;
 Chart.defaults.color = colors.muted;
 
 const charts = new Map();
