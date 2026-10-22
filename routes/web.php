@@ -23,7 +23,7 @@ Route::middleware('auth:operator')->group(function (): void {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
     Route::patch('/inventory/slots/{slot}', [InventoryController::class, 'update'])
-        ->whereIn('slot', ['A1', 'A2', 'A3'])
+        ->whereIn('slot', ['A1', 'A2', 'A3', 'A4'])
         ->name('inventory.slots.update');
     Route::get('/sales', SalesController::class)->name('sales');
     Route::get('/temperature', TemperatureController::class)->name('temperature');

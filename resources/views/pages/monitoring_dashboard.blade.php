@@ -32,7 +32,13 @@
                     <td>{{ $row['slot'] }}</td>
                     <td>{{ $row['duration'] }}</td>
                     <td>{{ $row['remaining'] }}</td>
-                    <td><x-lencana-status :label="$row['status']->label()" :status="$row['status']->value" /></td>
+                    <td>
+                        @if ($row['status'])
+                            <x-lencana-status :label="$row['status']->label()" :status="$row['status']->value" />
+                        @else
+                            —
+                        @endif
+                    </td>
                     <td><x-batang-progres :percentage="$row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity'].' '.$row['stock_percent'].'%'" /></td>
                 </tr>
             @endforeach

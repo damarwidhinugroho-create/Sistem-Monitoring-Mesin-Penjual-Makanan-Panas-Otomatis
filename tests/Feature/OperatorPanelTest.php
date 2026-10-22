@@ -50,6 +50,27 @@ class OperatorPanelTest extends TestCase
         $this->get('/reports')->assertOk()->assertSee('Laporan');
     }
 
+    public function test_inventory_data_is_shared_with_the_dashboard(): void
+    {
+        $this->post('/login', [
+            'username' => 'Budi',
+            'password' => 'budi123',
+        ]);
+
+        $this->get('/inventory')
+            ->assertOk()
+            ->assertSee('Mie Tarempa Original')
+            ->assertSee('Luti Gendang Abon')
+            ->assertSee('40');
+
+        $this->get('/dashboard')
+            ->assertOk()
+            ->assertSee('40 Porsi')
+            ->assertSee('dari 4 slot aktif')
+            ->assertSee('Mie Tarempa Original')
+            ->assertSee('Luti Gendang Abon');
+    }
+
     public function test_sales_period_must_be_one_of_the_supported_values(): void
     {
         $this->post('/login', [

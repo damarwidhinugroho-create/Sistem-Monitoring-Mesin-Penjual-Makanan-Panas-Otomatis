@@ -6,13 +6,13 @@ use App\Enums\StockStatus;
 
 class StockService
 {
-    public function statusFor(int $stock, int $capacity): StockStatus
+    public function statusFor(int $stock, int $capacity, ?int $minimumStock = null): StockStatus
     {
         if ($stock <= 0) {
             return StockStatus::Habis;
         }
 
-        if ($capacity > 0 && ($stock / $capacity) <= 0.2) {
+        if ($minimumStock !== null ? $stock <= $minimumStock : ($capacity > 0 && ($stock / $capacity) <= 0.2)) {
             return StockStatus::Rendah;
         }
 

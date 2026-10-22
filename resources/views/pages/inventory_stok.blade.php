@@ -22,9 +22,15 @@
                     <td>{{ $row['product'] }}</td>
                     <td>{{ $row['temperature'] }}</td>
                     <td><x-batang-progres :percentage="$row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity']" /></td>
-                    <td>{{ $row['duration'] }}</td>
-                    <td>{{ $row['remaining'] }}</td>
-                    <td><x-lencana-status :label="$row['status']->label()" :status="$row['status']->value" /></td>
+                    <td>{{ $row['duration'] ?? '—' }}</td>
+                    <td>{{ $row['remaining'] ?? '—' }}</td>
+                    <td>
+                        @if ($row['status'])
+                            <x-lencana-status :label="$row['status']->label()" :status="$row['status']->value" />
+                        @else
+                            —
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </x-data-table>
