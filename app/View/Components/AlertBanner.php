@@ -15,6 +15,6 @@ class AlertBanner extends Component
 
     public function render(): View
     {
-        return view('components.banner-peringatan');
+        return view('components.alert');
     }
 }

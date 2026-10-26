@@ -29,7 +29,7 @@
                 <tr>
                     <td>{{ $row['product'] }}</td>
                     <td>{{ $row['temperature'] }}</td>
-                    <td><x-batang-progres :percentage="$row['stock'] === 0 ? 4 : $row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity']" /></td>
+                    <td><x-progress-bar :percentage="$row['stock'] === 0 ? 4 : $row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity']" /></td>
                     <td>{{ $row['duration'] ?? '—' }}</td>
                     <td>{{ $row['remaining'] ?? '—' }}</td>
                     <td>
@@ -44,7 +44,21 @@
         </x-data-table>
     </section>
 
-    <section class="surface inventory__slots">
+    @php
+        $inventorySlotTone = 'aman';
+        foreach ($inventory->slots as $slot) {
+            if ($slot['status']->value === 'habis') {
+                $inventorySlotTone = 'habis';
+                break;
+            }
+
+            if ($slot['status']->value === 'rendah') {
+                $inventorySlotTone = 'rendah';
+            }
+        }
+    @endphp
+
+    <section class="inventory__slots inventory__slots--{{ $inventorySlotTone }}">
         <div class="inventory__slots-header">
             <h2 class="section-heading">Manajemen Stok</h2>
             {{-- <div class="inventory__legend">
@@ -62,7 +76,7 @@
                     </div>
                     <h3 class="slot-card__product">{{ $slot['product'] }}</h3>
                     <span class="slot-card__duration">{{ $slot['duration'] }}</span>
-                    <div class="slot-card__meta">Stok <x-batang-progres :percentage="$slot['stock'] === 0 ? 4 : $slot['stock_percent']" :status="$slot['status']->value" :label="$slot['stock'].'/'.$slot['capacity']" /></div>
+                    <div class="slot-card__meta">Stok <x-progress-bar :percentage="$slot['stock'] === 0 ? 4 : $slot['stock_percent']" :status="$slot['status']->value" :label="$slot['stock'].'/'.$slot['capacity']" /></div>
                     <div class="slot-card__meta">Terakhir refill<strong>{{ $slot['filled_at'] }}</strong></div>
                     <div class="slot-card__meta">Harga<strong>{{ $slot['price'] }}</strong></div>
                     <button class="slot-card__edit" type="button" data-open-slot="{{ $slot['slot'] }}">Edit</button>
@@ -96,7 +110,7 @@
                 @method('PATCH')
                 <div class="dialog__row"><span class="dialog__label">NAMA PRODUK</span><span class="dialog__value" data-slot-view>{{ $slot['product'] }}</span><input class="dialog__input" name="product" value="{{ $slot['product'] }}" required hidden></div>
                 <div class="dialog__row"><span class="dialog__label">SLOT</span><span class="dialog__value">{{ $slot['slot'] }}</span></div>
-                <div class="dialog__row"><span class="dialog__label">STOK</span><span class="dialog__value" data-slot-view><x-batang-progres :percentage="$slot['stock_percent']" :status="$slot['status']->value" :label="$slot['stock'].'/'.$slot['capacity']" /></span><input class="dialog__input" type="number" name="stock" value="{{ $slot['stock'] }}" min="0" max="10" required hidden></div>
+                <div class="dialog__row"><span class="dialog__label">STOK</span><span class="dialog__value" data-slot-view><x-progress-bar :percentage="$slot['stock_percent']" :status="$slot['status']->value" :label="$slot['stock'].'/'.$slot['capacity']" /></span><input class="dialog__input" type="number" name="stock" value="{{ $slot['stock'] }}" min="0" max="10" required hidden></div>
                 <div class="dialog__row"><span class="dialog__label">TERAKHIR FILL</span><span class="dialog__value" data-slot-view>{{ $slot['filled_at'] }}</span><input class="dialog__input" name="filled_at" value="{{ $slot['filled_at'] }}" required hidden></div>
                 <div class="dialog__row"><span class="dialog__label">HARGA</span><span class="dialog__value" data-slot-view>{{ $slot['price'] }}</span><input class="dialog__input" type="number" name="price" value="{{ $slot['price_value'] }}" min="0" required hidden></div>
                 <div class="dialog__row"><span class="dialog__label">AKSI</span><span class="dialog__value"><button class="dialog__edit" type="button" data-edit-slot>Edit</button><button class="dialog__edit" type="submit" data-save-slot hidden>Simpan</button></span></div>
