@@ -21,7 +21,7 @@
                 <tr>
                     <td>{{ $row['product'] }}</td>
                     <td>{{ $row['temperature'] }}</td>
-                    <td><x-batang-progres :percentage="$row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity']" /></td>
+                    <td><x-batang-progres :percentage="$row['stock'] === 0 ? 4 : $row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity']" /></td>
                     <td>{{ $row['duration'] ?? '—' }}</td>
                     <td>{{ $row['remaining'] ?? '—' }}</td>
                     <td>
@@ -54,7 +54,7 @@
                     </div>
                     <h3 class="slot-card__product">{{ $slot['product'] }}</h3>
                     <span class="slot-card__duration">{{ $slot['duration'] }}</span>
-                    <div class="slot-card__meta">Stok <x-batang-progres :percentage="$slot['stock_percent']" :status="$slot['status']->value" :label="$slot['stock'].'/'.$slot['capacity']" /></div>
+                    <div class="slot-card__meta">Stok <x-batang-progres :percentage="$slot['stock'] === 0 ? 4 : $slot['stock_percent']" :status="$slot['status']->value" :label="$slot['stock'].'/'.$slot['capacity']" /></div>
                     <div class="slot-card__meta">Terakhir refill<strong>{{ $slot['filled_at'] }}</strong></div>
                     <div class="slot-card__meta">Harga<strong>{{ $slot['price'] }}</strong></div>
                     <button class="slot-card__edit" type="button" data-open-slot="{{ $slot['slot'] }}">Edit</button>

@@ -19,7 +19,8 @@ class ProgressBar extends Component
     {
         return match ($this->status) {
             'mendekati-batas', 'rendah', 'warning' => 'warning',
-            'lewat-batas', 'habis', 'critical' => 'critical',
+            'habis' => 'empty',
+            'lewat-batas', 'critical' => 'critical',
             default => 'safe',
         };
     }

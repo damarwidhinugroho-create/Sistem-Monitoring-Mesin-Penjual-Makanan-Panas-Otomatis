@@ -15,7 +15,6 @@
     <div class="operator-layout">
         <x-menu-samping />
         <main class="operator-main">
-            <x-bilah-navigasi />
             <section class="operator-content">
                 @yield('content')
             </section>
