@@ -35,6 +35,31 @@ class DemoInventoryRepository implements InventoryRepositoryInterface
     public function slots(): array
     {
         $rows = $this->vendingInventoryData->rows();
+
+        if (count($rows) < 4) {
+            $rows = [
+                ...$rows,
+                [
+                    'machine_id' => 1,
+                    'product_id' => 4,
+                    'quantity' => 10,
+                    'minimum_stock' => 2,
+                    'maximum_stock' => 10,
+                    'last_restocked_at' => '2026-10-11T17:31:26.000000Z',
+                    'product' => [
+                        'name' => 'Luti Gendang Abon',
+                        'price' => '12000.00',
+                    ],
+                ],
+            ];
+        }
+
+        $rows = collect($rows)
+            ->unique(fn (array $row): ?string => $row['product']['name'] ?? null)
+            ->take(4)
+            ->values()
+            ->all();
+
         $slots = array_map(function (array $row, int $index): array {
             $number = $index + 1;
             $price = (int) ($row['product']['price'] ?? 0);

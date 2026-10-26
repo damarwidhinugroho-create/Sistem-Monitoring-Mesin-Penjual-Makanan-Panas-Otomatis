@@ -3,7 +3,6 @@
 @section('title', 'Monitoring Penjualan')
 
 @section('content')
-{{--
     <div class="sales__heading">
         <h1 class="page-title">Monitoring Penjualan</h1>
         <nav class="sales__periods" aria-label="Periode penjualan">
@@ -14,11 +13,12 @@
     </div>
 
     <section class="stat-grid sales__metrics" aria-label="Statistik penjualan">
-        <x-kartu-ringkasan :label="$sales->report['transactions_label']" :value="$sales->report['transactions']" />
-        <x-kartu-ringkasan :label="$sales->report['revenue_label']" :value="$sales->report['revenue']" />
+        <x-kartu-ringkasan :label="$sales->report['transactions_label']" :value="$sales->report['transactions']" icon-name="receipt" />
+        <x-kartu-ringkasan :label="$sales->report['revenue_label']" :value="$sales->report['revenue']" icon-name="money" />
         <x-kartu-ringkasan
             :label="$sales->report['waste_label']"
             :value="$sales->report['waste']"
+            icon-name="food"
             :tag="$sales->period === \App\Enums\SalesPeriod::Minggu ? 'Hari Ini' : '05 Agu 2025'"
             tag-status="safe"
         />
@@ -61,8 +61,6 @@
         </x-tabel-data>
         <button class="sales__load-more" type="button">Muat Lebih Banyak <span aria-hidden="true">↓</span></button>
     </section>
-@endsection
---}}
-@push('styles')
+@endsection}@push('styles')
     @vite('resources/css/monitoring_penjualan.css')
 @endpush

@@ -2,7 +2,7 @@
 
 @section('title', 'History Alert')
 
-{{-- @section('content')
+@section('content')
     <div class="history-alert__heading">
         <div>
             <h1 class="page-title">History Alert</h1>
@@ -27,8 +27,7 @@
         </x-tabel-data>
         <nav class="pagination history-alert__pagination" aria-label="Halaman riwayat alert" data-alert-pagination></nav>
     </section>
-@endsection --}}
-
+@endsection}
 @push('styles')
     @vite('resources/css/riwayat_alert.css')
 @endpush

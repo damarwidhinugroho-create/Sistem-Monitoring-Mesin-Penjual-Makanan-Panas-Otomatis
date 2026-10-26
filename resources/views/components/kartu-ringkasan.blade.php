@@ -1,7 +1,7 @@
 <article {{ $attributes->class('stat-card') }}>
     <div>
         @if ($icon)
-            <span class="stat-card__icon"><x-ikon /></span>
+            <span class="stat-card__icon"><x-ikon :name="$iconName ?? 'money'" /></span>
         @endif
         <span class="stat-card__label">{{ $label }}</span>
     </div>

@@ -3,15 +3,6 @@
 @section("title", 'Dashboard Operator')
 
 @section('content')
-    <div class="dashboard__heading">
-        <div>
-            <h1 class="page-title">DASHBOARD OVERVIEW</h1>
-            <p class="page-subtitle">Selamat Datang Budi</p>
-        </div>
-        <x-banner-peringatan class="dashboard__notice" message="VM-02 - Marina tidak mengirim data selama 5 mnt" />
-        <div class="machine-status">Status VM : <x-lencana-status :label="$dashboard->machineStatus->label()" :status="$dashboard->machineStatus->value" /></div>
-    </div>
-
     @php
         $dashboardStockTone = 'aman';
         foreach ($dashboard->shelfLifeRows as $row) {
@@ -26,12 +17,21 @@
         }
     @endphp
 
-    <div class="dashboard__summary dashboard__summary--{{ $dashboardStockTone }}">
+    <div class="dashboard__overview dashboard__overview--{{ $dashboardStockTone }}">
+        <div class="dashboard__heading">
+            <div>
+                <h1 class="page-title">DASHBOARD OVERVIEW</h1>
+                <p class="page-subtitle">Selamat Datang Budi</p>
+            </div>
+            <x-banner-peringatan class="dashboard__notice" message="VM-02 - Marina tidak mengirim data selama 5 mnt" />
+            <div class="machine-status">Status VM : <x-lencana-status :label="$dashboard->machineStatus->label()" :status="$dashboard->machineStatus->value" /></div>
+        </div>
+
         <section class="stat-grid" aria-label="Ringkasan dashboard">
-            <x-kartu-ringkasan label="Total penjualan hari ini" :value="$dashboard->summary['sales']" />
-            <x-kartu-ringkasan label="Sisa stok keseluruhan" :value="$dashboard->summary['stock']" :detail="$dashboard->summary['active_slots']" />
-            <x-kartu-ringkasan label="Status suhu vending machine" :value="$dashboard->summary['temperature']" />
-            <x-kartu-ringkasan label="Status Masa Simpan Makanan" :value="$dashboard->summary['shelf_life_count']" :detail="$dashboard->summary['shelf_life_detail'].' · '.$dashboard->summary['shelf_life_warning']" tag="Perlu Tindakan" />
+            <x-kartu-ringkasan label="Total penjualan hari ini" :value="$dashboard->summary['sales']" icon-name="money" />
+            <x-kartu-ringkasan label="Sisa stok keseluruhan" :value="$dashboard->summary['stock']" :detail="$dashboard->summary['active_slots']" icon-name="food" />
+            <x-kartu-ringkasan label="Status suhu vending machine" :value="$dashboard->summary['temperature']" icon-name="thermometer" />
+            <x-kartu-ringkasan label="Status Masa Simpan Makanan" :value="$dashboard->summary['shelf_life_count']" :detail="$dashboard->summary['shelf_life_detail'].' · '.$dashboard->summary['shelf_life_warning']" tag="Perlu Tindakan" icon-name="clock" />
         </section>
     </div>
 

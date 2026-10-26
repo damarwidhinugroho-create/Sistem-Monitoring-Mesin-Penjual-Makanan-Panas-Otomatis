@@ -13,7 +13,7 @@
 
     <section class="temperature__grid">
         <article class="surface temperature__reading">
-            <x-ikon active large />
+            <x-ikon name="thermometer" :size="24" />
             <strong class="temperature__value">{{ $temperature->readings['temperature'] }}°C</strong>
             <x-lencana-status :label="$temperature->machineStatus->label()" :status="$temperature->machineStatus->value" />
             <span class="temperature__update">Last update {{ $temperature->readings['updated_at'] }}</span>
