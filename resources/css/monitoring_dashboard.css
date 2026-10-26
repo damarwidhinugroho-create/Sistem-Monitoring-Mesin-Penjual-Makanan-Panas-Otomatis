@@ -1,11 +1,15 @@
-.dashboard__heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin: 0 0 28px; padding: 0; }
+.dashboard__heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: 0 0 18px; padding: 0; }
 .dashboard__heading .page-title { font-size: 30px; }
-.dashboard__summary { border: var(--border-card-width) solid; border-radius: var(--radius-card); padding: 18px; box-shadow: 0 4px 14px rgb(31 41 55 / 10%); }
-.dashboard__summary--aman { border-color: var(--safe); background: linear-gradient(135deg, var(--safe-light), #D3E8D7); }
-.dashboard__summary--rendah { border-color: var(--warning-border); background: linear-gradient(135deg, var(--warning-light), #F7E4AE); }
-.dashboard__summary--habis { border-color: var(--stock-empty); background: linear-gradient(135deg, var(--stock-empty-light), #F5D2D2); }
-.dashboard__summary .stat-grid { gap: 18px; }
-.dashboard__summary .stat-card { min-height: 144px; padding: 22px 24px; }
+.dashboard__overview { --dashboard-glow: rgb(47 150 81 / 24%); border: var(--border-card-width) solid var(--safe); border-radius: var(--radius-card); padding: 18px; background: radial-gradient(ellipse 120% 55% at 50% 0%, var(--dashboard-glow), transparent 100%), var(--canvas); box-shadow: 0 4px 14px rgb(31 41 55 / 10%); }
+.dashboard__overview--rendah { --dashboard-glow: rgb(197 138 8 / 27%); border-color: var(--warning-border); }
+.dashboard__overview--habis { --dashboard-glow: rgb(214 69 69 / 24%); border-color: var(--stock-empty); }
+.dashboard__overview > * { position: relative; }
+.dashboard__overview .stat-grid { gap: 18px; }
+.dashboard__overview .stat-card { min-height: 144px; border-color: rgb(255 255 255 / 70%); padding: 22px 24px; background: rgb(255 255 255 / 38%); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 4px 16px rgb(31 41 55 / 8%); color: var(--text-primary); }
+.dashboard__overview .stat-card__icon .icon { color: var(--text-secondary); }
+.dashboard__overview .stat-card__label,
+.dashboard__overview .stat-card__value,
+.dashboard__overview .stat-card__detail { color: var(--text-primary); }
 .machine-status { display: flex; align-items: center; align-self: flex-start; gap: 8px; padding-top: 0; font-size: var(--font-size-xs); white-space: nowrap; }
 .machine-status .badge { font-size: inherit; }
 .dashboard__life { margin-top: 20px; }
@@ -20,6 +24,6 @@
 .dashboard__charts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
 .dashboard__notice { margin: 0; }
 @media (max-width: 640px) {
-    .dashboard__heading { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .dashboard__heading { align-items: flex-start; flex-direction: column; gap: 12px; margin-bottom: 16px; }
     .dashboard__heading .page-title { font-size: var(--font-size-lg); }
 }

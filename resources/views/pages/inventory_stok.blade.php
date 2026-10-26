@@ -10,7 +10,15 @@
 
     <section class="stat-grid inventory__stats" aria-label="Ringkasan stok">
         @foreach ($inventory->summary as $stat)
-            <x-kartu-ringkasan :label="$stat['label']" :value="$stat['value']" :icon="false" />
+            @php
+                $iconName = match ($stat['label']) {
+                    'Total Stok' => 'box',
+                    'Stok Rendah' => 'alert-triangle',
+                    'Produk Habis' => 'box-empty',
+                    'Perlu Perhatian (Masa Simpan)' => 'clock',
+                };
+            @endphp
+            <x-kartu-ringkasan :label="$stat['label']" :value="$stat['value']" :icon-name="$iconName" />
         @endforeach
     </section>
 
@@ -39,18 +47,18 @@
     <section class="surface inventory__slots">
         <div class="inventory__slots-header">
             <h2 class="section-heading">Manajemen Stok</h2>
-            <div class="inventory__legend">
+            {{-- <div class="inventory__legend">
                 <x-lencana-status label="Aman" status="aman" />
                 <x-lencana-status label="Rendah" status="rendah" />
                 <x-lencana-status label="Habis" status="habis" />
-            </div>
+            </div> --}}
         </div>
         <div class="inventory__slot-grid">
             @foreach ($inventory->slots as $slot)
                 <article class="slot-card">
                     <div class="slot-card__top">
                         <span class="slot-card__slot">{{ $slot['slot'] }}<small>{{ $slot['slot_number'] }}</small></span>
-                        <span class="slot-card__label">Status <x-lencana-status :label="$slot['status']->label()" :status="$slot['status']->value" /></span>
+                        {{-- <span class="slot-card__label">Status <x-lencana-status :label="$slot['status']->label()" :status="$slot['status']->value" /></span> --}}
                     </div>
                     <h3 class="slot-card__product">{{ $slot['product'] }}</h3>
                     <span class="slot-card__duration">{{ $slot['duration'] }}</span>
@@ -76,7 +84,8 @@
             @endforeach
         </x-tabel-data>
         <nav class="pagination" aria-label="Halaman riwayat restok">
-            <button type="button" class="is-current">1</button><button type="button">2</button><button type="button">3</button><span>...</span><button type="button">10</button><button type="button" aria-label="Halaman berikutnya">&gt;</button>
+            <button type="button" class="is-current">1</button><button type="button">2</button><button type="button">3</button><span>...</span><button type="button">10</button>
+            <button type="button" aria-label="Halaman berikutnya"><x-ikon name="chevron-right" :size="12" /></button>
         </nav>
     </section>
 

@@ -6,6 +6,7 @@
     <section class="login-card" aria-labelledby="forgot-password-title">
         <form class="login-card__body" data-reset-form>
             <div class="login-card__avatar" aria-hidden="true">
+                <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="login-card__avatar-logo">
             </div>
             <h1 class="login-card__title" id="forgot-password-title">LUPA PASSWORD</h1>
             <p class="page-subtitle">Masukkan username untuk memulihkan akses akun.</p>

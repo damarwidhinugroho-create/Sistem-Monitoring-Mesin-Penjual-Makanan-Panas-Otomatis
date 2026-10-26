@@ -13,6 +13,7 @@ class StatCard extends Component
         public ?string $detail = null,
         public ?string $tag = null,
         public bool $icon = true,
+        public ?string $iconName = null,
         public string $tagStatus = 'warning',
     ) {}
 

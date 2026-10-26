@@ -3,9 +3,8 @@
 @section('title', 'Detail Mesin')
 
 @section('content')
-{{--
     <section class="surface machine__hero">
-        <x-ikon active large />
+        <x-ikon name="machine" :size="24" />
         <div>
             <x-lencana-status :label="$machine->status->label()" :status="$machine->status->value" />
             <div class="machine__hero-title">DETAIL MESIN</div>
@@ -60,8 +59,6 @@
             </x-tabel-data>
         </article>
     </section>
-@endsection
---}}
-@push('styles')
+@endsection}@push('styles')
     @vite('resources/css/detail_mesin.css')
 @endpush

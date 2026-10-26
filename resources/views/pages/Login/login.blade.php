@@ -7,6 +7,7 @@
         <form class="login-card__body" method="POST" action="{{ route('login.store') }}">
             @csrf
             <div class="login-card__avatar" aria-hidden="true">
+                <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="login-card__avatar-logo">
             </div>
             <h1 class="login-card__title" id="login-title">LOGIN operator/UMKM</h1>
             <label class="login-field">
