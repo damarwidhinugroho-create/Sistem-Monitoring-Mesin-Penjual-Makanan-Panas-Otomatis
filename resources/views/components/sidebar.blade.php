@@ -2,6 +2,17 @@
     <div class="sidebar__brand">
         <x-ikon name="logo" size="30" class="sidebar__logo" />
         <span>Operator Panel</span>
+        <button
+            class="sidebar__theme-toggle"
+            type="button"
+            data-theme-toggle
+            aria-label="Aktifkan mode gelap"
+            aria-pressed="false"
+            title="Aktifkan mode gelap"
+        >
+            <span class="sidebar__theme-switch" aria-hidden="true"></span>
+            <span class="visually-hidden">Mode gelap</span>
+        </button>
     </div>
     <nav class="sidebar__navigation" aria-label="Navigasi operator">
         <a class="sidebar__item {{ request()->routeIs('dashboard') ? 'sidebar__item--active' : '' }}" href="{{ route('dashboard') }}">

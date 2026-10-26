@@ -12,11 +12,13 @@
 .inventory__slots { --inventory-glow: rgb(47 150 81 / 24%); margin-bottom: 20px; border: var(--border-card-width) solid var(--safe); border-radius: var(--radius-card); padding: 16px; background: radial-gradient(ellipse 120% 55% at 50% 0%, var(--inventory-glow), transparent 100%), var(--canvas); box-shadow: 0 4px 14px rgb(31 41 55 / 10%); }
 .inventory__slots--rendah { --inventory-glow: rgb(197 138 8 / 27%); border-color: var(--warning-border); }
 .inventory__slots--habis { --inventory-glow: rgb(214 69 69 / 24%); border-color: var(--stock-empty); }
+:root[data-theme="dark"] .inventory__slots { box-shadow: 0 4px 14px rgb(0 0 0 / 24%); }
 .inventory__slots-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .inventory__legend { display: flex; gap: 14px; font-size: 11px; }
 .inventory__legend .badge, .slot-card__label .badge { border-radius: 0; padding: 0; background: transparent; }
 .inventory__slot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .slot-card { min-width: 0; border: var(--border-card-width) solid rgb(255 255 255 / 70%); border-radius: var(--radius-card); padding: 14px; background: rgb(255 255 255 / 38%); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 4px 16px rgb(31 41 55 / 8%); color: var(--text-primary); }
+:root[data-theme="dark"] .slot-card { border-color: rgb(148 163 184 / 25%); background: rgb(31 41 55 / 78%); box-shadow: 0 4px 16px rgb(0 0 0 / 24%); }
 .slot-card__top { display: flex; justify-content: space-between; }
 .slot-card__slot { display: inline-flex; flex-direction: column; align-items: center; border-radius: var(--radius-pill); padding: 7px 11px; background: var(--brand-primary-light); font-weight: 700; }
 .slot-card__slot small { font-size: 10px; font-weight: 400; }
@@ -33,6 +35,7 @@
 .slot-card .progress--empty .progress__fill::after { background: var(--stock-empty); }
 .slot-card__meta strong { display: block; font-size: var(--font-size-xs); }
 .slot-card__edit { width: 100%; min-height: 34px; margin-top: 11px; border: var(--border-width) solid var(--brand-primary); border-radius: var(--radius-sm); padding: 7px 10px; background: var(--brand-primary-light); color: var(--brand-primary); font-size: 12px; }
+:root[data-theme="dark"] .slot-card__edit { border-color: #38bdf8; background: #0c4a6e; color: #f0f9ff; }
 .restock { overflow: hidden; }
 .restock__heading { padding: 15px 16px; }
 .pagination { display: flex; justify-content: flex-end; gap: 5px; border-top: var(--border-width) solid var(--border-light); padding: 9px 14px; }
@@ -48,6 +51,7 @@
 .dialog__value { text-align: right; }
 .dialog__input { width: 165px; min-height: 34px; border: var(--border-width) solid var(--border); border-radius: var(--radius-sm); padding: 7px; background: var(--card); font-size: 11px; text-align: right; }
 .dialog__edit { min-height: 34px; border: var(--border-width) solid var(--brand-primary); border-radius: var(--radius-sm); padding: 7px 12px; background: var(--card); color: var(--brand-primary); }
+:root[data-theme="dark"] .dialog__edit { border-color: #38bdf8; color: #7dd3fc; }
 @media (max-width: 900px) {
     .inventory__slot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

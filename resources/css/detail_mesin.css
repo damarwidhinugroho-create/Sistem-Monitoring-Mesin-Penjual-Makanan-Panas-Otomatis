@@ -12,3 +12,12 @@
 .machine__problem { border-radius: var(--radius-sm); padding: 12px; background: var(--critical-light); color: var(--critical); font-size: 11px; }
 .machine__alerts { grid-column: 1 / -1; padding: 14px; }
 .machine__alerts-header { display: flex; justify-content: space-between; margin-bottom: 9px; }
+@media (max-width: 1000px) {
+    .machine__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+    .machine__hero { align-items: flex-start; flex-wrap: wrap; padding: 16px; }
+    .machine__updated { width: 100%; margin-left: 40px; text-align: left; }
+    .machine__grid { grid-template-columns: minmax(0, 1fr); }
+    .machine__alerts-header { align-items: flex-start; flex-direction: column; gap: 8px; }
+}

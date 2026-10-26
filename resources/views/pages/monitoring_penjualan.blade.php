@@ -61,6 +61,8 @@
         </x-tabel-data>
         <button class="sales__load-more" type="button">Muat Lebih Banyak <span aria-hidden="true">↓</span></button>
     </section>
-@endsection}@push('styles')
+@endsection
+
+@push('styles')
     @vite('resources/css/monitoring_penjualan.css')
 @endpush
