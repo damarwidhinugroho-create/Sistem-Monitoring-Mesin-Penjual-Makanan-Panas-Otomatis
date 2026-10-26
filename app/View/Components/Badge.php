@@ -17,7 +17,8 @@ class Badge extends Component
         return match ($this->status) {
             'aman', 'online' => 'safe',
             'mendekati-batas', 'rendah', 'warning' => 'warning',
-            'lewat-batas', 'habis', 'offline', 'critical' => 'critical',
+            'habis' => 'empty',
+            'lewat-batas', 'offline', 'critical' => 'critical',
             default => 'neutral',
         };
     }

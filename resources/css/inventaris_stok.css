@@ -2,12 +2,19 @@
 .inventory__stats { margin-bottom: 16px; }
 .inventory__life { margin-bottom: 20px; overflow: hidden; }
 .inventory__life-title { padding: 15px 16px; }
+.inventory__life .progress__track,
+.inventory__life .progress__fill { overflow: visible; }
+.inventory__life .progress__fill { position: relative; }
+.inventory__life .progress__fill::after { position: absolute; top: 50%; right: 0; width: 12px; height: 12px; transform: translate(50%, -50%); border-radius: 50%; background: var(--safe); content: ''; }
+.inventory__life .progress--warning .progress__fill::after { background: var(--warning); }
+.inventory__life .progress--critical .progress__fill::after { background: var(--critical); }
+.inventory__life .progress--empty .progress__fill::after { background: var(--stock-empty); }
 .inventory__slots { margin-bottom: 20px; padding: 16px; }
 .inventory__slots-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .inventory__legend { display: flex; gap: 14px; font-size: 11px; }
 .inventory__legend .badge, .slot-card__label .badge { border-radius: 0; padding: 0; background: transparent; }
 .inventory__slot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.slot-card { border: var(--border-width) solid var(--border); border-radius: var(--radius-card); padding: 14px; }
+.slot-card { border: var(--border-card-width) solid var(--border); border-radius: var(--radius-card); padding: 14px; }
 .slot-card__top { display: flex; justify-content: space-between; }
 .slot-card__slot { display: inline-flex; flex-direction: column; align-items: center; border-radius: var(--radius-pill); padding: 7px 11px; background: var(--brand-primary-light); font-weight: 700; }
 .slot-card__slot small { font-size: 10px; font-weight: 400; }
@@ -15,6 +22,13 @@
 .slot-card__product { margin: 11px 0 3px; font-size: var(--font-size-xs); font-weight: 700; }
 .slot-card__duration { font-size: 11px; }
 .slot-card__meta { margin-top: 11px; font-size: 11px; line-height: 1.6; }
+.slot-card .progress__track,
+.slot-card .progress__fill { overflow: visible; }
+.slot-card .progress__fill { position: relative; }
+.slot-card .progress__fill::after { position: absolute; top: 50%; right: 0; width: 12px; height: 12px; transform: translate(50%, -50%); border-radius: 50%; background: var(--safe); content: ''; }
+.slot-card .progress--warning .progress__fill::after { background: var(--warning); }
+.slot-card .progress--critical .progress__fill::after { background: var(--critical); }
+.slot-card .progress--empty .progress__fill::after { background: var(--stock-empty); }
 .slot-card__meta strong { display: block; font-size: var(--font-size-xs); }
 .slot-card__edit { width: 100%; min-height: 34px; margin-top: 11px; border: var(--border-width) solid var(--brand-primary); border-radius: var(--radius-sm); padding: 7px 10px; background: var(--brand-primary-light); color: var(--brand-primary); font-size: 12px; }
 .restock { overflow: hidden; }
@@ -30,5 +44,5 @@
 .dialog__row:last-child { border-bottom: 0; }
 .dialog__label { font-weight: 400; }
 .dialog__value { text-align: right; }
-.dialog__input { width: 165px; min-height: 34px; border: var(--border-width) solid var(--border); border-radius: var(--radius-sm); padding: 7px; background: var(--white); font-size: 11px; text-align: right; }
+.dialog__input { width: 165px; min-height: 34px; border: var(--border-width) solid var(--border); border-radius: var(--radius-sm); padding: 7px; background: var(--card); font-size: 11px; text-align: right; }
 .dialog__edit { min-height: 34px; border: var(--border-width) solid var(--brand-primary); border-radius: var(--radius-sm); padding: 7px 12px; background: var(--card); color: var(--brand-primary); }
