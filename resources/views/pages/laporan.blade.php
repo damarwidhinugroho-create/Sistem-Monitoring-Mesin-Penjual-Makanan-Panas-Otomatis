@@ -10,7 +10,7 @@
                 <button class="report__period is-active" type="button" data-period="day" aria-pressed="true">Hari</button>
                 <button class="report__period" type="button" data-period="week" aria-pressed="false">Minggu</button>
                 <button class="report__period" type="button" data-period="month" aria-pressed="false">Bulan</button>
-                <x-date-range-picker />
+                <x-filter-tanggal />
             </nav>
             <button class="report__export-button" type="button" data-open-export>
                 <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5v8m0 0 3-3m-3 3-3-3M2.5 10v3.5h11V10" /></svg>

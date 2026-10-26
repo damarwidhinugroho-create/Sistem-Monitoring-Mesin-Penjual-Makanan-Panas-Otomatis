@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="operator-layout">
-        <x-menu-samping />
+        <x-sidebar />
         <main class="operator-main">
             <section class="operator-content">
                 @yield('content')

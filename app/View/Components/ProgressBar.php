@@ -27,6 +27,6 @@ class ProgressBar extends Component
 
     public function render(): View
     {
-        return view('components.batang-progres');
+        return view('components.progress-bar');
     }
 }

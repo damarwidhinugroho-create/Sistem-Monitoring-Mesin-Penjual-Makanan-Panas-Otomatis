@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="temperature__heading"><h1 class="page-title">Monitoring Suhu</h1></div>
-    <x-banner-peringatan
+    <x-alert
         class="temperature__alert"
         :message="$temperature->readings['alert']"
         link-label="Lihat Riwayat Alert"

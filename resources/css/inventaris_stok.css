@@ -9,12 +9,14 @@
 .inventory__life .progress--warning .progress__fill::after { background: var(--warning); }
 .inventory__life .progress--critical .progress__fill::after { background: var(--critical); }
 .inventory__life .progress--empty .progress__fill::after { background: var(--stock-empty); }
-.inventory__slots { margin-bottom: 20px; padding: 16px; }
+.inventory__slots { --inventory-glow: rgb(47 150 81 / 24%); margin-bottom: 20px; border: var(--border-card-width) solid var(--safe); border-radius: var(--radius-card); padding: 16px; background: radial-gradient(ellipse 120% 55% at 50% 0%, var(--inventory-glow), transparent 100%), var(--canvas); box-shadow: 0 4px 14px rgb(31 41 55 / 10%); }
+.inventory__slots--rendah { --inventory-glow: rgb(197 138 8 / 27%); border-color: var(--warning-border); }
+.inventory__slots--habis { --inventory-glow: rgb(214 69 69 / 24%); border-color: var(--stock-empty); }
 .inventory__slots-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .inventory__legend { display: flex; gap: 14px; font-size: 11px; }
 .inventory__legend .badge, .slot-card__label .badge { border-radius: 0; padding: 0; background: transparent; }
 .inventory__slot-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.slot-card { border: var(--border-card-width) solid var(--border); border-radius: var(--radius-card); padding: 14px; }
+.slot-card { min-width: 0; border: var(--border-card-width) solid rgb(255 255 255 / 70%); border-radius: var(--radius-card); padding: 14px; background: rgb(255 255 255 / 38%); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 4px 16px rgb(31 41 55 / 8%); color: var(--text-primary); }
 .slot-card__top { display: flex; justify-content: space-between; }
 .slot-card__slot { display: inline-flex; flex-direction: column; align-items: center; border-radius: var(--radius-pill); padding: 7px 11px; background: var(--brand-primary-light); font-weight: 700; }
 .slot-card__slot small { font-size: 10px; font-weight: 400; }
@@ -46,3 +48,9 @@
 .dialog__value { text-align: right; }
 .dialog__input { width: 165px; min-height: 34px; border: var(--border-width) solid var(--border); border-radius: var(--radius-sm); padding: 7px; background: var(--card); font-size: 11px; text-align: right; }
 .dialog__edit { min-height: 34px; border: var(--border-width) solid var(--brand-primary); border-radius: var(--radius-sm); padding: 7px 12px; background: var(--card); color: var(--brand-primary); }
+@media (max-width: 900px) {
+    .inventory__slot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+    .inventory__slot-grid { grid-template-columns: 1fr; }
+}

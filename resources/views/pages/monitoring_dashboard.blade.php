@@ -23,7 +23,7 @@
                 <h1 class="page-title">DASHBOARD OVERVIEW</h1>
                 <p class="page-subtitle">Selamat Datang Budi</p>
             </div>
-            <x-banner-peringatan class="dashboard__notice" message="VM-02 - Marina tidak mengirim data selama 5 mnt" />
+            <x-alert class="dashboard__notice" message="VM-02 - Marina tidak mengirim data selama 5 mnt" />
             <div class="machine-status">Status VM : <x-lencana-status :label="$dashboard->machineStatus->label()" :status="$dashboard->machineStatus->value" /></div>
         </div>
 
@@ -54,7 +54,7 @@
                             —
                         @endif
                     </td>
-                    <td><x-batang-progres :percentage="$row['stock'] === 0 ? 4 : $row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity']" /></td>
+                    <td><x-progress-bar :percentage="$row['stock'] === 0 ? 4 : $row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity']" /></td>
                 </tr>
             @endforeach
         </x-tabel-data>
