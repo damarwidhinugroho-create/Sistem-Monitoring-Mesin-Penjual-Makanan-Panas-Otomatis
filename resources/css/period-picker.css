@@ -1,18 +1,120 @@
-.period-picker { position: relative; display: inline-flex; }
-.period-picker__trigger { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; gap: 9px; white-space: nowrap; }
-.period-picker__trigger svg { width: 17px; height: 17px; flex: 0 0 17px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.4; }
-.period-picker__chevron { transition: transform 120ms ease; }
-.period-picker__trigger[aria-expanded="true"] .period-picker__chevron { transform: rotate(180deg); }
-.period-picker__panel { position: absolute; z-index: 8; top: calc(100% + 6px); right: 0; display: grid; width: min(600px, calc(100vw - 36px)); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; border: var(--border-width) solid var(--border); border-radius: var(--radius-card); padding: 16px; background: var(--card); box-shadow: 0 8px 24px rgb(31 41 55 / 14%); }
-.period-picker__group { min-width: 0; }
-.period-picker__group h2 { margin: 0 0 8px; font-size: var(--font-size-xs); font-weight: 600; }
-.period-picker__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-.period-picker__grid button { min-height: 34px; overflow: hidden; border: var(--border-width) solid var(--border-light); border-radius: var(--radius-sm); padding: 5px 6px; background: var(--card); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
-.period-picker__grid button:hover { border-color: var(--brand-primary); }
-.period-picker__grid button.is-selected { border-color: var(--brand-primary); background: var(--brand-primary); color: var(--white); }
-.period-picker__clear { grid-column: 1 / -1; justify-self: end; border: 0; padding: 4px 2px; background: transparent; color: var(--brand-primary); font-size: var(--font-size-xs); text-decoration: underline; }
+/* Tombol pembuka dan ikon kalender untuk pilihan periode. */
+.period-picker {
+    position: relative;
+    display: inline-flex;
+}
+
+.period-picker__trigger {
+    display: inline-flex;
+    min-height: 38px;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    white-space: nowrap;
+}
+
+.period-picker__trigger svg {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.4;
+}
+
+.period-picker__chevron {
+    transition: transform 120ms ease;
+}
+
+.period-picker__trigger[aria-expanded="true"] .period-picker__chevron {
+    transform: rotate(180deg);
+}
+
+/* Panel pilihan rentang tanggal dan tombol periode cepat. */
+.period-picker__panel {
+    position: absolute;
+    z-index: 8;
+    top: calc(100% + 6px);
+    right: 0;
+    display: grid;
+    width: min(600px, calc(100vw - 36px));
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 18px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 16px;
+    background: var(--card);
+    box-shadow: 0 8px 24px rgb(31 41 55 / 14%);
+}
+
+.period-picker__group {
+    min-width: 0;
+}
+
+.period-picker__group h2 {
+    margin: 0 0 8px;
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+}
+
+.period-picker__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.period-picker__grid button {
+    min-height: 34px;
+    overflow: hidden;
+    border: var(--border-width) solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 5px 6px;
+    background: var(--card);
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.period-picker__grid button:hover {
+    border-color: var(--brand-primary);
+}
+
+.period-picker__grid button.is-selected {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary);
+    color: var(--white);
+}
+
+.period-picker__clear {
+    grid-column: 1 / -1;
+    justify-self: end;
+    border: 0;
+    padding: 4px 2px;
+    background: transparent;
+    color: var(--brand-primary);
+    font-size: var(--font-size-xs);
+    text-decoration: underline;
+}
+
+/* Rapikan panel pilihan periode di layar HP. */
 @media (max-width: 560px) {
-    .period-picker__panel { left: auto; right: -9px; width: min(450px, calc(100vw - 28px)); gap: 12px; padding: 12px; }
-    .period-picker__grid { gap: 3px; }
-    .period-picker__grid button { min-height: 32px; padding-inline: 3px; font-size: 11px; }
+    .period-picker__panel {
+        left: auto;
+        right: -9px;
+        width: min(450px, calc(100vw - 28px));
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .period-picker__grid {
+        gap: 3px;
+    }
+
+    .period-picker__grid button {
+        min-height: 32px;
+        padding-inline: 3px;
+        font-size: 11px;
+    }
 }

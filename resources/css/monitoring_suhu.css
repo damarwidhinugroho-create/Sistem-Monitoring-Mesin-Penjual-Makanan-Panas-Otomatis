@@ -1,12 +1,54 @@
-.temperature__heading { margin: 0 0 14px; }
-.temperature__alert { margin-bottom: 18px; }
-.temperature__grid { display: grid; grid-template-columns: 1fr 1.7fr; gap: 18px; }
-.temperature__reading { display: flex; min-height: 180px; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-.temperature__reading > .icon { color: var(--brand-primary); }
-.temperature__value { margin: 5px 0; font-size: 36px; font-weight: 700; }
-.temperature__update, .temperature__safe { font-size: 11px; }
-.temperature__chart { min-height: 180px; }
+/* Judul halaman suhu dan banner info/peringatan. */
+.temperature__heading {
+    margin: 0 0 14px;
+}
+
+.temperature__alert {
+    margin-bottom: 18px;
+}
+
+/* Kartu suhu saat ini dan grafik perubahan suhu. */
+.temperature__grid {
+    display: grid;
+    grid-template-columns: 1fr 1.7fr;
+    gap: 18px;
+}
+
+.temperature__reading {
+    display: flex;
+    min-height: 180px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.temperature__reading > .icon {
+    color: var(--brand-primary);
+}
+
+.temperature__value {
+    margin: 5px 0;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.temperature__update, .temperature__safe {
+    font-size: 11px;
+}
+
+.temperature__chart {
+    min-height: 180px;
+}
+
+/* Susun kartu suhu dan grafik bertumpuk di layar kecil. */
 @media (max-width: 760px) {
-    .temperature__grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-    .temperature__reading { min-height: 150px; }
+    .temperature__grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+    }
+
+    .temperature__reading {
+        min-height: 150px;
+    }
 }

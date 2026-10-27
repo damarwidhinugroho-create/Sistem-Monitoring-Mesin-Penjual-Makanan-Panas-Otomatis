@@ -1,17 +1,80 @@
-.sales__heading { display: flex; align-items: center; justify-content: space-between; margin: 0 0 16px; }
-.sales__periods { display: flex; gap: 5px; }
-.sales__metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 20px; }
-.sales__chart { margin-bottom: 20px; }
-.sales__products { margin-bottom: 20px; overflow: hidden; }
-.sales__transactions { overflow: hidden; }
-.sales__table-heading { padding: 13px 15px; }
-.sales__load-more { display: block; width: 100%; min-height: 38px; border: 0; border-top: var(--border-width) solid var(--border-light); padding: 9px; background: var(--card); color: var(--brand-primary); font-size: 12px; }
-.sales__date { border: 0; border-radius: var(--radius-pill); padding: 5px 11px; background: var(--safe-light); color: var(--safe); font-size: 11px; }
-@media (max-width: 760px) {
-    .sales__heading { align-items: flex-start; flex-direction: column; gap: 12px; }
-    .sales__periods { max-width: 100%; overflow-x: auto; }
-    .sales__metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Judul halaman penjualan dan pilihan rentang waktu. */
+.sales__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 16px;
 }
+
+.sales__periods {
+    display: flex;
+    gap: 5px;
+}
+
+/* Ringkasan penjualan, grafik, daftar produk, dan transaksi. */
+.sales__metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 20px;
+}
+
+.sales__chart {
+    margin-bottom: 20px;
+}
+
+.sales__products {
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.sales__transactions {
+    overflow: hidden;
+}
+
+.sales__table-heading {
+    padding: 13px 15px;
+}
+
+.sales__load-more {
+    display: block;
+    width: 100%;
+    min-height: 38px;
+    border: 0;
+    border-top: var(--border-width) solid var(--border-light);
+    padding: 9px;
+    background: var(--card);
+    color: var(--brand-primary);
+    font-size: 12px;
+}
+
+.sales__date {
+    border: 0;
+    border-radius: var(--radius-pill);
+    padding: 5px 11px;
+    background: var(--safe-light);
+    color: var(--safe);
+    font-size: 11px;
+}
+
+/* Tata ulang judul dan kartu ringkasan di layar tablet atau HP. */
+@media (max-width: 760px) {
+    .sales__heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .sales__periods {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .sales__metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 520px) {
-    .sales__metrics { grid-template-columns: minmax(0, 1fr); }
+    .sales__metrics {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }

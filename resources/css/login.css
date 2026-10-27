@@ -1,3 +1,21 @@
-.login-field__toggle { align-self: stretch; border: 0; border-left: var(--border-width) solid var(--border-light); padding: 0 11px; background: var(--brand-primary-light); color: var(--brand-primary); font-size: 11px; }
-.login-card__forgot { border-top: var(--border-width) solid var(--border); padding: 25px; font-size: 11px; }
-.login-card__forgot a { color: var(--brand-primary-dark); }
+/* Tombol untuk melihat atau menyembunyikan password di kolom login. */
+.login-field__toggle {
+    align-self: stretch;
+    border: 0;
+    border-left: var(--border-width) solid var(--border-light);
+    padding: 0 11px;
+    background: var(--brand-primary-light);
+    color: var(--brand-primary);
+    font-size: 11px;
+}
+
+/* Link bantuan di bagian bawah kartu login. */
+.login-card__forgot {
+    border-top: var(--border-width) solid var(--border);
+    padding: 25px;
+    font-size: 11px;
+}
+
+.login-card__forgot a {
+    color: var(--brand-primary-dark);
+}
