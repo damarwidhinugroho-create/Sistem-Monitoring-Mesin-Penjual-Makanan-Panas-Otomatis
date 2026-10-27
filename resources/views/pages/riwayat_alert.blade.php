@@ -27,7 +27,7 @@
         </x-tabel-data>
         <nav class="pagination history-alert__pagination" aria-label="Halaman riwayat alert" data-alert-pagination></nav>
     </section>
-@endsection}
+@endsection
 @push('styles')
     @vite('resources/css/riwayat_alert.css')
 @endpush

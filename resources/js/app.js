@@ -6,9 +6,10 @@ import './laporanPenjualan';
 
 const theme = getComputedStyle(document.documentElement);
 const colors = {
-    brand: theme.getPropertyValue('--brand-primary').trim(),
+    brand: theme.getPropertyValue('--chart-primary').trim(),
     safe: theme.getPropertyValue('--safe').trim(),
     border: theme.getPropertyValue('--border-light').trim(),
+    secondary: theme.getPropertyValue('--chart-secondary').trim(),
     muted: theme.getPropertyValue('--text-muted').trim(),
 };
 
@@ -17,6 +18,62 @@ Chart.defaults.font.size = 11;
 Chart.defaults.color = colors.muted;
 
 const charts = new Map();
+let themeTransitionTimer;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const progressiveLineAnimation = {
+    x: {
+        type: 'number',
+        easing: 'linear',
+        duration: reduceMotion ? 0 : 900,
+        from: Number.NaN,
+        delay(context) {
+            return !reduceMotion && context.type === 'data' ? context.index * 110 : 0;
+        },
+    },
+    y: {
+        type: 'number',
+        easing: 'easeOutQuart',
+        duration: reduceMotion ? 0 : 700,
+        delay(context) {
+            return !reduceMotion && context.type === 'data' ? context.index * 110 : 0;
+        },
+    },
+};
+
+function updateTheme(animateCharts = false) {
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    const theme = getComputedStyle(document.documentElement);
+
+    colors.brand = theme.getPropertyValue('--chart-primary').trim();
+    colors.border = theme.getPropertyValue('--border-light').trim();
+    colors.secondary = theme.getPropertyValue('--chart-secondary').trim();
+    colors.muted = theme.getPropertyValue('--text-muted').trim();
+    Chart.defaults.color = colors.muted;
+
+    charts.forEach((chart) => {
+        chart.data.datasets.forEach((dataset, index) => {
+            dataset.borderColor = index === 0 ? colors.brand : colors.secondary;
+            dataset.backgroundColor = index === 0 && chart.config.type !== 'line'
+                ? colors.brand
+                : 'transparent';
+        });
+
+        chart.options.scales.x.border.color = colors.border;
+        chart.options.scales.x.ticks.color = colors.muted;
+        chart.options.scales.y.grid.color = colors.border;
+        if (animateCharts) {
+            chart.options.animation = { duration: 520, easing: 'easeInOutCubic' };
+            chart.update();
+        }
+    });
+
+    document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+        button.setAttribute('aria-pressed', String(isDark));
+        button.setAttribute('aria-label', isDark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap');
+        button.setAttribute('title', isDark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap');
+    });
+}
 
 document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
     const labels = JSON.parse(canvas.dataset.chartLabels ?? '[]');
@@ -39,7 +96,7 @@ document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
     if (secondary.length > 0) {
         datasets.push({
             data: secondary,
-            borderColor: colors.border,
+            borderColor: colors.secondary,
             backgroundColor: 'transparent',
             borderWidth: 1,
             pointRadius: 0,
@@ -54,7 +111,11 @@ document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: false,
+            animation: reduceMotion ? false : {
+                duration: 850,
+                easing: 'easeOutQuart',
+            },
+            animations: isLine ? progressiveLineAnimation : undefined,
             plugins: {
                 legend: { display: false },
                 tooltip: { enabled: true },
@@ -77,6 +138,34 @@ document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
 
     charts.set(canvas.id, chart);
 });
+
+document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const isDark = document.documentElement.dataset.theme !== 'dark';
+        const root = document.documentElement;
+        const transitionDuration = reduceMotion ? 0 : 720;
+
+        if (transitionDuration > 0) {
+            root.dataset.themeChanging = '';
+        }
+        window.clearTimeout(themeTransitionTimer);
+
+        if (isDark) {
+            root.dataset.theme = 'dark';
+        } else {
+            delete root.dataset.theme;
+        }
+        root.style.backgroundColor = isDark ? '#111827' : '#F3F4F6';
+
+        localStorage.setItem('operator-theme', isDark ? 'dark' : 'light');
+        updateTheme(transitionDuration > 0);
+        themeTransitionTimer = window.setTimeout(() => {
+            delete root.dataset.themeChanging;
+        }, transitionDuration);
+    });
+});
+
+updateTheme();
 
 document.querySelectorAll('[data-chart-period]').forEach((button) => {
     button.addEventListener('click', () => {

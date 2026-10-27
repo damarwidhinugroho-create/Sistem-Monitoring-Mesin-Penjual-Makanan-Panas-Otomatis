@@ -59,6 +59,8 @@
             </x-tabel-data>
         </article>
     </section>
-@endsection}@push('styles')
+@endsection
+
+@push('styles')
     @vite('resources/css/detail_mesin.css')
 @endpush
