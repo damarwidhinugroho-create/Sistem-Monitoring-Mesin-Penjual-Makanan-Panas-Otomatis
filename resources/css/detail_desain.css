@@ -1,6 +1,6 @@
+/* Warna dan tampilan dasar saat tema terang dipakai. */
 :root {
     color-scheme: light;
-
     --brand-primary: #475569;
     --brand-primary-dark: #334155;
     --chart-primary: var(--brand-primary);
@@ -20,14 +20,13 @@
     --warning-light: #FFF4D6;
     --warning-border: #E6C56F;
     --warning-text: #76530A;
-    --critical: #2563EB;
-    --critical-light: #E8F0FF;
+    --critical: #f00000;
+    --critical-light: #ffd7d7;
     --stock-empty: #D64545;
     --stock-empty-light: #FDECEC;
     --brand-primary-light: #E9EDF2;
     --ink-overlay: rgb(31 41 55 / 45%);
     --profile-muted: #C7CDD4;
-
     --font-sans: Inter, Arial, Helvetica, sans-serif;
     --font-size-xs: 13px;
     --font-size-2xs: 11px;
@@ -38,13 +37,11 @@
     --font-size-lg: 20px;
     --font-size-xl: 24px;
     --font-size-title: 30px;
-
     --radius-sm: 5px;
     --radius-card: 16px;
     --radius-pill: 18px;
     --border-width: 1px;
     --border-card-width: 2px;
-
     --space-1: 5px;
     --space-2: 9px;
     --space-3: 14px;
@@ -63,9 +60,9 @@
     --content-padding: 32px;
 }
 
+/* Ganti warna supaya semua komponen cocok saat tema gelap dipakai. */
 :root[data-theme="dark"] {
     color-scheme: dark;
-
     --brand-primary: #334155;
     --brand-primary-dark: #1e293b;
     --chart-primary: #38bdf8;
@@ -84,8 +81,8 @@
     --warning-light: #3f3215;
     --warning-border: #80651c;
     --warning-text: #fde68a;
-    --critical: #60a5fa;
-    --critical-light: #172d4d;
+    --critical: #ff3a3a;
+    --critical-light: #411d1d;
     --stock-empty: #f87171;
     --stock-empty-light: #451e25;
     --brand-primary-light: #334155;

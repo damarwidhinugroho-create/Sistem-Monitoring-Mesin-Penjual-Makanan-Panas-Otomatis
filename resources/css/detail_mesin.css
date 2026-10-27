@@ -1,23 +1,112 @@
-.machine__hero { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; padding: 23px; }
-.machine__hero > .icon { color: var(--brand-primary); }
-.machine__hero-title { font-size: var(--font-size-sm); }
-.machine__updated { margin-left: auto; font-size: 11px; text-align: right; }
-.machine__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-.machine__card { min-height: 144px; padding: 14px; }
-.machine__card h2 { margin: 0 0 14px; font-size: var(--font-size-xs); font-weight: 400; }
-.machine__line { display: flex; justify-content: space-between; gap: 9px; border-bottom: var(--border-width) solid var(--border-light); padding: 8px 0; font-size: 11px; }
-.machine__line:last-child { border-bottom: 0; }
-.machine__line span { color: var(--text-muted); }
-.machine__temperature { font-size: var(--font-size-title); font-weight: 700; }
-.machine__problem { border-radius: var(--radius-sm); padding: 12px; background: var(--critical-light); color: var(--critical); font-size: 11px; }
-.machine__alerts { grid-column: 1 / -1; padding: 14px; }
-.machine__alerts-header { display: flex; justify-content: space-between; margin-bottom: 9px; }
-@media (max-width: 1000px) {
-    .machine__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Kartu bagian atas berisi nama mesin dan waktu pembaruan. */
+.machine__hero {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+    padding: 23px;
 }
+
+.machine__hero > .icon {
+    color: var(--brand-primary);
+}
+
+.machine__hero-title {
+    font-size: var(--font-size-sm);
+}
+
+.machine__updated {
+    margin-left: auto;
+    font-size: 11px;
+    text-align: right;
+}
+
+/* Kartu-kartu informasi kondisi dan detail mesin. */
+.machine__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.machine__card {
+    min-height: 144px;
+    padding: 14px;
+}
+
+.machine__card h2 {
+    margin: 0 0 14px;
+    font-size: var(--font-size-xs);
+    font-weight: 400;
+}
+
+.machine__line {
+    display: flex;
+    justify-content: space-between;
+    gap: 9px;
+    border-bottom: var(--border-width) solid var(--border-light);
+    padding: 8px 0;
+    font-size: 11px;
+}
+
+.machine__line:last-child {
+    border-bottom: 0;
+}
+
+.machine__line span {
+    color: var(--text-muted);
+}
+
+.machine__temperature {
+    font-size: var(--font-size-title);
+    font-weight: 700;
+}
+
+.machine__problem {
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    background: var(--critical-light);
+    color: var(--critical);
+    font-size: 11px;
+}
+
+.machine__alerts {
+    grid-column: 1 / -1;
+    padding: 14px;
+}
+
+.machine__alerts-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 9px;
+}
+
+/* Susunan kartu detail mesin untuk tablet dan HP. */
+@media (max-width: 1000px) {
+    .machine__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 600px) {
-    .machine__hero { align-items: flex-start; flex-wrap: wrap; padding: 16px; }
-    .machine__updated { width: 100%; margin-left: 40px; text-align: left; }
-    .machine__grid { grid-template-columns: minmax(0, 1fr); }
-    .machine__alerts-header { align-items: flex-start; flex-direction: column; gap: 8px; }
+    .machine__hero {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        padding: 16px;
+    }
+
+    .machine__updated {
+        width: 100%;
+        margin-left: 40px;
+        text-align: left;
+    }
+
+    .machine__grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .machine__alerts-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
 }
