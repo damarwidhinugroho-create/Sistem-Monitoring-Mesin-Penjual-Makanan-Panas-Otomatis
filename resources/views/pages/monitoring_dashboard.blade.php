@@ -24,7 +24,6 @@
                 <p class="page-subtitle">Selamat Datang Budi</p>
             </div>
             <x-alert class="dashboard__notice" message="VM-02 - Marina tidak mengirim data selama 5 mnt" />
-            <div class="machine-status">Status VM : <x-lencana-status :label="$dashboard->machineStatus->label()" :status="$dashboard->machineStatus->value" /></div>
         </div>
 
         <section class="stat-grid" aria-label="Ringkasan dashboard">

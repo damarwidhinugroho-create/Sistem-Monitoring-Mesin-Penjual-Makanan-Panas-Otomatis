@@ -213,22 +213,11 @@ document.querySelectorAll('[data-open-slot]').forEach((button) => {
     });
 });
 
-document.querySelectorAll('[data-edit-slot]').forEach((button) => {
-    button.addEventListener('click', () => {
-        const form = button.closest('form');
-
-        form.querySelectorAll('[data-slot-view]').forEach((value) => {
-            value.hidden = true;
-        });
-        form.querySelectorAll('.dialog__input').forEach((input) => {
-            input.hidden = false;
-        });
-        button.hidden = true;
-        form.querySelector('[data-save-slot]').hidden = false;
-    });
-});
-
 document.querySelectorAll('[data-slot-dialog]').forEach((dialog) => {
+    dialog.querySelector('[data-close-slot]')?.addEventListener('click', () => {
+        dialog.close();
+    });
+
     dialog.addEventListener('click', (event) => {
         if (event.target === dialog) {
             dialog.close();

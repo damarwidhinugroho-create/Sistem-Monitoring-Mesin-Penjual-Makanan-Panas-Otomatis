@@ -79,7 +79,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     flex: 0 0 var(--navbar-height);
     align-items: center;
     gap: 12px;
-    border-bottom: var(--border-width) solid var(--border);
     padding: 0 15px;
     color: var(--text-primary);
     font-size: var(--font-size-sm);
@@ -118,6 +117,52 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 :root[data-theme="dark"] .sidebar__theme-switch {
     transform: translateX(12px);
     background: #fbbf24;
+}
+
+.sidebar__vm {
+    border-bottom: var(--border-width) solid var(--border);
+    padding: 1px 12px 10px;
+}
+
+.sidebar__vm-card {
+    --sidebar-vm-color: var(--safe);
+    --sidebar-vm-tint: var(--safe-light);
+    display: flex;
+    min-height: 58px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border: var(--border-card-width) solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 10px 12px;
+    background: linear-gradient(to left, var(--sidebar-vm-tint), var(--card) 88%);
+    color: var(--text-primary);
+    font-size: var(--font-size-xs);
+}
+
+.sidebar__vm-card--offline {
+    --sidebar-vm-color: var(--stock-empty);
+    --sidebar-vm-tint: var(--stock-empty-light);
+}
+
+.sidebar__vm-label {
+    font-weight: 600;
+}
+
+.sidebar__vm-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--sidebar-vm-color);
+    font-weight: 600;
+}
+
+.sidebar__vm-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-radius: 50%;
+    background: currentColor;
 }
 
 .sidebar__navigation {
@@ -269,23 +314,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 @keyframes content-enter {
     from {
         transform: translateY(8px);
-    }
-}
-
-/* Animasi saat dialog atau pop-up dibuka. */
-.dialog[open] {
-    animation: dialog-enter 160ms ease-out both;
-}
-
-@keyframes dialog-enter {
-    from {
-        opacity: 0;
-        transform: translateY(5px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 

@@ -252,21 +252,90 @@
     font-size: var(--font-size-xs);
 }
 
-/* Dialog untuk melihat atau mengubah info produk pada slot. */
+/* Panel samping untuk melihat atau mengubah info produk pada slot. */
 .dialog {
-    width: min(400px, calc(100% - 36px));
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--radius-card);
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(440px, 100vw);
+    height: 100vh;
+    height: 100dvh;
+    max-width: 100vw;
+    max-height: none;
+    margin: 0;
+    overflow-y: auto;
+    transform: translateX(100%);
+    border: 0;
+    border-left: var(--border-width) solid var(--border);
+    border-radius: var(--radius-card) 0 0 var(--radius-card);
     padding: 0;
     background: var(--card);
+    color: var(--text-primary);
+    box-shadow: -16px 0 48px rgb(15 23 42 / 16%);
+    opacity: 0;
+    transition: transform 420ms cubic-bezier(.22, 1, .36, 1), opacity 260ms ease, display 420ms allow-discrete, overlay 420ms allow-discrete;
+}
+
+.dialog[open] {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+@starting-style {
+    .dialog[open] {
+        transform: translateX(100%);
+        opacity: 0;
+    }
 }
 
 .dialog::backdrop {
+    background: transparent;
+    -webkit-backdrop-filter: blur(0);
+    backdrop-filter: blur(0);
+    transition: background-color 360ms ease, backdrop-filter 360ms ease;
+}
+
+.dialog[open]::backdrop {
     background: var(--ink-overlay);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+
+@starting-style {
+    .dialog[open]::backdrop {
+        background: transparent;
+    }
 }
 
 .dialog__content {
-    padding: 16px;
+    min-height: 100%;
+    padding: 0 24px 24px;
+}
+
+.dialog__header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border-bottom: var(--border-width) solid var(--border-light);
+    padding: 20px 0 16px;
+    background: var(--card);
+}
+
+.dialog__title {
+    margin: 0;
+    font-size: var(--font-size-sm);
+}
+
+.dialog__close {
+    min-height: 34px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    background: var(--card);
+    color: var(--text-primary);
+    font-size: var(--font-size-xs);
 }
 
 .dialog__row {
@@ -316,6 +385,10 @@
     color: #7dd3fc;
 }
 
+:root[data-theme="dark"] .dialog__close {
+    border-color: var(--border);
+}
+
 /* Kurangi jumlah kolom slot di tablet dan HP. */
 @media (max-width: 900px) {
     .inventory__slot-grid {
@@ -326,5 +399,9 @@
 @media (max-width: 560px) {
     .inventory__slot-grid {
         grid-template-columns: 1fr;
+    }
+
+    .dialog__content {
+        padding-inline: 18px;
     }
 }

@@ -14,6 +14,15 @@
             <span class="visually-hidden">Mode gelap</span>
         </button>
     </div>
+    <div class="sidebar__vm">
+        <div class="sidebar__vm-card sidebar__vm-card--{{ $machineStatus->value }}">
+            <span class="sidebar__vm-label">Status VM</span>
+            <span class="sidebar__vm-value">
+                <span class="sidebar__vm-dot" aria-hidden="true"></span>
+                {{ $machineStatus->label() }}
+            </span>
+        </div>
+    </div>
     <nav class="sidebar__navigation" aria-label="Navigasi operator">
         <a class="sidebar__item {{ request()->routeIs('dashboard') ? 'sidebar__item--active' : '' }}" href="{{ route('dashboard') }}">
             <x-ikon name="dashboard" /><span>Dashboard</span>

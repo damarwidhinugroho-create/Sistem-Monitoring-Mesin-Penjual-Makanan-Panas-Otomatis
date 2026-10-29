@@ -74,21 +74,6 @@
     color: var(--text-secondary);
 }
 
-/* Status mesin dan progress umur stok di ringkasan dashboard. */
-.machine-status {
-    display: flex;
-    align-items: center;
-    align-self: flex-start;
-    gap: 8px;
-    padding-top: 0;
-    font-size: var(--font-size-xs);
-    white-space: nowrap;
-}
-
-.machine-status .badge {
-    font-size: inherit;
-}
-
 .dashboard__life {
     margin-top: 20px;
 }
@@ -139,6 +124,7 @@
 }
 
 .dashboard__notice {
+    flex: 1;
     margin: 0;
 }
 
@@ -153,6 +139,11 @@
 
     .dashboard__heading .page-title {
         font-size: var(--font-size-lg);
+    }
+
+    .dashboard__notice {
+        width: 100%;
+        flex: none;
     }
 }
 
@@ -181,7 +172,4 @@
         padding: 16px;
     }
 
-    .machine-status {
-        flex-wrap: wrap;
-    }
 }

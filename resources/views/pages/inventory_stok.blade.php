@@ -104,16 +104,20 @@
     </section>
 
     @foreach ($inventory->slots as $slot)
-        <dialog class="dialog" id="slot-dialog-{{ $slot['slot'] }}" data-slot-dialog>
+        <dialog class="dialog" id="slot-dialog-{{ $slot['slot'] }}" aria-labelledby="slot-dialog-title-{{ $slot['slot'] }}" data-slot-dialog>
             <form class="dialog__content" method="POST" action="{{ route('inventory.slots.update', ['slot' => $slot['slot']]) }}">
                 @csrf
                 @method('PATCH')
-                <div class="dialog__row"><span class="dialog__label">NAMA PRODUK</span><span class="dialog__value" data-slot-view>{{ $slot['product'] }}</span><input class="dialog__input" name="product" value="{{ $slot['product'] }}" required hidden></div>
+                <header class="dialog__header">
+                    <h2 class="dialog__title" id="slot-dialog-title-{{ $slot['slot'] }}">Edit Slot {{ $slot['slot'] }}</h2>
+                    <button class="dialog__close" type="button" data-close-slot>Tutup</button>
+                </header>
+                <div class="dialog__row"><span class="dialog__label">NAMA PRODUK</span><input class="dialog__input" name="product" value="{{ $slot['product'] }}" required></div>
                 <div class="dialog__row"><span class="dialog__label">SLOT</span><span class="dialog__value">{{ $slot['slot'] }}</span></div>
-                <div class="dialog__row"><span class="dialog__label">STOK</span><span class="dialog__value" data-slot-view><x-progress-bar :percentage="$slot['stock_percent']" :status="$slot['status']->value" :label="$slot['stock'].'/'.$slot['capacity']" /></span><input class="dialog__input" type="number" name="stock" value="{{ $slot['stock'] }}" min="0" max="10" required hidden></div>
-                <div class="dialog__row"><span class="dialog__label">TERAKHIR FILL</span><span class="dialog__value" data-slot-view>{{ $slot['filled_at'] }}</span><input class="dialog__input" name="filled_at" value="{{ $slot['filled_at'] }}" required hidden></div>
-                <div class="dialog__row"><span class="dialog__label">HARGA</span><span class="dialog__value" data-slot-view>{{ $slot['price'] }}</span><input class="dialog__input" type="number" name="price" value="{{ $slot['price_value'] }}" min="0" required hidden></div>
-                <div class="dialog__row"><span class="dialog__label">AKSI</span><span class="dialog__value"><button class="dialog__edit" type="button" data-edit-slot>Edit</button><button class="dialog__edit" type="submit" data-save-slot hidden>Simpan</button></span></div>
+                <div class="dialog__row"><span class="dialog__label">STOK</span><input class="dialog__input" type="number" name="stock" value="{{ $slot['stock'] }}" min="0" max="10" required></div>
+                <div class="dialog__row"><span class="dialog__label">TERAKHIR FILL</span><input class="dialog__input" name="filled_at" value="{{ $slot['filled_at'] }}" required></div>
+                <div class="dialog__row"><span class="dialog__label">HARGA</span><input class="dialog__input" type="number" name="price" value="{{ $slot['price_value'] }}" min="0" required></div>
+                <div class="dialog__row"><span class="dialog__label">AKSI</span><span class="dialog__value"><button class="dialog__edit" type="submit">Simpan</button></span></div>
             </form>
         </dialog>
     @endforeach
