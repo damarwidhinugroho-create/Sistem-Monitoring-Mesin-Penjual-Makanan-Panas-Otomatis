@@ -3,6 +3,10 @@
 @section('title', 'History Alert')
 
 @section('content')
+    <script>
+        window.operatorAlertRecords = @js($alerts);
+    </script>
+
     <div class="history-alert__heading">
         <div>
             <h1 class="page-title">History Alert</h1>

@@ -2,13 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\TemperatureService;
+use App\Enums\MachineStatus;
 use Illuminate\Contracts\View\View;
 
 class TemperatureController extends Controller
 {
-    public function __invoke(TemperatureService $service): View
+    public function __invoke(): View
     {
-        return view('pages.monitoring_suhu', ['temperature' => $service->monitor()]);
+        $temperature = [
+            'title' => 'Monitoring Suhu',
+            'temperature' => 62,
+            'status' => 'Online',
+            'updated_at' => '19:02 WIB',
+            'safe_label' => 'Suhu aman >60C',
+            'alert' => 'VM-02 - Marina tidak mengirim data selama 5 mnt',
+            'labels' => ['08:00', '09:00', '10:00', '11:00', '12:00'],
+            'values' => [66, 58, 61, 64, 56],
+            'thresholds' => [60, 60, 60, 60, 60],
+        ];
+
+        return view('pages.monitoring_suhu', [
+            'machineStatus' => MachineStatus::Online,
+            'temperature' => [
+                'readings' => $temperature,
+                'machineStatus' => MachineStatus::Online,
+            ],
+        ]);
     }
 }

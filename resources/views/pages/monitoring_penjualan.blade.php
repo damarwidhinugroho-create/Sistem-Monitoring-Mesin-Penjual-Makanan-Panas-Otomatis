@@ -7,19 +7,19 @@
         <h1 class="page-title">Monitoring Penjualan</h1>
         <nav class="sales__periods" aria-label="Periode penjualan">
             @foreach (\App\Enums\SalesPeriod::cases() as $period)
-                <a class="chart-card__control {{ $sales->period === $period ? 'chart-card__control--active' : '' }}" href="{{ route('sales', ['period' => $period->value]) }}">{{ $period->label() }}</a>
+                <a class="chart-card__control {{ $sales['period'] === $period ? 'chart-card__control--active' : '' }}" href="{{ route('sales', ['period' => $period->value]) }}">{{ $period->label() }}</a>
             @endforeach
         </nav>
     </div>
 
     <section class="stat-grid sales__metrics" aria-label="Statistik penjualan">
-        <x-kartu-ringkasan :label="$sales->report['transactions_label']" :value="$sales->report['transactions']" icon-name="receipt" />
-        <x-kartu-ringkasan :label="$sales->report['revenue_label']" :value="$sales->report['revenue']" icon-name="money" />
+        <x-kartu-ringkasan :label="$sales['report']['transactions_label']" :value="$sales['report']['transactions']" icon-name="receipt" />
+        <x-kartu-ringkasan :label="$sales['report']['revenue_label']" :value="$sales['report']['revenue']" icon-name="money" />
         <x-kartu-ringkasan
-            :label="$sales->report['waste_label']"
-            :value="$sales->report['waste']"
+            :label="$sales['report']['waste_label']"
+            :value="$sales['report']['waste']"
             icon-name="food"
-            :tag="$sales->period === \App\Enums\SalesPeriod::Minggu ? 'Hari Ini' : '05 Agu 2025'"
+            :tag="$sales['period'] === \App\Enums\SalesPeriod::Minggu ? 'Hari Ini' : '05 Agu 2025'"
             tag-status="safe"
         />
     </section>
@@ -29,15 +29,15 @@
             title="Tren Omzet Penjualan"
             chart-id="sales-revenue-chart"
             type="bar"
-            :labels="$sales->period->axisLabels()"
-            :values="$sales->report['bars']"
+            :labels="$sales['period']->axisLabels()"
+            :values="$sales['report']['bars']"
         />
     </section>
 
     <section class="surface sales__products">
         <h2 class="section-heading sales__table-heading">Performa Produk</h2>
         <x-tabel-data :headers="['PRODUK', 'TERJUAL', 'TERBUANG', 'TERBUANG(%)']">
-            @foreach ($sales->report['product_performance'] as $product)
+            @foreach ($sales['report']['product_performance'] as $product)
                 <tr>
                     <td>{{ $product['product'] }}</td>
                     <td>{{ $product['sold'] }}</td>
@@ -51,7 +51,7 @@
     <section class="surface sales__transactions">
         <h2 class="section-heading sales__table-heading">Riwayat Transaksi</h2>
         <x-tabel-data :headers="[]">
-            @foreach ($sales->transactions as $transaction)
+            @foreach ($sales['transactions'] as $transaction)
                 <tr>
                     <td>{{ $transaction['time'] }}</td>
                     <td>{{ $transaction['product'] }}</td>
