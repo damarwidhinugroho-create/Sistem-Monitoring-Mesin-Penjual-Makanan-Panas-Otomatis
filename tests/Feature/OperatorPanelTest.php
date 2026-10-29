@@ -84,6 +84,83 @@ class OperatorPanelTest extends TestCase
             ->assertDontSee('Data masih belum ada');
     }
 
+    public function test_nested_inventory_api_data_is_displayed_for_each_slot(): void
+    {
+        config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
+        Http::fake([
+            '*' => Http::response([
+                'success' => true,
+                'message' => 'Inventory retrieved successfully',
+                'data' => [
+                    [
+                        'machine' => ['id' => ApiController::MACHINE_ID, 'name' => 'Vending Machine Ptr', 'status' => 'ONLINE'],
+                        'slot' => ['id' => 3, 'slot_code' => 'A03', 'capacity' => 10],
+                        'product' => ['id' => 1, 'name' => 'Mie Lendir', 'price' => '15000.00'],
+                        'current_qty' => 7,
+                        'hold_qty' => 2,
+                        'available_qty' => 5,
+                    ],
+                    [
+                        'machine' => ['id' => ApiController::MACHINE_ID, 'name' => 'Vending Machine Ptr', 'status' => 'ONLINE'],
+                        'slot' => ['id' => 5, 'slot_code' => 'A04', 'capacity' => 1],
+                        'product' => ['id' => 12, 'name' => 'Ayam Bakar Taliwang', 'price' => '17100.00'],
+                        'current_qty' => 1,
+                        'hold_qty' => 0,
+                        'available_qty' => 1,
+                    ],
+                    [
+                        'machine' => ['id' => ApiController::MACHINE_ID, 'name' => 'Vending Machine Ptr', 'status' => 'ONLINE'],
+                        'slot' => ['id' => 7, 'slot_code' => 'A05', 'capacity' => 7],
+                        'product' => ['id' => 11, 'name' => 'Ayam Geprek', 'price' => '22500.00'],
+                        'current_qty' => 6,
+                        'hold_qty' => 0,
+                        'available_qty' => 6,
+                    ],
+                    [
+                        'machine' => ['id' => ApiController::MACHINE_ID, 'name' => 'Vending Machine Ptr', 'status' => 'ONLINE'],
+                        'slot' => ['id' => 8, 'slot_code' => 'A06', 'capacity' => 5],
+                        'product' => ['id' => 1, 'name' => 'Mie Lendir', 'price' => '15000.00'],
+                        'current_qty' => 5,
+                        'hold_qty' => 0,
+                        'available_qty' => 5,
+                    ],
+                    [
+                        'machine' => ['id' => ApiController::MACHINE_ID, 'name' => 'Vending Machine Ptr', 'status' => 'ONLINE'],
+                        'slot' => ['id' => 9, 'slot_code' => 'A07', 'capacity' => 2],
+                        'product' => ['id' => 6, 'name' => 'Lemper Ayam', 'price' => '9000.00'],
+                        'current_qty' => 2,
+                        'hold_qty' => 0,
+                        'available_qty' => 2,
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $this->post('/login', [
+            'username' => 'Budi',
+            'password' => 'budi123',
+        ]);
+
+        $this->get('/inventory')
+            ->assertOk()
+            ->assertSee('A03')
+            ->assertSee('A07')
+            ->assertSee('Mie Lendir')
+            ->assertSee('Ayam Bakar Taliwang')
+            ->assertSee('5/10')
+            ->assertSee('1/1')
+            ->assertSee('6/7')
+            ->assertSee('5/5')
+            ->assertSee('2/2');
+
+        $this->get('/dashboard')
+            ->assertOk()
+            ->assertSee('19 Porsi')
+            ->assertSee('dari 5 slot aktif')
+            ->assertSee('Mie Lendir')
+            ->assertSee('Ayam Bakar Taliwang');
+    }
+
     public function test_inventory_and_dashboard_show_a_message_when_api_data_is_empty(): void
     {
         config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
