@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\ApiController;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -85,6 +86,7 @@ class OperatorPanelTest extends TestCase
 
     public function test_inventory_and_dashboard_show_a_message_when_api_data_is_empty(): void
     {
+        config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
         Http::fake(['*' => Http::response(['data' => []], 200)]);
 
         $this->post('/login', [
@@ -102,6 +104,17 @@ class OperatorPanelTest extends TestCase
             ->assertOk()
             ->assertSee('colspan="6" role="status">Data masih belum ada.', false)
             ->assertDontSee('<p class="surface" role="status">Data masih belum ada.</p>', false);
+    }
+
+    public function test_api_controller_uses_the_configured_vending_url(): void
+    {
+        $url = 'https://vending.example.test/api/inventory';
+        config(['app.api_vending_url' => $url]);
+        Http::fake(['*' => Http::response(['data' => []], 200)]);
+
+        app(ApiController::class)->getInventory();
+
+        Http::assertSent(fn (Request $request): bool => $request->url() === $url);
     }
 
     public function test_sales_period_must_be_one_of_the_supported_values(): void
@@ -135,6 +148,8 @@ class OperatorPanelTest extends TestCase
 
     private function fakeInventoryApi(): void
     {
+        config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
+
         Http::fake([
             '*' => Http::response([
                 'data' => [

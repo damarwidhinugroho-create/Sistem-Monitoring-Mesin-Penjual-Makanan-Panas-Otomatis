@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
+use RuntimeException;
 use UnexpectedValueException;
 
 class ApiController extends Controller
 {
-    public const INVENTORY_URL = 'https://vending-machines-rust.vercel.app/api/v1/inventory?machine_id=3';
-
     public const MACHINE_ID = 3;
 
     /**
@@ -17,9 +16,15 @@ class ApiController extends Controller
      */
     public function getInventory(): array
     {
+        $apiUrl = config('app.api_vending_url');
+
+        if (! is_string($apiUrl) || trim($apiUrl) === '') {
+            throw new RuntimeException('API_VENDING_URL belum diatur pada file .env.');
+        }
+
         $payload = Http::acceptJson()
             ->timeout(10)
-            ->get(self::INVENTORY_URL)
+            ->get($apiUrl)
             ->throw()
             ->json();
 
