@@ -14,7 +14,7 @@ class DashboardController extends Controller
         $updates = session('operator.slot_updates', []);
 
         $shelfLifeRows = array_map(function (array $row, int $index) use ($updates): array {
-            $slot = 'A'.($index + 1);
+            $slot = $row['slot_code'] ?? 'A'.($index + 1);
             $stock = (int) ($updates[$slot]['stock'] ?? $row['quantity'] ?? 0);
             $capacity = (int) ($row['maximum_stock'] ?? 0);
             $minimumStock = (int) ($row['minimum_stock'] ?? 0);

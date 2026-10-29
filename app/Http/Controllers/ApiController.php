@@ -39,9 +39,13 @@ class ApiController extends Controller
         }
 
         return collect($payload['data'])
-            ->filter(fn (array $row): bool => (int) ($row['machine_id'] ?? 0) === self::MACHINE_ID)
-            ->unique(fn (array $row): ?string => $row['product']['name'] ?? null)
-            ->take(4)
+            ->filter(fn (array $row): bool => (int) ($row['machine']['id'] ?? $row['machine_id'] ?? 0) === self::MACHINE_ID)
+            ->map(fn (array $row): array => array_merge($row, [
+                'slot_code' => $row['slot']['slot_code'] ?? $row['slot_code'] ?? null,
+                'maximum_stock' => $row['slot']['capacity'] ?? $row['maximum_stock'] ?? 0,
+                'quantity' => $row['available_qty'] ?? $row['current_qty'] ?? $row['quantity'] ?? 0,
+                'minimum_stock' => $row['minimum_stock'] ?? 0,
+            ]))
             ->values()
             ->all();
     }

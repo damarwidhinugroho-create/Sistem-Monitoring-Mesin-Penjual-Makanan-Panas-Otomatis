@@ -18,7 +18,7 @@ class InventoryController extends Controller
 
         $slots = array_map(function (array $row, int $index) use ($updates): array {
             $number = $index + 1;
-            $slot = 'A'.$number;
+            $slot = $row['slot_code'] ?? 'A'.$number;
             $price = (int) ($row['product']['price'] ?? 0);
             $restockedAt = $row['last_restocked_at'] ?? null;
             $stock = (int) ($updates[$slot]['stock'] ?? $row['quantity'] ?? 0);
@@ -28,7 +28,7 @@ class InventoryController extends Controller
 
             return [
                 'slot' => $slot,
-                'slot_number' => 'Slot '.$number,
+                'slot_number' => 'Slot '.$slot,
                 'product' => $updates[$slot]['product'] ?? $row['product']['name'] ?? 'Produk Slot '.$number,
                 'duration' => '—',
                 'stock' => $stock,
