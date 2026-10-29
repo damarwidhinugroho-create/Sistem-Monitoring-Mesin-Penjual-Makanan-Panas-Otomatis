@@ -20,7 +20,7 @@ Route::middleware('guest:operator')->group(function (): void {
 
 Route::middleware('auth:operator')->group(function (): void {
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory');
     Route::patch('/inventory/slots/{slot}', [InventoryController::class, 'update'])
         ->whereIn('slot', ['A1', 'A2', 'A3', 'A4'])

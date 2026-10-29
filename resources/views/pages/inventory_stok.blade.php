@@ -9,7 +9,7 @@
     </div>
 
     <section class="stat-grid inventory__stats" aria-label="Ringkasan stok">
-        @foreach ($inventory->summary as $stat)
+        @foreach ($inventory['summary'] as $stat)
             @php
                 $iconName = match ($stat['label']) {
                     'Total Stok' => 'box',
@@ -25,7 +25,7 @@
     <section class="surface inventory__life">
         <div class="inventory__life-title"><h2 class="section-heading">Masa Simpan Makanan</h2></div>
         <x-tabel-data :headers="['PRODUK', 'SUHU', 'STOK', 'DURASI DI MESIN', 'SISA WAKTU', 'STATUS']">
-            @foreach ($inventory->shelfLifeRows as $row)
+            @forelse ($inventory['shelfLifeRows'] as $row)
                 <tr>
                     <td>{{ $row['product'] }}</td>
                     <td>{{ $row['temperature'] }}</td>
@@ -40,13 +40,17 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="6" role="status">Data masih belum ada.</td>
+                </tr>
+            @endforelse
         </x-data-table>
     </section>
 
     @php
         $inventorySlotTone = 'aman';
-        foreach ($inventory->slots as $slot) {
+        foreach ($inventory['slots'] as $slot) {
             if ($slot['status']->value === 'habis') {
                 $inventorySlotTone = 'habis';
                 break;
@@ -68,7 +72,7 @@
             </div> --}}
         </div>
         <div class="inventory__slot-grid">
-            @foreach ($inventory->slots as $slot)
+            @foreach ($inventory['slots'] as $slot)
                 <article class="slot-card">
                     <div class="slot-card__top">
                         <span class="slot-card__slot">{{ $slot['slot'] }}<small>{{ $slot['slot_number'] }}</small></span>
@@ -88,14 +92,18 @@
     <section class="surface restock">
         <h2 class="section-heading restock__heading">Riwayat Restok</h2>
         <x-tabel-data :headers="['TANGGAL & WAKTU', 'SLOT', 'PRODUK', 'JUMLAH TAMBAH']">
-            @foreach ($inventory->restockHistory as $entry)
+            @forelse ($inventory['restockHistory'] as $entry)
                 <tr>
                     <td>{{ $entry['date'] }}</td>
                     <td>{{ $entry['slot'] }}</td>
                     <td>{{ $entry['product'] }}</td>
                     <td>{{ $entry['quantity'] }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="4" role="status">Data masih belum ada.</td>
+                </tr>
+            @endforelse
         </x-tabel-data>
         <nav class="pagination" aria-label="Halaman riwayat restok">
             <button type="button" class="is-current">1</button><button type="button">2</button><button type="button">3</button><span>...</span><button type="button">10</button>
@@ -103,7 +111,7 @@
         </nav>
     </section>
 
-    @foreach ($inventory->slots as $slot)
+    @foreach ($inventory['slots'] as $slot)
         <dialog class="dialog" id="slot-dialog-{{ $slot['slot'] }}" aria-labelledby="slot-dialog-title-{{ $slot['slot'] }}" data-slot-dialog>
             <form class="dialog__content" method="POST" action="{{ route('inventory.slots.update', ['slot' => $slot['slot']]) }}">
                 @csrf

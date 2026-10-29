@@ -1,8 +1,7 @@
-import { alertRecords } from './data/mockLaporanData';
-
 const root = document.querySelector('[data-alert-filter]');
 
 if (root) {
+    const alertRecords = window.operatorAlertRecords ?? [];
     const tableBody = document.querySelector('.history-alert__table tbody');
     const emptyRow = tableBody?.querySelector('[data-alert-empty]');
     const pagination = document.querySelector('[data-alert-pagination]');

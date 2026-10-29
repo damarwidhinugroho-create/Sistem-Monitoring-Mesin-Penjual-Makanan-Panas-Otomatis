@@ -20,7 +20,7 @@
 </head>
 <body>
     <div class="operator-layout">
-        <x-sidebar />
+        <x-sidebar :machine-status="$machineStatus" />
         <main class="operator-main">
             <section class="operator-content">
                 @yield('content')
