@@ -34,11 +34,11 @@
         />
     </section>
 
-    <section class="surface sales__products">
+    <section class="surface sales__products" data-paginated-list data-item-label="produk">
         <h2 class="section-heading sales__table-heading">Performa Produk</h2>
         <x-tabel-data :headers="['PRODUK', 'TERJUAL', 'TERBUANG', 'TERBUANG(%)']">
             @foreach ($sales['report']['product_performance'] as $product)
-                <tr>
+                <tr data-pagination-row>
                     <td>{{ $product['product'] }}</td>
                     <td>{{ $product['sold'] }}</td>
                     <td>{{ $product['wasted'] }}</td>
@@ -46,20 +46,33 @@
                 </tr>
             @endforeach
         </x-tabel-data>
+        <div class="sales__list-footer" data-pagination-controls hidden>
+            <p class="sales__list-count" data-pagination-count aria-live="polite"></p>
+            <div class="sales__list-actions">
+                <button class="button" type="button" data-pagination-view-all>Lihat semua</button>
+                <nav class="pagination sales__list-pagination" aria-label="Halaman performa produk" data-pagination-nav></nav>
+            </div>
+        </div>
     </section>
 
-    <section class="surface sales__transactions">
+    <section class="surface sales__transactions" data-paginated-list data-item-label="transaksi">
         <h2 class="section-heading sales__table-heading">Riwayat Transaksi</h2>
         <x-tabel-data :headers="[]">
             @foreach ($sales['transactions'] as $transaction)
-                <tr>
+                <tr data-pagination-row>
                     <td>{{ $transaction['time'] }}</td>
                     <td>{{ $transaction['product'] }}</td>
                     <td class="data-table__right">{{ $transaction['amount'] }}</td>
                 </tr>
             @endforeach
         </x-tabel-data>
-        <button class="sales__load-more" type="button">Muat Lebih Banyak <span aria-hidden="true">↓</span></button>
+        <div class="sales__list-footer" data-pagination-controls hidden>
+            <p class="sales__list-count" data-pagination-count aria-live="polite"></p>
+            <div class="sales__list-actions">
+                <button class="button" type="button" data-pagination-view-all>Lihat semua</button>
+                <nav class="pagination sales__list-pagination" aria-label="Halaman riwayat transaksi" data-pagination-nav></nav>
+            </div>
+        </div>
     </section>
 @endsection
 

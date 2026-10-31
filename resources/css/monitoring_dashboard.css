@@ -115,6 +115,50 @@
     padding: 15px 16px 11px;
 }
 
+.dashboard__list-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: var(--border-width) solid var(--border-light);
+    padding: 9px 14px;
+}
+
+.dashboard__list-count {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+}
+
+.dashboard__list-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dashboard__list-pagination {
+    border: 0;
+    padding: 0;
+}
+
+.dashboard__list-pagination button:disabled {
+    cursor: not-allowed;
+    opacity: .5;
+}
+
+.dashboard__list-pagination button {
+    min-width: 28px;
+    height: 28px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    font-size: 11px;
+}
+
+.dashboard__list-pagination .is-current {
+    border-color: var(--brand-primary);
+}
+
 /* Kartu grafik dan pemberitahuan tambahan di dashboard. */
 .dashboard__charts {
     display: grid;
@@ -126,6 +170,13 @@
 .dashboard__notice {
     flex: 1;
     margin: 0;
+    border-color: var(--critical);
+    background: var(--critical-light);
+    color: var(--critical);
+}
+
+.dashboard__notice .alert-banner__icon {
+    color: var(--critical);
 }
 
 /* Atur ulang ringkasan dan grafik di layar kecil. */
@@ -144,6 +195,17 @@
     .dashboard__notice {
         width: 100%;
         flex: none;
+    }
+
+    .dashboard__list-footer,
+    .dashboard__list-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .dashboard__list-pagination {
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 }
 

@@ -163,14 +163,35 @@
     text-align: center;
 }
 
-/* Tombol halaman tabel buat pindah ke data sebelumnya atau berikutnya. */
+/* Navigasi tabel alert dan opsi menampilkan semua hasil filter. */
+.history-alert__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: var(--border-width) solid var(--border-light);
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+    padding: 9px 14px;
+}
+
+.history-alert__count {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+}
+
+.history-alert__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .history-alert__pagination {
     display: flex;
     justify-content: flex-end;
     gap: 5px;
-    border-top: var(--border-width) solid var(--border-light);
-    border-radius: 0 0 var(--radius-card) var(--radius-card);
-    padding: 9px 14px;
+    border: 0;
+    padding: 0;
 }
 
 .history-alert__pagination button {
@@ -216,6 +237,17 @@
 
     .history-alert__table {
         min-width: 620px;
+    }
+
+    .history-alert__footer,
+    .history-alert__actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .history-alert__pagination {
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 }
 

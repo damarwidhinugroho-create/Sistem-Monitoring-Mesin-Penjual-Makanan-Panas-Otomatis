@@ -4,10 +4,14 @@ if (root) {
     const alertRecords = window.operatorAlertRecords ?? [];
     const tableBody = document.querySelector('.history-alert__table tbody');
     const emptyRow = tableBody?.querySelector('[data-alert-empty]');
+    const controls = document.querySelector('[data-alert-controls]');
+    const count = document.querySelector('[data-alert-count]');
     const pagination = document.querySelector('[data-alert-pagination]');
-    const pageSize = 5;
+    const viewAllButton = document.querySelector('[data-alert-view-all]');
+    const pageSize = 6;
     let selectedFilter = 'all';
     let currentPage = 1;
+    let showAll = false;
     let selectedMonth = '';
     let selectedYear = '';
 
@@ -95,9 +99,9 @@ if (root) {
 
     const renderPagination = (pageCount) => {
         pagination.replaceChildren();
-        pagination.hidden = pageCount <= 1;
+        pagination.hidden = showAll || pageCount <= 1;
 
-        if (pageCount <= 1) {
+        if (showAll || pageCount <= 1) {
             return;
         }
 
@@ -137,15 +141,22 @@ if (root) {
     };
 
     const render = () => {
-        if (!tableBody || !emptyRow || !pagination) {
+        if (!tableBody || !emptyRow || !controls || !count || !pagination || !viewAllButton) {
             return;
         }
 
         const alerts = visibleAlerts();
         const pageCount = Math.ceil(alerts.length / pageSize);
         currentPage = Math.min(currentPage, Math.max(pageCount, 1));
-        const pageAlerts = alerts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+        const start = showAll ? 0 : (currentPage - 1) * pageSize;
+        const end = showAll ? alerts.length : Math.min(start + pageSize, alerts.length);
+        const pageAlerts = alerts.slice(start, end);
         tableBody.replaceChildren();
+        controls.hidden = alerts.length <= pageSize;
+        count.textContent = showAll
+            ? `Menampilkan semua ${alerts.length} alert`
+            : `Menampilkan ${alerts.length === 0 ? 0 : start + 1}–${end} dari ${alerts.length} alert`;
+        viewAllButton.textContent = showAll ? 'Tampilkan per halaman' : 'Lihat semua';
 
         if (pageAlerts.length === 0) {
             emptyRow.hidden = false;
@@ -166,6 +177,7 @@ if (root) {
 
         selectedFilter = button.dataset.filter;
         currentPage = 1;
+        showAll = false;
         root.querySelectorAll('[data-filter]').forEach((filterButton) => {
             const active = filterButton === button;
             filterButton.classList.toggle('is-active', active);
@@ -177,6 +189,13 @@ if (root) {
     document.querySelector('[data-period-picker][data-context="alerts"]')?.addEventListener('periodchange', (event) => {
         selectedMonth = event.currentTarget.dataset.month;
         selectedYear = event.currentTarget.dataset.year;
+        currentPage = 1;
+        showAll = false;
+        render();
+    });
+
+    viewAllButton?.addEventListener('click', () => {
+        showAll = !showAll;
         currentPage = 1;
         render();
     });
