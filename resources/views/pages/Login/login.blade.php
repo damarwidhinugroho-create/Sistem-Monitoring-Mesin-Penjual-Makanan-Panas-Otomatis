@@ -7,7 +7,7 @@
         <form class="login-card__body" method="POST" action="{{ route('login.store') }}">
             @csrf
             <div class="login-card__avatar" aria-hidden="true">
-                <img src="{{ asset('images/logo.svg') }}" alt="Logo" class="login-card__avatar-logo">
+                <x-ikon name="logo" size="42" class="login-card__avatar-logo" />
             </div>
             <h1 class="login-card__title" id="login-title">LOGIN operator/UMKM</h1>
             <label class="login-field">
@@ -27,7 +27,6 @@
             @enderror
             <button class="login-card__submit" type="submit">LOGIN</button>
         </form>
-        <div class="login-card__forgot"><a href="{{ route('password.request') }}">Lupa Password?</a></div>
     </section>
 @endsection
 

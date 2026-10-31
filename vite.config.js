@@ -15,7 +15,6 @@ export default defineConfig({
                 'resources/css/riwayat_alert.css',
                 'resources/css/laporan.css',
                 'resources/css/login.css',
-                'resources/css/lupa_password.css',
                 'resources/js/app.js',
             ],
             refresh: true,

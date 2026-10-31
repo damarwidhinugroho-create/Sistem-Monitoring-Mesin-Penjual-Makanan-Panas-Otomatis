@@ -22,13 +22,15 @@ class OperatorPanelTest extends TestCase
         $this->get('/dashboard')->assertOk()->assertSee('DASHBOARD OVERVIEW');
     }
 
-    public function test_forgot_password_page_is_available_to_guests(): void
+    public function test_login_page_displays_the_vending_machine_logo_without_forgot_password(): void
     {
-        $this->get('/forgot-password')
+        $this->get('/login')
             ->assertOk()
-            ->assertSee('LUPA PASSWORD')
-            ->assertSee('Kembali ke Login')
-            ->assertSee('images/logo.svg');
+            ->assertSee('LOGIN operator/UMKM')
+            ->assertSee('icon login-card__avatar-logo')
+            ->assertDontSee('Lupa Password');
+
+        $this->get('/forgot-password')->assertNotFound();
     }
 
     public function test_operator_pages_require_a_login(): void
@@ -82,6 +84,54 @@ class OperatorPanelTest extends TestCase
             ->assertSee('Luti Gendang Abon')
             ->assertDontSee('Produk Mesin Lain')
             ->assertDontSee('Data masih belum ada');
+    }
+
+    public function test_stock_of_three_is_critical_on_dashboard_and_inventory(): void
+    {
+        config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
+        Http::fake([
+            '*' => Http::response([
+                'data' => [
+                    [
+                        'machine_id' => ApiController::MACHINE_ID,
+                        'slot_code' => 'A1',
+                        'quantity' => 3,
+                        'minimum_stock' => 0,
+                        'maximum_stock' => 10,
+                        'product' => ['name' => 'Produk Kritis'],
+                    ],
+                    [
+                        'machine_id' => ApiController::MACHINE_ID,
+                        'slot_code' => 'A2',
+                        'quantity' => 0,
+                        'minimum_stock' => 0,
+                        'maximum_stock' => 10,
+                        'product' => ['name' => 'Produk Habis'],
+                    ],
+                    [
+                        'machine_id' => ApiController::MACHINE_ID,
+                        'slot_code' => 'A3',
+                        'quantity' => 4,
+                        'minimum_stock' => 0,
+                        'maximum_stock' => 10,
+                        'product' => ['name' => 'Produk Aman'],
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $this->post('/login', [
+            'username' => 'Budi',
+            'password' => 'budi123',
+        ]);
+
+        foreach (['/dashboard', '/inventory'] as $path) {
+            $this->get($path)
+                ->assertOk()
+                ->assertSeeInOrder(['Produk Kritis', 'progress--warning', '3/10'])
+                ->assertSeeInOrder(['Produk Habis', 'progress--empty', '0/10'])
+                ->assertSeeInOrder(['Produk Aman', 'progress--safe', '4/10']);
+        }
     }
 
     public function test_nested_inventory_api_data_is_displayed_for_each_slot(): void
