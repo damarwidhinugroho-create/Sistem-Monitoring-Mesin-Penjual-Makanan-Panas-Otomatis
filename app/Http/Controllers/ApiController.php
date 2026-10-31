@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MachineStatus;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
@@ -15,6 +16,37 @@ class ApiController extends Controller
      * @throws ConnectionException
      */
     public function getInventory(): array
+    {
+        return $this->normalizeInventory($this->fetchRows());
+    }
+
+    /**
+     * @throws ConnectionException
+     *
+     * @return array{inventory: array, machineStatus: MachineStatus}
+     */
+    public function getMachineData(): array
+    {
+        $rows = $this->fetchRows();
+
+        return [
+            'inventory' => $this->normalizeInventory($rows),
+            'machineStatus' => $this->machineStatusFromRows($rows),
+        ];
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    public function getMachineStatus(): MachineStatus
+    {
+        return $this->machineStatusFromRows($this->fetchRows());
+    }
+
+    /**
+     * @throws ConnectionException
+     */
+    private function fetchRows(): array
     {
         $apiUrl = config('app.api_vending_url');
 
@@ -38,8 +70,13 @@ class ApiController extends Controller
             }
         }
 
-        return collect($payload['data'])
-            ->filter(fn (array $row): bool => (int) ($row['machine']['id'] ?? $row['machine_id'] ?? 0) === self::MACHINE_ID)
+        return $payload['data'];
+    }
+
+    private function normalizeInventory(array $rows): array
+    {
+        return collect($rows)
+            ->filter(fn (array $row): bool => $this->isMachineOnline($row))
             ->map(fn (array $row): array => array_merge($row, [
                 'slot_code' => $row['slot']['slot_code'] ?? $row['slot_code'] ?? null,
                 'maximum_stock' => $row['slot']['capacity'] ?? $row['maximum_stock'] ?? 0,
@@ -48,5 +85,42 @@ class ApiController extends Controller
             ]))
             ->values()
             ->all();
+    }
+
+    private function machineStatusFromRows(array $rows): MachineStatus
+    {
+        $machineRows = array_filter($rows, fn (array $row): bool => $this->belongsToMachine($row));
+
+        if ($machineRows === []) {
+            return MachineStatus::Offline;
+        }
+
+        foreach ($machineRows as $row) {
+            if (! $this->isMachineOnline($row)) {
+                return MachineStatus::Offline;
+            }
+        }
+
+        return MachineStatus::Online;
+    }
+
+    private function isMachineOnline(array $row): bool
+    {
+        if (! $this->belongsToMachine($row)) {
+            return false;
+        }
+
+        $machine = is_array($row['machine'] ?? null) ? $row['machine'] : [];
+        $status = $machine['status'] ?? $row['machine_status'] ?? $row['status'] ?? null;
+
+        return MachineStatus::fromApiStatus(is_string($status) ? $status : null) === MachineStatus::Online;
+    }
+
+    private function belongsToMachine(array $row): bool
+    {
+        $machine = is_array($row['machine'] ?? null) ? $row['machine'] : [];
+        $machineId = $machine['id'] ?? $row['machine_id'] ?? 0;
+
+        return (int) $machineId === self::MACHINE_ID;
     }
 }

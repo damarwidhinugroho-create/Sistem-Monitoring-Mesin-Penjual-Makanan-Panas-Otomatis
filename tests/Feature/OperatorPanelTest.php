@@ -48,15 +48,15 @@ class OperatorPanelTest extends TestCase
             'password' => 'budi123',
         ]);
 
-        $this->get('/dashboard')->assertOk()->assertSee('Rp 1.250.000');
-        $this->get('/inventory')->assertOk()->assertSee('30/10/2026 13:00');
-        $this->get('/sales?period=jam')->assertOk()->assertSee('Rp. 120.000');
-        $this->get('/sales?period=hari')->assertOk()->assertSee('Senin');
-        $this->get('/sales?period=minggu')->assertOk()->assertSee('Minggu 1');
-        $this->get('/temperature')->assertOk()->assertSee('62°C');
-        $this->get('/machine')->assertOk()->assertSee('VM - 001');
-        $this->get('/alerts')->assertOk()->assertSee('History Alert');
-        $this->get('/reports')->assertOk()->assertSee('Laporan');
+        $this->get('/dashboard')->assertOk()->assertSee('Rp 1.250.000')->assertSee('Status VM')->assertSee('Online');
+        $this->get('/inventory')->assertOk()->assertSee('30/10/2026 13:00')->assertSee('Online');
+        $this->get('/sales?period=jam')->assertOk()->assertSee('Rp. 120.000')->assertSee('Online');
+        $this->get('/sales?period=hari')->assertOk()->assertSee('Senin')->assertSee('Online');
+        $this->get('/sales?period=minggu')->assertOk()->assertSee('Minggu 1')->assertSee('Online');
+        $this->get('/temperature')->assertOk()->assertSee('62°C')->assertSee('Online');
+        $this->get('/machine')->assertOk()->assertSee('VM - 001')->assertSee('Online');
+        $this->get('/alerts')->assertOk()->assertSee('History Alert')->assertSee('Online');
+        $this->get('/reports')->assertOk()->assertSee('Laporan')->assertSee('Online');
     }
 
     public function test_inventory_data_is_shared_with_the_dashboard(): void
@@ -233,6 +233,57 @@ class OperatorPanelTest extends TestCase
             ->assertDontSee('<p class="surface" role="status">Data masih belum ada.</p>', false);
     }
 
+    public function test_offline_machine_inventory_is_not_displayed(): void
+    {
+        config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
+        Http::fake([
+            '*' => Http::response([
+                'data' => [
+                    [
+                        'machine' => [
+                            'id' => ApiController::MACHINE_ID,
+                            'status' => 'OFFLINE',
+                        ],
+                        'slot' => ['slot_code' => 'A1', 'capacity' => 10],
+                        'product' => ['name' => 'Produk Offline'],
+                        'available_qty' => 8,
+                    ],
+                    [
+                        'machine' => [
+                            'id' => ApiController::MACHINE_ID,
+                            'status' => 'UNKNOWN',
+                        ],
+                        'slot' => ['slot_code' => 'A2', 'capacity' => 10],
+                        'product' => ['name' => 'Produk Status Tidak Diketahui'],
+                        'available_qty' => 5,
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $this->post('/login', [
+            'username' => 'Budi',
+            'password' => 'budi123',
+        ]);
+
+        $this->get('/inventory')
+            ->assertOk()
+            ->assertDontSee('Produk Offline')
+            ->assertDontSee('Produk Status Tidak Diketahui')
+            ->assertSee('Data masih belum ada.');
+
+        $this->get('/dashboard')
+            ->assertOk()
+            ->assertDontSee('Produk Offline')
+            ->assertDontSee('Produk Status Tidak Diketahui')
+            ->assertSee('dari 0 slot aktif');
+
+        $this->get('/machine')
+            ->assertOk()
+            ->assertSee('sidebar__vm-card--offline', false)
+            ->assertSee('Offline');
+    }
+
     public function test_api_controller_uses_the_configured_vending_url(): void
     {
         $url = 'https://vending.example.test/api/inventory';
@@ -282,6 +333,7 @@ class OperatorPanelTest extends TestCase
                 'data' => [
                     [
                         'machine_id' => ApiController::MACHINE_ID,
+                        'status' => 'ONLINE',
                         'quantity' => 8,
                         'minimum_stock' => 2,
                         'maximum_stock' => 10,
@@ -290,6 +342,7 @@ class OperatorPanelTest extends TestCase
                     ],
                     [
                         'machine_id' => ApiController::MACHINE_ID,
+                        'status' => 'ONLINE',
                         'quantity' => 2,
                         'minimum_stock' => 2,
                         'maximum_stock' => 10,
@@ -298,6 +351,7 @@ class OperatorPanelTest extends TestCase
                     ],
                     [
                         'machine_id' => ApiController::MACHINE_ID,
+                        'status' => 'ONLINE',
                         'quantity' => 20,
                         'minimum_stock' => 3,
                         'maximum_stock' => 20,
@@ -306,6 +360,7 @@ class OperatorPanelTest extends TestCase
                     ],
                     [
                         'machine_id' => ApiController::MACHINE_ID,
+                        'status' => 'ONLINE',
                         'quantity' => 10,
                         'minimum_stock' => 2,
                         'maximum_stock' => 10,
@@ -314,6 +369,7 @@ class OperatorPanelTest extends TestCase
                     ],
                     [
                         'machine_id' => ApiController::MACHINE_ID + 1,
+                        'status' => 'ONLINE',
                         'quantity' => 100,
                         'minimum_stock' => 1,
                         'maximum_stock' => 100,
