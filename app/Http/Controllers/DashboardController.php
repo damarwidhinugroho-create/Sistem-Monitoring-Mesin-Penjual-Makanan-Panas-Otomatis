@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\MachineStatus;
 use App\Enums\StockStatus;
 use Illuminate\Contracts\View\View;
 
@@ -10,7 +9,8 @@ class DashboardController extends Controller
 {
     public function index(ApiController $api): View
     {
-        $apiRows = $api->getInventory();
+        $machineData = $api->getMachineData();
+        $apiRows = $machineData['inventory'];
         $updates = session('operator.slot_updates', []);
 
         $shelfLifeRows = array_map(function (array $row, int $index) use ($updates): array {
@@ -38,7 +38,7 @@ class DashboardController extends Controller
         $totalStock = array_sum(array_column($shelfLifeRows, 'stock'));
 
         return view('pages.monitoring_dashboard', [
-            'machineStatus' => MachineStatus::Online,
+            'machineStatus' => $machineData['machineStatus'],
             'dashboard' => [
                 'summary' => [
                     'sales' => 'Rp 1.250.000',

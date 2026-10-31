@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\MachineStatus;
 use App\Enums\StockStatus;
 use App\Http\Requests\UpdateSlotRequest;
 use Carbon\Carbon;
@@ -13,7 +12,8 @@ class InventoryController extends Controller
 {
     public function index(ApiController $api): View
     {
-        $apiRows = $api->getInventory();
+        $machineData = $api->getMachineData();
+        $apiRows = $machineData['inventory'];
         $updates = session('operator.slot_updates', []);
 
         $slots = array_map(function (array $row, int $index) use ($updates): array {
@@ -59,7 +59,7 @@ class InventoryController extends Controller
         ], $slots);
 
         return view('pages.inventory_stok', [
-            'machineStatus' => MachineStatus::Online,
+            'machineStatus' => $machineData['machineStatus'],
             'inventory' => [
                 'summary' => [
                     ['label' => 'Total Stok', 'value' => $totalStock],

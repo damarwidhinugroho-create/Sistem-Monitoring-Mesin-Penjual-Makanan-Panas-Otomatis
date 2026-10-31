@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\MachineStatus;
 use Illuminate\Contracts\View\View;
 
 class AlertController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(ApiController $api): View
     {
         $alerts = [
             [
@@ -87,7 +86,7 @@ class AlertController extends Controller
 
         return view('pages.riwayat_alert', [
             'alerts' => $alerts,
-            'machineStatus' => MachineStatus::Online,
+            'machineStatus' => $api->getMachineStatus(),
         ]);
     }
 }

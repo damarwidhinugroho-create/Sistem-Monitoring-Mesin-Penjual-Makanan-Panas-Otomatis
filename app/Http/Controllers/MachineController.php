@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\MachineStatus;
 use Illuminate\Contracts\View\View;
 
 class MachineController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(ApiController $api): View
     {
+        $machineStatus = $api->getMachineStatus();
+
         return view('pages.detail_mesin', [
-            'machineStatus' => MachineStatus::Online,
+            'machineStatus' => $machineStatus,
             'machine' => [
-                'status' => MachineStatus::Online,
+                'status' => $machineStatus,
                 'details' => [
                     'machine_id' => 'VM - 001',
                     'location' => 'Sonoan sikit',

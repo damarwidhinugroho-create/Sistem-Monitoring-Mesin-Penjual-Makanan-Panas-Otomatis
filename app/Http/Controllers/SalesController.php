@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\MachineStatus;
 use App\Enums\SalesPeriod;
 use App\Http\Requests\SalesPeriodRequest;
 use Illuminate\Contracts\View\View;
 
 class SalesController extends Controller
 {
-    public function __invoke(SalesPeriodRequest $request): View
+    public function __invoke(SalesPeriodRequest $request, ApiController $api): View
     {
         $period = SalesPeriod::from($request->validated('period'));
         $report = match ($period) {
@@ -58,7 +57,7 @@ class SalesController extends Controller
         };
 
         return view('pages.monitoring_penjualan', [
-            'machineStatus' => MachineStatus::Online,
+            'machineStatus' => $api->getMachineStatus(),
             'sales' => [
                 'period' => $period,
                 'report' => $report,
