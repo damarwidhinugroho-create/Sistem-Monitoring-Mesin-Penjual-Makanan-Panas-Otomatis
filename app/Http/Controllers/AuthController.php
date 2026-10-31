@@ -16,11 +16,6 @@ class AuthController extends Controller
             : view('pages.Login.login');
     }
 
-    public function forgotPassword(): View
-    {
-        return view('pages.Login.lupa_password');
-    }
-
     public function store(LoginRequest $request): RedirectResponse
     {
         $credentials = $request->validated();

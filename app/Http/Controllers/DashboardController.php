@@ -18,9 +18,7 @@ class DashboardController extends Controller
             $stock = (int) ($updates[$slot]['stock'] ?? $row['quantity'] ?? 0);
             $capacity = (int) ($row['maximum_stock'] ?? 0);
             $minimumStock = (int) ($row['minimum_stock'] ?? 0);
-            $status = $stock <= 0
-                ? StockStatus::Habis
-                : ($stock <= $minimumStock ? StockStatus::Rendah : StockStatus::Aman);
+            $status = StockStatus::fromStock($stock, $minimumStock);
 
             return [
                 'product' => $updates[$slot]['product'] ?? $row['product']['name'] ?? 'Produk Slot '.($index + 1),

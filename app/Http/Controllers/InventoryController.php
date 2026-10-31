@@ -100,15 +100,7 @@ class InventoryController extends Controller
 
     private function stockStatus(int $stock, int $minimumStock): StockStatus
     {
-        if ($stock <= 0) {
-            return StockStatus::Habis;
-        }
-
-        if ($stock <= $minimumStock) {
-            return StockStatus::Rendah;
-        }
-
-        return StockStatus::Aman;
+        return StockStatus::fromStock($stock, $minimumStock);
     }
 
     private function stockPercentage(int $stock, int $capacity): int

@@ -200,13 +200,6 @@ document.querySelectorAll('[data-password-toggle]').forEach((button) => {
     });
 });
 
-document.querySelectorAll('[data-reset-form]').forEach((form) => {
-    form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        form.querySelector('[data-reset-message]').hidden = false;
-    });
-});
-
 document.querySelectorAll('[data-open-slot]').forEach((button) => {
     button.addEventListener('click', () => {
         document.querySelector(`#slot-dialog-${button.dataset.openSlot}`)?.showModal();

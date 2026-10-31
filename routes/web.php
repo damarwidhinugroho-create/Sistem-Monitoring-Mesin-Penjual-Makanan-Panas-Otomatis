@@ -15,7 +15,6 @@ Route::redirect('/', '/login');
 Route::middleware('guest:operator')->group(function (): void {
     Route::get('/login', [AuthController::class, 'create'])->name('login');
     Route::post('/login', [AuthController::class, 'store'])->name('login.store');
-    Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.request');
 });
 
 Route::middleware('auth:operator')->group(function (): void {
