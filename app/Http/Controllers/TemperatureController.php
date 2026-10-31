@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\MachineStatus;
 use Illuminate\Contracts\View\View;
 
 class TemperatureController extends Controller
 {
-    public function __invoke(): View
+    public function __invoke(ApiController $api): View
     {
+        $machineStatus = $api->getMachineStatus();
         $temperature = [
             'title' => 'Monitoring Suhu',
             'temperature' => 62,
-            'status' => 'Online',
+            'status' => $machineStatus->label(),
             'updated_at' => '19:02 WIB',
             'safe_label' => 'Suhu aman >60C',
             'alert' => 'VM-02 - Marina tidak mengirim data selama 5 mnt',
@@ -22,10 +22,10 @@ class TemperatureController extends Controller
         ];
 
         return view('pages.monitoring_suhu', [
-            'machineStatus' => MachineStatus::Online,
+            'machineStatus' => $machineStatus,
             'temperature' => [
                 'readings' => $temperature,
-                'machineStatus' => MachineStatus::Online,
+                'machineStatus' => $machineStatus,
             ],
         ]);
     }
