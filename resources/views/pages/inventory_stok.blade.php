@@ -22,11 +22,11 @@
         @endforeach
     </section>
 
-    <section class="surface inventory__life">
+    <section class="surface inventory__life" data-paginated-list data-item-label="produk">
         <div class="inventory__life-title"><h2 class="section-heading">Masa Simpan Makanan</h2></div>
         <x-tabel-data :headers="['PRODUK', 'SUHU', 'STOK', 'DURASI DI MESIN', 'SISA WAKTU', 'STATUS']">
             @forelse ($inventory['shelfLifeRows'] as $row)
-                <tr>
+                <tr data-pagination-row>
                     <td>{{ $row['product'] }}</td>
                     <td>{{ $row['temperature'] }}</td>
                     <td><x-progress-bar :percentage="$row['stock'] === 0 ? 4 : $row['stock_percent']" :status="$row['stock_status']->value" :label="$row['stock'].'/'.$row['capacity']" /></td>
@@ -42,10 +42,17 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" role="status">Data masih belum ada.</td>
+                    <td colspan="6" role="status" data-pagination-empty>Data masih belum ada.</td>
                 </tr>
             @endforelse
-        </x-data-table>
+        </x-tabel-data>
+        <div class="inventory__list-footer" data-pagination-controls hidden>
+            <p class="inventory__list-count" data-pagination-count aria-live="polite"></p>
+            <div class="inventory__list-actions">
+                <button class="button" type="button" data-pagination-view-all>Lihat semua</button>
+                <nav class="pagination inventory__list-pagination" aria-label="Halaman masa simpan makanan" data-pagination-nav></nav>
+            </div>
+        </div>
     </section>
 
     @php
@@ -73,7 +80,7 @@
         </div>
         <div class="inventory__slot-grid">
             @foreach ($inventory['slots'] as $slot)
-                <article class="slot-card">
+                <article class="slot-card" data-slot-card>
                     <div class="slot-card__top">
                         <span class="slot-card__slot">{{ $slot['slot'] }}<small>{{ $slot['slot_number'] }}</small></span>
                         {{-- <span class="slot-card__label">Status <x-lencana-status :label="$slot['status']->label()" :status="$slot['status']->value" /></span> --}}
@@ -87,13 +94,20 @@
                 </article>
             @endforeach
         </div>
+        <div class="inventory__slots-footer" data-slot-controls hidden>
+            <p class="inventory__slot-count" data-slot-count aria-live="polite"></p>
+            <div class="inventory__slot-actions">
+                <button class="button" type="button" data-slot-view-all>Lihat semua</button>
+                <nav class="pagination inventory__slot-pagination" aria-label="Halaman manajemen stok" data-slot-pagination></nav>
+            </div>
+        </div>
     </section>
 
-    <section class="surface restock">
+    <section class="surface restock" data-paginated-list data-item-label="riwayat restok">
         <h2 class="section-heading restock__heading">Riwayat Restok</h2>
         <x-tabel-data :headers="['TANGGAL & WAKTU', 'SLOT', 'PRODUK', 'JUMLAH TAMBAH']">
             @forelse ($inventory['restockHistory'] as $entry)
-                <tr>
+                <tr data-pagination-row>
                     <td>{{ $entry['date'] }}</td>
                     <td>{{ $entry['slot'] }}</td>
                     <td>{{ $entry['product'] }}</td>
@@ -101,14 +115,17 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" role="status">Data masih belum ada.</td>
+                    <td colspan="4" role="status" data-pagination-empty>Data masih belum ada.</td>
                 </tr>
             @endforelse
         </x-tabel-data>
-        <nav class="pagination" aria-label="Halaman riwayat restok">
-            <button type="button" class="is-current">1</button><button type="button">2</button><button type="button">3</button><span>...</span><button type="button">10</button>
-            <button type="button" aria-label="Halaman berikutnya"><x-ikon name="chevron-right" :size="12" /></button>
-        </nav>
+        <div class="inventory__list-footer" data-pagination-controls hidden>
+            <p class="inventory__list-count" data-pagination-count aria-live="polite"></p>
+            <div class="inventory__list-actions">
+                <button class="button" type="button" data-pagination-view-all>Lihat semua</button>
+                <nav class="pagination inventory__list-pagination" aria-label="Halaman riwayat restok" data-pagination-nav></nav>
+            </div>
+        </div>
     </section>
 
     @foreach ($inventory['slots'] as $slot)

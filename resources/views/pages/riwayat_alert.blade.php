@@ -29,7 +29,13 @@
                 <td class="history-alert__empty" colspan="4">Tidak ada alert untuk filter yang dipilih.</td>
             </tr>
         </x-tabel-data>
-        <nav class="pagination history-alert__pagination" aria-label="Halaman riwayat alert" data-alert-pagination></nav>
+        <div class="history-alert__footer" data-alert-controls hidden>
+            <p class="history-alert__count" data-alert-count aria-live="polite"></p>
+            <div class="history-alert__actions">
+                <button class="button" type="button" data-alert-view-all>Lihat semua</button>
+                <nav class="pagination history-alert__pagination" aria-label="Halaman riwayat alert" data-alert-pagination></nav>
+            </div>
+        </div>
     </section>
 @endsection
 @push('styles')

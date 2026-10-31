@@ -34,14 +34,14 @@
         </section>
     </div>
 
-    <section class="surface dashboard__life">
+    <section class="surface dashboard__life" data-paginated-list data-item-label="produk">
         <div class="dashboard__life-header">
             <h2 class="section-heading">Masa Simpan Makanan</h2>
             <p class="page-subtitle">Daftar produk dengan masa simpannya</p>
         </div>
         <x-tabel-data :headers="['PRODUK', 'SLOT', 'DURASI DI MESIN', 'SISA WAKTU', 'STATUS', 'STOK']">
             @forelse ($dashboard['shelfLifeRows'] as $row)
-                <tr>
+                <tr data-pagination-row>
                     <td>{{ $row['product'] }}</td>
                     <td>{{ $row['slot'] }}</td>
                     <td>{{ $row['duration'] }}</td>
@@ -57,10 +57,17 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" role="status">Data masih belum ada.</td>
+                    <td colspan="6" role="status" data-pagination-empty>Data masih belum ada.</td>
                 </tr>
             @endforelse
         </x-tabel-data>
+        <div class="dashboard__list-footer" data-pagination-controls hidden>
+            <p class="dashboard__list-count" data-pagination-count aria-live="polite"></p>
+            <div class="dashboard__list-actions">
+                <button class="button" type="button" data-pagination-view-all>Lihat semua</button>
+                <nav class="pagination dashboard__list-pagination" aria-label="Halaman masa simpan makanan" data-pagination-nav></nav>
+            </div>
+        </div>
     </section>
 
     <section class="dashboard__charts" aria-label="Grafik dashboard">

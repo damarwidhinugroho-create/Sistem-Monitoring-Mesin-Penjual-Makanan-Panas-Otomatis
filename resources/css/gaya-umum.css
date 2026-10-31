@@ -52,6 +52,15 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     outline-offset: 2px;
 }
 
+.button {
+    min-height: 36px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 7px 12px;
+    background: var(--card);
+    font-size: var(--font-size-xs);
+}
+
 [hidden] {
     display: none !important;
 }
