@@ -792,23 +792,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     max-width: calc(100vw - 28px);
 }
 
-/* Efek halus dan sedikit naik saat kartu disentuh mouse. */
-.surface, .chart-card, .stat-card, .slot-card {
-    transition: background-color 520ms ease, border-color 520ms ease, color 520ms ease, box-shadow 220ms ease, transform 220ms ease;
+/* Bayangan tipis yang konsisten pada kartu, tanpa efek hover. */
+.surface, .chart-card, .stat-card, .slot-card, .login-card, .sidebar__vm-card {
+    box-shadow: 0 2px 8px rgb(31 41 55 / 7%);
+    transition: background-color 520ms ease, border-color 520ms ease, color 520ms ease;
 }
 
-@media (hover: hover) and (pointer: fine) {
-    .surface:hover, .chart-card:hover, .stat-card:hover, .slot-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgb(31 41 55 / 12%);
-    }
-
-    :root[data-theme="dark"] .surface:hover,
-    :root[data-theme="dark"] .chart-card:hover,
-    :root[data-theme="dark"] .stat-card:hover,
-    :root[data-theme="dark"] .slot-card:hover {
-        box-shadow: 0 6px 18px rgb(0 0 0 / 24%);
-    }
+:root[data-theme="dark"] .surface,
+:root[data-theme="dark"] .chart-card,
+:root[data-theme="dark"] .stat-card,
+:root[data-theme="dark"] .slot-card,
+:root[data-theme="dark"] .login-card,
+:root[data-theme="dark"] .sidebar__vm-card {
+    box-shadow: 0 2px 8px rgb(0 0 0 / 16%);
 }
 
 /* Penyesuaian layout untuk layar tablet. */

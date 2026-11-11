@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\ApiController;
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -84,6 +85,41 @@ class OperatorPanelTest extends TestCase
             ->assertSee('Luti Gendang Abon')
             ->assertDontSee('Produk Mesin Lain')
             ->assertDontSee('Data masih belum ada');
+    }
+
+    public function test_vending_api_response_is_cached_between_page_requests(): void
+    {
+        $this->fakeInventoryApi();
+
+        $this->post('/login', [
+            'username' => 'Budi',
+            'password' => 'budi123',
+        ]);
+
+        $this->get('/inventory')->assertOk();
+        $this->get('/dashboard')->assertOk();
+        $this->get('/sales')->assertOk();
+
+        Http::assertSentCount(1);
+    }
+
+    public function test_last_known_inventory_is_used_when_vending_api_is_unavailable(): void
+    {
+        $apiUrl = 'https://vending.example.test/api/inventory';
+        config(['app.api_vending_url' => $apiUrl]);
+        Cache::put('vending.inventory.'.hash('sha256', $apiUrl).'.last-known-good', [
+            [
+                'machine_id' => ApiController::MACHINE_ID,
+                'status' => 'ONLINE',
+                'quantity' => 4,
+                'product' => ['name' => 'Produk Cache'],
+            ],
+        ], now()->addMinutes(15));
+        Http::fake(['*' => Http::failedConnection()]);
+
+        $inventory = app(ApiController::class)->getInventory();
+
+        $this->assertSame('Produk Cache', $inventory[0]['product']['name']);
     }
 
     public function test_stock_of_three_is_critical_on_dashboard_and_inventory(): void
