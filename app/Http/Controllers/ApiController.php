@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Enums\MachineStatus;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 use UnexpectedValueException;
@@ -54,23 +56,40 @@ class ApiController extends Controller
             throw new RuntimeException('API_VENDING_URL belum diatur pada file .env.');
         }
 
-        $payload = Http::acceptJson()
-            ->timeout(10)
-            ->get($apiUrl)
-            ->throw()
-            ->json();
+        $cacheKey = 'vending.inventory.'.hash('sha256', $apiUrl);
+        $staleCacheKey = $cacheKey.'.last-known-good';
 
-        if (! is_array($payload) || ! is_array($payload['data'] ?? null)) {
-            throw new UnexpectedValueException('Respons API inventory harus memiliki properti data berbentuk array.');
-        }
+        try {
+            return Cache::flexible($cacheKey, [15, 300], function () use ($apiUrl, $staleCacheKey): array {
+                $payload = Http::acceptJson()
+                    ->timeout(20)
+                    ->get($apiUrl)
+                    ->throw()
+                    ->json();
 
-        foreach ($payload['data'] as $row) {
-            if (! is_array($row)) {
-                throw new UnexpectedValueException('Setiap item inventory dari API harus berbentuk object JSON.');
+                if (! is_array($payload) || ! is_array($payload['data'] ?? null)) {
+                    throw new UnexpectedValueException('Respons API inventory harus memiliki properti data berbentuk array.');
+                }
+
+                foreach ($payload['data'] as $row) {
+                    if (! is_array($row)) {
+                        throw new UnexpectedValueException('Setiap item inventory dari API harus berbentuk object JSON.');
+                    }
+                }
+
+                Cache::put($staleCacheKey, $payload['data'], now()->addMinutes(15));
+
+                return $payload['data'];
+            });
+        } catch (ConnectionException|RequestException $exception) {
+            $lastKnownRows = Cache::get($staleCacheKey);
+
+            if (is_array($lastKnownRows)) {
+                return $lastKnownRows;
             }
-        }
 
-        return $payload['data'];
+            throw $exception;
+        }
     }
 
     private function normalizeInventory(array $rows): array
