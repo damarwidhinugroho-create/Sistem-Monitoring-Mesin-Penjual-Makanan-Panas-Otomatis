@@ -1,10 +1,12 @@
 @extends('layouts.layout_dashboard')
 
 @section('title', 'Monitoring Penjualan')
+@section('breadcrumb', 'PENJUALAN')
+@section('page-heading', 'Monitoring Penjualan')
+@section('page-subtitle', 'Ringkasan transaksi dan performa produk.')
 
 @section('content')
     <div class="sales__heading">
-        <h1 class="page-title">Monitoring Penjualan</h1>
         <nav class="sales__periods" aria-label="Periode penjualan">
             @foreach (\App\Enums\SalesPeriod::cases() as $period)
                 <a class="chart-card__control {{ $sales['period'] === $period ? 'chart-card__control--active' : '' }}" href="{{ route('sales', ['period' => $period->value]) }}">{{ $period->label() }}</a>
@@ -49,7 +51,7 @@
         <div class="sales__list-footer" data-pagination-controls hidden>
             <p class="sales__list-count" data-pagination-count aria-live="polite"></p>
             <div class="sales__list-actions">
-                <button class="button" type="button" data-pagination-view-all>Lihat semua</button>
+                <x-tombol variant="ghost" data-pagination-view-all>Lihat semua</x-tombol>
                 <nav class="pagination sales__list-pagination" aria-label="Halaman performa produk" data-pagination-nav></nav>
             </div>
         </div>
@@ -69,7 +71,7 @@
         <div class="sales__list-footer" data-pagination-controls hidden>
             <p class="sales__list-count" data-pagination-count aria-live="polite"></p>
             <div class="sales__list-actions">
-                <button class="button" type="button" data-pagination-view-all>Lihat semua</button>
+                <x-tombol variant="ghost" data-pagination-view-all>Lihat semua</x-tombol>
                 <nav class="pagination sales__list-pagination" aria-label="Halaman riwayat transaksi" data-pagination-nav></nav>
             </div>
         </div>

@@ -7,7 +7,6 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MachineController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SalesController;
-use App\Http\Controllers\TemperatureController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/login');
@@ -25,8 +24,12 @@ Route::middleware('auth:operator')->group(function (): void {
         ->whereIn('slot', ['A1', 'A2', 'A3', 'A4'])
         ->name('inventory.slots.update');
     Route::get('/sales', SalesController::class)->name('sales');
-    Route::get('/temperature', TemperatureController::class)->name('temperature');
     Route::get('/machine', MachineController::class)->name('machine');
     Route::get('/alerts', AlertController::class)->name('alerts');
     Route::get('/reports', ReportController::class)->name('reports');
 });
+
+Route::view('/offline', 'errors.offline')->name('offline');
+Route::view('/maintenance', 'errors.503')->name('maintenance');
+Route::view('/server-error', 'errors.500')->name('server-error');
+Route::fallback(fn () => response()->view('errors.404', [], 404));

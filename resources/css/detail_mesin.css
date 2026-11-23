@@ -2,9 +2,9 @@
 .machine__hero {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 14px;
-    padding: 23px;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-md);
+    padding: var(--space-xl);
 }
 
 .machine__hero > .icon {
@@ -17,7 +17,7 @@
 
 .machine__updated {
     margin-left: auto;
-    font-size: 11px;
+    font-size: var(--type-label);
     text-align: right;
 }
 
@@ -25,16 +25,26 @@
 .machine__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
+    gap: var(--space-grid);
 }
 
 .machine__card {
     min-height: 144px;
-    padding: 14px;
+    padding: var(--space-card);
+}
+
+.machine__card .panel__header {
+    margin-bottom: var(--space-sm);
+}
+
+.machine__card .panel__title {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
 }
 
 .machine__card h2 {
-    margin: 0 0 14px;
+    margin: 0 0 var(--space-md);
     font-size: var(--font-size-xs);
     font-weight: 400;
 }
@@ -42,10 +52,10 @@
 .machine__line {
     display: flex;
     justify-content: space-between;
-    gap: 9px;
+    gap: var(--space-sm);
     border-bottom: var(--border-width) solid var(--border-light);
-    padding: 8px 0;
-    font-size: 11px;
+    padding: var(--space-sm) 0;
+    font-size: var(--type-label);
 }
 
 .machine__line:last-child {
@@ -57,27 +67,27 @@
 }
 
 .machine__temperature {
-    font-size: var(--font-size-title);
+    font-size: var(--type-stat);
     font-weight: 700;
 }
 
 .machine__problem {
     border-radius: var(--radius-sm);
-    padding: 12px;
+    padding: var(--space-md);
     background: var(--critical-light);
     color: var(--critical);
-    font-size: 11px;
+    font-size: var(--type-label);
 }
 
 .machine__alerts {
     grid-column: 1 / -1;
-    padding: 14px;
+    padding: var(--space-card);
 }
 
 .machine__alerts-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 9px;
+    margin-bottom: var(--space-sm);
 }
 
 /* Susunan kartu detail mesin untuk tablet dan HP. */
@@ -91,12 +101,12 @@
     .machine__hero {
         align-items: flex-start;
         flex-wrap: wrap;
-        padding: 16px;
+        padding: var(--space-card);
     }
 
     .machine__updated {
         width: 100%;
-        margin-left: 40px;
+        margin-left: var(--space-3xl);
         text-align: left;
     }
 
@@ -107,6 +117,6 @@
     .machine__alerts-header {
         align-items: flex-start;
         flex-direction: column;
-        gap: 8px;
+        gap: var(--space-sm);
     }
 }

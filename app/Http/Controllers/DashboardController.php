@@ -49,7 +49,7 @@ class DashboardController extends Controller
                 ],
                 'shelfLifeRows' => $shelfLifeRows,
                 'temperatureChart' => [
-                    'title' => 'Data suhu VM - 00 Jam terakhir',
+                    'title' => 'Data suhu VM · 5 jam terakhir',
                     'labels' => ['08:00', '09:00', '10:00', '11:00', '12:00'],
                     'values' => [64, 59, 61, 62, 58],
                 ],

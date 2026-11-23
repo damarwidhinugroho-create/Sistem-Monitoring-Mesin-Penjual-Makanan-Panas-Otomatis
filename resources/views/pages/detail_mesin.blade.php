@@ -1,36 +1,36 @@
 @extends('layouts.layout_dashboard')
 
 @section('title', 'Detail Mesin')
+@section('breadcrumb', 'MESIN')
+@section('page-heading', 'Detail Mesin')
+@section('page-subtitle', 'Informasi perangkat, koneksi, dan spesifikasi mesin.')
 
 @section('content')
     <section class="surface machine__hero">
         <x-ikon name="machine" :size="24" />
         <div>
             <x-lencana-status :label="$machine['status']->label()" :status="$machine['status']->value" />
-            <div class="machine__hero-title">DETAIL MESIN</div>
+            <div class="machine__hero-title">{{ $machine['details']['machine_id'] }}</div>
         </div>
         <div class="machine__updated">Terakhir diperbarui<br>{{ $machine['details']['updated_at'] }}</div>
     </section>
 
     <section class="machine__grid">
-        <article class="surface machine__card">
-            <h2>Informasi Mesin</h2>
+        <x-panel class="machine__card" title="Informasi Mesin">
             <div class="machine__line"><span>ID Mesin</span><strong>{{ $machine['details']['machine_id'] }}</strong></div>
             <div class="machine__line"><span>Lokasi</span><strong>{{ $machine['details']['location'] }}</strong></div>
             <div class="machine__line"><span>Status</span><x-lencana-status :label="$machine['status']->label()" :status="$machine['status']->value" /></div>
-        </article>
-        <article class="surface machine__card">
-            <h2>Koneksi</h2>
+        </x-panel>
+        <x-panel class="machine__card" title="Koneksi">
             <div class="machine__line"><span>Wi-Fi</span><strong>{{ $machine['details']['wifi'] }}</strong></div>
             <div class="machine__line"><span>Last Online</span><strong>{{ $machine['details']['last_online'] }}</strong></div>
             <div class="machine__line"><span>Last Update</span><strong>{{ $machine['details']['last_update'] }}</strong></div>
-        </article>
-        <article class="surface machine__card">
-            <h2>Spesifikasi</h2>
+        </x-panel>
+        <x-panel class="machine__card" title="Spesifikasi">
             <div class="machine__line"><span>Jumlah Slot</span><strong>{{ $machine['details']['slots'] }}</strong></div>
             <div class="machine__line"><span>Pembayaran</span><strong>{{ $machine['details']['payment'] }}</strong></div>
             <div class="machine__line"><span>Tipe Mesin</span><strong>{{ $machine['details']['machine_type'] }}</strong></div>
-        </article>
+        </x-panel>
         {{-- <article class="surface machine__card">
             <h2>Maintenance</h2>
             <div class="machine__line"><span>Pengecekan Terakhir</span><strong>{{ $machine['details']['maintenance_date'] }}</strong></div>

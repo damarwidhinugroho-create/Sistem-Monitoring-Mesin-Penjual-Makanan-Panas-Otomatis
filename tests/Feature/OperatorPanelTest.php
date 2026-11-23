@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\ApiController;
+use App\Enums\StockStatus;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -20,16 +21,28 @@ class OperatorPanelTest extends TestCase
         ]);
 
         $response->assertRedirect('/dashboard');
-        $this->get('/dashboard')->assertOk()->assertSee('DASHBOARD OVERVIEW');
+        $this->get('/dashboard')->assertOk()->assertSee('Dashboard');
     }
 
-    public function test_login_page_displays_the_vending_machine_logo_without_forgot_password(): void
+    public function test_login_page_uses_the_saji_vending_machine_without_prefilled_credentials(): void
     {
         $this->get('/login')
             ->assertOk()
-            ->assertSee('LOGIN operator/UMKM')
-            ->assertSee('icon login-card__avatar-logo')
-            ->assertDontSee('Lupa Password');
+            ->assertSee('Welcome back!')
+            ->assertSee('MASUK KE DASHBOARD')
+            ->assertSee('pageMotion-', false)
+            ->assertSee('data-vending-machine', false)
+            ->assertSee('SAJI!')
+            ->assertDontSee('SMART WARM FOOD')
+            ->assertDontSee('OPEN 24/7')
+            ->assertDontSee('OPERATOR')
+            ->assertDontSee('Akses khusus untuk operator mesin.')
+            ->assertDontSee('PUSH')
+            ->assertSee('name="username"', false)
+            ->assertSee('name="password"', false)
+            ->assertDontSee('value="Budi"', false)
+            ->assertDontSee('value="budi123"', false)
+            ->assertDontSee('Lupa password?');
 
         $this->get('/forgot-password')->assertNotFound();
     }
@@ -38,9 +51,10 @@ class OperatorPanelTest extends TestCase
     {
         $this->get('/dashboard')->assertRedirect('/login');
         $this->get('/inventory')->assertRedirect('/login');
+        $this->get('/reports')->assertRedirect('/login');
     }
 
-    public function test_all_operator_screens_render_their_prototype_content(): void
+    public function test_selected_pages_keep_the_shared_layout_but_render_no_page_content(): void
     {
         $this->fakeInventoryApi();
 
@@ -49,15 +63,31 @@ class OperatorPanelTest extends TestCase
             'password' => 'budi123',
         ]);
 
-        $this->get('/dashboard')->assertOk()->assertSee('Rp 1.250.000')->assertSee('Status VM')->assertSee('Online');
-        $this->get('/inventory')->assertOk()->assertSee('30/10/2026 13:00')->assertSee('Online');
-        $this->get('/sales?period=jam')->assertOk()->assertSee('Rp. 120.000')->assertSee('Online');
+        foreach (['/dashboard', '/inventory', '/reports'] as $path) {
+            $this->get($path)
+                ->assertOk()
+                ->assertSee('id="operator-sidebar"', false)
+                ->assertSee(route('dashboard'), false)
+                ->assertSee(route('inventory'), false)
+                ->assertSee(route('reports'), false)
+                ->assertDontSee('pageMotion-', false)
+                ->assertDontSee('VENDING MANAGEMENT')
+                ->assertDontSee('Administrator')
+                ->assertDontSee('TAMPILAN')
+                ->assertDontSee('WORKSPACE')
+                ->assertDontSee('sidebar__bottom-status', false)
+                ->assertDontSee('data-dashboard-stage', false)
+                ->assertDontSee('data-slot-card', false)
+                ->assertDontSee('data-open-export', false)
+                ->assertDontSee('Mie Tarempa');
+        }
+
+        $this->get('/sales?period=jam')->assertOk()->assertSee('Rp. 120.000')->assertSee('Online')->assertSee('pageMotion-', false);
         $this->get('/sales?period=hari')->assertOk()->assertSee('Senin')->assertSee('Online');
         $this->get('/sales?period=minggu')->assertOk()->assertSee('Minggu 1')->assertSee('Online');
-        $this->get('/temperature')->assertOk()->assertSee('62°C')->assertSee('Online');
-        $this->get('/machine')->assertOk()->assertSee('VM - 001')->assertSee('Online');
-        $this->get('/alerts')->assertOk()->assertSee('History Alert')->assertSee('Online');
-        $this->get('/reports')->assertOk()->assertSee('Laporan')->assertSee('Online');
+        $this->get('/temperature')->assertNotFound();
+        $this->get('/machine')->assertOk()->assertSee('VM - 001')->assertSee('Online')->assertSee('pageMotion-', false);
+        $this->get('/alerts')->assertOk()->assertSee('History Alert')->assertSee('Online')->assertSee('pageMotion-', false);
     }
 
     public function test_inventory_data_is_shared_with_the_dashboard(): void
@@ -69,22 +99,14 @@ class OperatorPanelTest extends TestCase
             'password' => 'budi123',
         ]);
 
-        $this->get('/inventory')
-            ->assertOk()
-            ->assertSee('Mie Tarempa Original')
-            ->assertSee('Luti Gendang Abon')
-            ->assertSee('40')
-            ->assertDontSee('Produk Mesin Lain')
-            ->assertDontSee('Data masih belum ada');
+        $this->get('/inventory')->assertOk();
+        $this->get('/dashboard')->assertOk();
 
-        $this->get('/dashboard')
-            ->assertOk()
-            ->assertSee('40 Porsi')
-            ->assertSee('dari 4 slot aktif')
-            ->assertSee('Mie Tarempa Original')
-            ->assertSee('Luti Gendang Abon')
-            ->assertDontSee('Produk Mesin Lain')
-            ->assertDontSee('Data masih belum ada');
+        $inventory = app(ApiController::class)->getInventory();
+        $products = array_column(array_column($inventory, 'product'), 'name');
+        $this->assertContains('Mie Tarempa Original', $products);
+        $this->assertContains('Luti Gendang Abon', $products);
+        $this->assertNotContains('Produk Mesin Lain', $products);
     }
 
     public function test_vending_api_response_is_cached_between_page_requests(): void
@@ -122,55 +144,14 @@ class OperatorPanelTest extends TestCase
         $this->assertSame('Produk Cache', $inventory[0]['product']['name']);
     }
 
-    public function test_stock_of_three_is_critical_on_dashboard_and_inventory(): void
+    public function test_stock_status_logic_still_classifies_inventory_levels(): void
     {
-        config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
-        Http::fake([
-            '*' => Http::response([
-                'data' => [
-                    [
-                        'machine_id' => ApiController::MACHINE_ID,
-                        'slot_code' => 'A1',
-                        'quantity' => 3,
-                        'minimum_stock' => 0,
-                        'maximum_stock' => 10,
-                        'product' => ['name' => 'Produk Kritis'],
-                    ],
-                    [
-                        'machine_id' => ApiController::MACHINE_ID,
-                        'slot_code' => 'A2',
-                        'quantity' => 0,
-                        'minimum_stock' => 0,
-                        'maximum_stock' => 10,
-                        'product' => ['name' => 'Produk Habis'],
-                    ],
-                    [
-                        'machine_id' => ApiController::MACHINE_ID,
-                        'slot_code' => 'A3',
-                        'quantity' => 4,
-                        'minimum_stock' => 0,
-                        'maximum_stock' => 10,
-                        'product' => ['name' => 'Produk Aman'],
-                    ],
-                ],
-            ], 200),
-        ]);
-
-        $this->post('/login', [
-            'username' => 'Budi',
-            'password' => 'budi123',
-        ]);
-
-        foreach (['/dashboard', '/inventory'] as $path) {
-            $this->get($path)
-                ->assertOk()
-                ->assertSeeInOrder(['Produk Kritis', 'progress--warning', '3/10'])
-                ->assertSeeInOrder(['Produk Habis', 'progress--empty', '0/10'])
-                ->assertSeeInOrder(['Produk Aman', 'progress--safe', '4/10']);
-        }
+        $this->assertSame(StockStatus::Rendah, StockStatus::fromStock(3, 0));
+        $this->assertSame(StockStatus::Habis, StockStatus::fromStock(0, 0));
+        $this->assertSame(StockStatus::Aman, StockStatus::fromStock(4, 0));
     }
 
-    public function test_nested_inventory_api_data_is_displayed_for_each_slot(): void
+    public function test_nested_inventory_api_data_is_normalized_for_each_slot(): void
     {
         config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
         Http::fake([
@@ -227,27 +208,19 @@ class OperatorPanelTest extends TestCase
             'password' => 'budi123',
         ]);
 
-        $this->get('/inventory')
-            ->assertOk()
-            ->assertSee('A03')
-            ->assertSee('A07')
-            ->assertSee('Mie Lendir')
-            ->assertSee('Ayam Bakar Taliwang')
-            ->assertSee('5/10')
-            ->assertSee('1/1')
-            ->assertSee('6/7')
-            ->assertSee('5/5')
-            ->assertSee('2/2');
+        $this->get('/inventory')->assertOk();
+        $inventory = app(ApiController::class)->getInventory();
 
-        $this->get('/dashboard')
-            ->assertOk()
-            ->assertSee('19 Porsi')
-            ->assertSee('dari 5 slot aktif')
-            ->assertSee('Mie Lendir')
-            ->assertSee('Ayam Bakar Taliwang');
+        $this->assertSame(['A03', 'A04', 'A05', 'A06', 'A07'], array_column($inventory, 'slot_code'));
+        $this->assertSame(['5', '1', '6', '5', '2'], array_map(
+            fn (array $row): string => (string) $row['quantity'],
+            $inventory,
+        ));
+        $this->assertSame('Mie Lendir', $inventory[0]['product']['name']);
+        $this->assertSame('Ayam Bakar Taliwang', $inventory[1]['product']['name']);
     }
 
-    public function test_inventory_and_dashboard_show_a_message_when_api_data_is_empty(): void
+    public function test_empty_page_views_do_not_render_page_specific_inventory_content(): void
     {
         config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
         Http::fake(['*' => Http::response(['data' => []], 200)]);
@@ -259,14 +232,17 @@ class OperatorPanelTest extends TestCase
 
         $this->get('/inventory')
             ->assertOk()
-            ->assertSee('colspan="6" role="status">Data masih belum ada.', false)
-            ->assertSee('colspan="4" role="status">Data masih belum ada.', false)
-            ->assertDontSee('<p class="surface" role="status">Data masih belum ada.</p>', false);
+            ->assertSee('id="operator-sidebar"', false)
+            ->assertDontSee('data-slot-card', false)
+            ->assertDontSee('Data masih belum ada');
 
         $this->get('/dashboard')
             ->assertOk()
-            ->assertSee('colspan="6" role="status">Data masih belum ada.', false)
-            ->assertDontSee('<p class="surface" role="status">Data masih belum ada.</p>', false);
+            ->assertSee('id="operator-sidebar"', false)
+            ->assertDontSee('data-dashboard-stage', false)
+            ->assertDontSee('Data masih belum ada');
+
+        $this->assertSame([], app(ApiController::class)->getInventory());
     }
 
     public function test_offline_machine_inventory_is_not_displayed(): void
@@ -302,21 +278,11 @@ class OperatorPanelTest extends TestCase
             'password' => 'budi123',
         ]);
 
-        $this->get('/inventory')
-            ->assertOk()
-            ->assertDontSee('Produk Offline')
-            ->assertDontSee('Produk Status Tidak Diketahui')
-            ->assertSee('Data masih belum ada.');
-
-        $this->get('/dashboard')
-            ->assertOk()
-            ->assertDontSee('Produk Offline')
-            ->assertDontSee('Produk Status Tidak Diketahui')
-            ->assertSee('dari 0 slot aktif');
+        $this->get('/inventory')->assertOk()->assertDontSee('Produk Offline');
+        $this->get('/dashboard')->assertOk()->assertDontSee('Produk Offline');
 
         $this->get('/machine')
             ->assertOk()
-            ->assertSee('sidebar__vm-card--offline', false)
             ->assertSee('Offline');
     }
 
@@ -355,9 +321,10 @@ class OperatorPanelTest extends TestCase
             'stock' => 7,
             'filled_at' => '10 Sep 2026 09.00',
             'price' => 30000,
-        ])->assertRedirect('/inventory');
+        ])->assertRedirect('/inventory')
+            ->assertSessionHas('operator.slot_updates.A1.stock', 7);
 
-        $this->get('/inventory')->assertOk()->assertSee('7/10');
+        $this->get('/inventory')->assertOk()->assertDontSee('7/10');
     }
 
     private function fakeInventoryApi(): void

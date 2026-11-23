@@ -1,14 +1,18 @@
 import './bootstrap';
 import Chart from 'chart.js/auto';
 import './periodPicker';
+import './pageNavigation';
+import './dashboardSkeleton';
 import './riwayatAlert';
 import './laporanPenjualan';
 import './inventorySlots';
 import './inventoryTables';
+import './interactions';
 
 const theme = getComputedStyle(document.documentElement);
 const colors = {
     brand: theme.getPropertyValue('--chart-primary').trim(),
+    bar: theme.getPropertyValue('--chart-bar').trim(),
     safe: theme.getPropertyValue('--safe').trim(),
     border: theme.getPropertyValue('--border-light').trim(),
     secondary: theme.getPropertyValue('--chart-secondary').trim(),
@@ -18,36 +22,22 @@ const colors = {
 Chart.defaults.font.family = theme.getPropertyValue('--font-sans').trim();
 Chart.defaults.font.size = 11;
 Chart.defaults.color = colors.muted;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+Chart.defaults.animation = reduceMotion
+    ? false
+    : {
+        duration: 650,
+        easing: 'easeOutQuart',
+    };
 
 const charts = new Map();
-let themeTransitionTimer;
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-const progressiveLineAnimation = {
-    x: {
-        type: 'number',
-        easing: 'linear',
-        duration: reduceMotion ? 0 : 900,
-        from: Number.NaN,
-        delay(context) {
-            return !reduceMotion && context.type === 'data' ? context.index * 110 : 0;
-        },
-    },
-    y: {
-        type: 'number',
-        easing: 'easeOutQuart',
-        duration: reduceMotion ? 0 : 700,
-        delay(context) {
-            return !reduceMotion && context.type === 'data' ? context.index * 110 : 0;
-        },
-    },
-};
-
-function updateTheme(animateCharts = false) {
+function updateTheme() {
     const isDark = document.documentElement.dataset.theme === 'dark';
     const theme = getComputedStyle(document.documentElement);
 
     colors.brand = theme.getPropertyValue('--chart-primary').trim();
+    colors.bar = theme.getPropertyValue('--chart-bar').trim();
     colors.border = theme.getPropertyValue('--border-light').trim();
     colors.secondary = theme.getPropertyValue('--chart-secondary').trim();
     colors.muted = theme.getPropertyValue('--text-muted').trim();
@@ -55,19 +45,17 @@ function updateTheme(animateCharts = false) {
 
     charts.forEach((chart) => {
         chart.data.datasets.forEach((dataset, index) => {
-            dataset.borderColor = index === 0 ? colors.brand : colors.secondary;
-            dataset.backgroundColor = index === 0 && chart.config.type !== 'line'
-                ? colors.brand
-                : 'transparent';
+            const isBarChart = chart.config.type !== 'line';
+            dataset.borderColor = index === 0
+                ? (isBarChart ? colors.bar : colors.brand)
+                : colors.secondary;
+            dataset.backgroundColor = index === 0 && isBarChart ? colors.bar : 'transparent';
         });
 
         chart.options.scales.x.border.color = colors.border;
         chart.options.scales.x.ticks.color = colors.muted;
         chart.options.scales.y.grid.color = colors.border;
-        if (animateCharts) {
-            chart.options.animation = { duration: 520, easing: 'easeInOutCubic' };
-            chart.update();
-        }
+        chart.update(reduceMotion ? 'none' : undefined);
     });
 
     document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
@@ -82,10 +70,11 @@ document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
     const values = JSON.parse(canvas.dataset.chartValues ?? '[]');
     const secondary = JSON.parse(canvas.dataset.chartSecondary ?? '[]');
     const isLine = canvas.dataset.chartType === 'line';
+    const primaryChartColor = isLine ? colors.brand : colors.bar;
     const datasets = [{
         data: values,
-        borderColor: colors.brand,
-        backgroundColor: isLine ? 'transparent' : colors.brand,
+        borderColor: primaryChartColor,
+        backgroundColor: isLine ? 'transparent' : colors.bar,
         borderWidth: 1.5,
         pointRadius: 0,
         pointHoverRadius: 2,
@@ -113,57 +102,104 @@ document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: reduceMotion ? false : {
-                duration: 850,
-                easing: 'easeOutQuart',
-            },
-            animations: isLine ? progressiveLineAnimation : undefined,
+            animation: reduceMotion
+                ? false
+                : {
+                    duration: 650,
+                    easing: 'easeOutQuart',
+                },
             plugins: {
                 legend: { display: false },
-                tooltip: { enabled: true },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(28, 41, 33, 0.92)',
+                    titleColor: '#FFFFFF',
+                    bodyColor: '#FFFFFF',
+                    borderColor: 'rgba(255, 255, 255, 0.14)',
+                    borderWidth: 1,
+                    padding: 10,
+                    cornerRadius: 8,
+                    displayColors: false,
+                    animation: reduceMotion ? false : { duration: 180 },
+                },
             },
             scales: {
                 x: {
                     grid: { display: false },
                     border: { color: colors.border },
-                    ticks: { color: colors.muted, maxRotation: 0 },
+                    ticks: { color: colors.muted, maxRotation: 0, font: { size: 12 } },
                 },
                 y: {
                     beginAtZero: !isLine,
                     grid: { color: colors.border, drawTicks: false },
                     border: { display: false },
-                    ticks: { display: false, count: 4 },
+                    ticks: { display: true, count: 4, color: colors.muted, font: { size: 12 } },
                 },
             },
         },
     });
 
     charts.set(canvas.id, chart);
+    if ('ResizeObserver' in window) {
+        const observer = new ResizeObserver(() => chart.resize());
+        observer.observe(canvas.closest('.chart-card__plot') ?? canvas.parentElement);
+    }
 });
 
-document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
-    button.addEventListener('click', () => {
-        const isDark = document.documentElement.dataset.theme !== 'dark';
+    const themeSwitches = document.querySelectorAll('.sidebar__theme');
+    let themeTransitionTimer;
+
+    function applyTheme(theme) {
         const root = document.documentElement;
-        const transitionDuration = reduceMotion ? 0 : 720;
+        const nextTheme = theme === 'dark' ? 'dark' : 'light';
 
-        if (transitionDuration > 0) {
-            root.dataset.themeChanging = '';
-        }
-        window.clearTimeout(themeTransitionTimer);
-
-        if (isDark) {
+        if (nextTheme === 'dark') {
             root.dataset.theme = 'dark';
         } else {
             delete root.dataset.theme;
         }
-        root.style.backgroundColor = isDark ? '#111827' : '#F3F4F6';
+        root.style.colorScheme = nextTheme;
 
-        localStorage.setItem('operator-theme', isDark ? 'dark' : 'light');
-        updateTheme(transitionDuration > 0);
+        localStorage.setItem('operator-theme', nextTheme);
+        root.dataset.themeChanging = '';
+        window.clearTimeout(themeTransitionTimer);
+
+        themeSwitches.forEach((switcher) => {
+            switcher.dataset.active = nextTheme;
+            switcher.classList.toggle('is-dark', nextTheme === 'dark');
+            switcher.querySelectorAll('[data-theme-choice]').forEach((button) => {
+                const active = button.dataset.themeChoice === nextTheme;
+                button.setAttribute('aria-checked', String(active));
+                button.tabIndex = active ? 0 : -1;
+            });
+        });
+        updateTheme();
+
         themeTransitionTimer = window.setTimeout(() => {
             delete root.dataset.themeChanging;
-        }, transitionDuration);
+        }, reduceMotion ? 0 : 180);
+    }
+
+    themeSwitches.forEach((switcher) => {
+        switcher.querySelectorAll('[data-theme-choice]').forEach((button) => {
+            button.addEventListener('click', () => applyTheme(button.dataset.themeChoice));
+        });
+
+        switcher.addEventListener('keydown', (event) => {
+            if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+            event.preventDefault();
+            const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            applyTheme(nextTheme);
+            switcher.querySelector(`[data-theme-choice="${nextTheme}"]`)?.focus();
+        });
+    });
+
+    applyTheme(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
+document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+    button.addEventListener('click', () => {
+        const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+        applyTheme(nextTheme);
     });
 });
 
@@ -184,7 +220,7 @@ document.querySelectorAll('[data-chart-period]').forEach((button) => {
         const alternateValues = JSON.parse(canvas.dataset.chartAltValues ?? '[]');
         chart.data.labels = useDailyData ? alternateLabels : JSON.parse(canvas.dataset.chartLabels ?? '[]');
         chart.data.datasets[0].data = useDailyData ? alternateValues : JSON.parse(canvas.dataset.chartValues ?? '[]');
-        chart.update();
+        chart.update(reduceMotion ? 'none' : undefined);
 
         chartCard.querySelectorAll('[data-chart-period]').forEach((control) => {
             control.classList.toggle('chart-card__control--active', control === button);
@@ -195,10 +231,19 @@ document.querySelectorAll('[data-chart-period]').forEach((button) => {
 document.querySelectorAll('[data-password-toggle]').forEach((button) => {
     button.addEventListener('click', () => {
         const input = document.getElementById(button.dataset.passwordToggle);
+        if (!input) {
+            return;
+        }
         const visible = input.type === 'text';
         input.type = visible ? 'password' : 'text';
-        button.textContent = visible ? 'lihat' : 'sembunyi';
+        button.classList.add('is-changing');
+        window.setTimeout(() => {
+            button.textContent = visible ? 'LIHAT' : 'HIDE';
+            button.classList.remove('is-changing');
+        }, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 90);
         button.setAttribute('aria-label', visible ? 'Lihat password' : 'Sembunyikan password');
+        button.setAttribute('aria-pressed', String(!visible));
+        input.focus();
     });
 });
 
