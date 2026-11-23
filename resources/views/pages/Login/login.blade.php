@@ -4,6 +4,17 @@
 
 @section('content')
     <div class="vending-login" data-vending-login>
+        <div class="login-products" aria-hidden="true">
+            <img class="login-products__image login-products__image--gonggong" src="{{ asset('images/products/gonggong.png') }}" alt="" loading="lazy" decoding="async">
+            <img class="login-products__image login-products__image--mie-lendir" src="{{ asset('images/products/mie_lendir.png') }}" alt="" loading="lazy" decoding="async">
+            <img class="login-products__image login-products__image--mie-tarempa" src="{{ asset('images/products/mie_tarempa.png') }}" alt="" loading="lazy" decoding="async">
+            <img class="login-products__image login-products__image--sup-ikan" src="{{ asset('images/products/sup_ikan.png') }}" alt="" loading="lazy" decoding="async">
+            <img class="login-products__image login-products__image--ayam-goreng" src="{{ asset('images/products/ayam_goreng.png') }}" alt="" loading="lazy" decoding="async">
+            <img class="login-products__image login-products__image--lontong-sayur" src="{{ asset('images/products/lontong_sayur.png') }}" alt="" loading="lazy" decoding="async">
+            <img class="login-products__image login-products__image--naspad" src="{{ asset('images/products/naspad.png') }}" alt="" loading="lazy" decoding="async">
+            <img class="login-products__image login-products__image--otakotak" src="{{ asset('images/products/otakotak.png') }}" alt="" loading="lazy" decoding="async">
+        </div>
+
         <div class="vending-machine" data-vending-machine>
             <div class="vending-machine__front">
                 <header class="vending-machine__header">
