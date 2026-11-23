@@ -9,7 +9,7 @@
     min-height: 38px;
     align-items: center;
     justify-content: center;
-    gap: 9px;
+    gap: var(--space-sm);
     white-space: nowrap;
 }
 
@@ -24,14 +24,6 @@
     stroke-width: 1.4;
 }
 
-.period-picker__chevron {
-    transition: transform 120ms ease;
-}
-
-.period-picker__trigger[aria-expanded="true"] .period-picker__chevron {
-    transform: rotate(180deg);
-}
-
 /* Panel pilihan rentang tanggal dan tombol periode cepat. */
 .period-picker__panel {
     position: absolute;
@@ -41,12 +33,12 @@
     display: grid;
     width: min(600px, calc(100vw - 36px));
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 18px;
+    gap: var(--space-lg);
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-card);
-    padding: 16px;
+    padding: var(--space-card);
     background: var(--card);
-    box-shadow: 0 8px 24px rgb(31 41 55 / 14%);
+    box-shadow: var(--surface-shadow);
 }
 
 .period-picker__group {
@@ -54,7 +46,7 @@
 }
 
 .period-picker__group h2 {
-    margin: 0 0 8px;
+    margin: 0 0 var(--space-sm);
     font-size: var(--font-size-xs);
     font-weight: 600;
 }
@@ -62,7 +54,7 @@
 .period-picker__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 6px;
+    gap: var(--space-xs);
 }
 
 .period-picker__grid button {
@@ -70,9 +62,9 @@
     overflow: hidden;
     border: var(--border-width) solid var(--border-light);
     border-radius: var(--radius-sm);
-    padding: 5px 6px;
+    padding: var(--space-xs) var(--space-xs);
     background: var(--card);
-    font-size: 12px;
+    font-size: var(--type-label);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -91,7 +83,7 @@
     grid-column: 1 / -1;
     justify-self: end;
     border: 0;
-    padding: 4px 2px;
+    padding: var(--space-xs) var(--space-xs);
     background: transparent;
     color: var(--brand-primary);
     font-size: var(--font-size-xs);
@@ -104,17 +96,17 @@
         left: auto;
         right: -9px;
         width: min(450px, calc(100vw - 28px));
-        gap: 12px;
-        padding: 12px;
+        gap: var(--space-md);
+        padding: var(--space-md);
     }
 
     .period-picker__grid {
-        gap: 3px;
+        gap: var(--space-xs);
     }
 
     .period-picker__grid button {
         min-height: 32px;
-        padding-inline: 3px;
-        font-size: 11px;
+        padding-inline: var(--space-xs);
+        font-size: var(--type-label);
     }
 }

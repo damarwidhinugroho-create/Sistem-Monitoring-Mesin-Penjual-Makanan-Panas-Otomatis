@@ -1,6 +1,9 @@
 @extends('layouts.layout_dashboard')
 
 @section('title', 'History Alert')
+@section('breadcrumb', 'ALERTS')
+@section('page-heading', 'History Alert')
+@section('page-subtitle', 'Riwayat peringatan dan kondisi mesin.')
 
 @section('content')
     <script>
@@ -8,10 +11,6 @@
     </script>
 
     <div class="history-alert__heading">
-        <div>
-            <h1 class="page-title">History Alert</h1>
-            <p class="page-subtitle">Riwayat peringatan mesin</p>
-        </div>
         <div class="history-alert__toolbar">
             <x-period-picker context="alerts" />
             <div class="history-alert__filters" role="group" aria-label="Filter alert" data-alert-filter>

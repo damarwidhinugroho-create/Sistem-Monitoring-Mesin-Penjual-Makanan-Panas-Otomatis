@@ -132,6 +132,10 @@ class ApiController extends Controller
         $machine = is_array($row['machine'] ?? null) ? $row['machine'] : [];
         $status = $machine['status'] ?? $row['machine_status'] ?? $row['status'] ?? null;
 
+        if ($status === null) {
+            return true;
+        }
+
         return MachineStatus::fromApiStatus(is_string($status) ? $status : null) === MachineStatus::Online;
     }
 

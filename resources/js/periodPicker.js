@@ -1,3 +1,5 @@
+import { positionPopover } from './interactions';
+
 document.querySelectorAll('[data-period-picker]').forEach((picker) => {
     const trigger = picker.querySelector('[data-period-picker-trigger]');
     const panel = picker.querySelector('.period-picker__panel');
@@ -25,7 +27,16 @@ document.querySelectorAll('[data-period-picker]').forEach((picker) => {
         const opening = panel.hidden;
         panel.hidden = !opening;
         trigger.setAttribute('aria-expanded', String(opening));
+        if (opening) {
+            positionPopover(trigger, panel);
+        }
     });
+
+    const reflowPanel = () => {
+        if (!panel.hidden) positionPopover(trigger, panel);
+    };
+    window.addEventListener('resize', reflowPanel);
+    window.addEventListener('scroll', reflowPanel, true);
 
     picker.querySelectorAll('[data-picker-month-option]').forEach((button) => {
         button.addEventListener('click', () => selectOption('month', button.dataset.pickerMonthOption));
@@ -48,7 +59,7 @@ document.querySelectorAll('[data-period-picker]').forEach((picker) => {
     });
 
     document.addEventListener('click', (event) => {
-        if (!picker.contains(event.target)) {
+        if (!picker.contains(event.target) && !panel.contains(event.target)) {
             close();
         }
     });

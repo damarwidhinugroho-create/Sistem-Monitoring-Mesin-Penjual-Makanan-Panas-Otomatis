@@ -3,26 +3,31 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 0 16px;
+    margin: 0 0 var(--space-lg);
 }
 
 .sales__periods {
     display: flex;
-    gap: 5px;
+    gap: var(--space-xs);
 }
 
 /* Ringkasan penjualan, grafik, daftar produk, dan transaksi. */
 .sales__metrics {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin-bottom: 20px;
+    margin-bottom: var(--space-lg);
 }
 
 .sales__chart {
-    margin-bottom: 20px;
+    margin-bottom: var(--space-lg);
+    border: 2px solid var(--brand-primary);
+    border-radius: 16px;
+    padding: 24px;
+    background: var(--card);
+    box-shadow: 4px 4px 0 var(--brand-primary);
 }
 
 .sales__products {
-    margin-bottom: 20px;
+    margin-bottom: var(--space-lg);
     overflow: hidden;
 }
 
@@ -34,9 +39,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: var(--space-md);
     border-top: var(--border-width) solid var(--border-light);
-    padding: 9px 14px;
+    padding: var(--space-sm) var(--space-md);
 }
 
 .sales__list-count {
@@ -48,7 +53,7 @@
 .sales__list-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-sm);
 }
 
 .sales__list-pagination {
@@ -62,7 +67,7 @@
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-sm);
     background: var(--card);
-    font-size: 11px;
+    font-size: var(--type-label);
 }
 
 .sales__list-pagination .is-current {
@@ -75,16 +80,16 @@
 }
 
 .sales__table-heading {
-    padding: 13px 15px;
+    padding: var(--space-md) var(--space-lg);
 }
 
 .sales__date {
     border: 0;
     border-radius: var(--radius-pill);
-    padding: 5px 11px;
+    padding: var(--space-xs) var(--space-md);
     background: var(--safe-light);
     color: var(--safe);
-    font-size: 11px;
+    font-size: var(--type-label);
 }
 
 /* Tata ulang judul dan kartu ringkasan di layar tablet atau HP. */
@@ -92,7 +97,7 @@
     .sales__heading {
         align-items: flex-start;
         flex-direction: column;
-        gap: 12px;
+        gap: var(--space-md);
     }
 
     .sales__periods {

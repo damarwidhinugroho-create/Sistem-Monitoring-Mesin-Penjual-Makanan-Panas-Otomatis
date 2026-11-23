@@ -1,10 +1,614 @@
-/* Tombol untuk melihat atau menyembunyikan password di kolom login. */
-.login-field__toggle {
+.guest-layout {
+    --login-ink: var(--text-primary);
+    --login-dark: var(--brand-primary);
+    --login-dark-deep: var(--brand-primary-dark);
+    --login-paper: var(--card);
+    --login-canvas: var(--canvas);
+    --login-gold: var(--sidebar-accent);
+    --login-muted: var(--text-muted);
+    display: grid;
+    min-height: 100vh;
+    min-height: 100svh;
+    place-items: center;
+    overflow: hidden;
+    padding: 12px;
+    background:
+        radial-gradient(ellipse at 18% 22%, color-mix(in srgb, var(--brand-primary) 8%, transparent), transparent 40%),
+        radial-gradient(ellipse at 82% 78%, color-mix(in srgb, var(--login-gold) 16%, transparent), transparent 36%),
+        var(--login-canvas);
+    color: var(--login-ink);
+}
+
+.vending-login {
+    display: grid;
+    width: 100%;
+    height: calc(100svh - 24px);
+    place-items: center;
+}
+
+.vending-machine {
+    container-type: inline-size;
+    position: relative;
+    width: min(520px, calc((100svh - 24px) * .58), calc(100vw - 24px));
+    aspect-ratio: 520 / 820;
+    perspective: 1500px;
+    transform-origin: 50% 50%;
+}
+
+.vending-machine__front {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 4.5%;
+    display: grid;
+    grid-template-rows: 11.5% 1fr 15.5%;
+    gap: 2%;
+    overflow: hidden;
+    border: 3px solid var(--login-dark);
+    border-radius: 14px;
+    padding: 2.7%;
+    background: var(--login-dark);
+    box-shadow: 8px 8px 0 var(--login-dark-deep);
+}
+
+.vending-machine__header {
+    display: grid;
+    grid-template-columns: 11% 1fr;
+    align-items: center;
+    gap: 3%;
+    min-width: 0;
+    border: 2px solid var(--login-gold);
+    border-radius: 9px;
+    padding: 3.5% 3%;
+    background: var(--login-dark-deep);
+}
+
+.vending-machine__logo {
+    display: grid;
+    aspect-ratio: 1;
+    width: 100%;
+    place-items: center;
+    border: 2px solid var(--login-gold);
+    border-radius: 50%;
+    color: var(--login-gold);
+    font-size: clamp(13px, 4cqw, 20px);
+    font-weight: 900;
+    transition: transform 220ms var(--motion-ease);
+}
+
+.vending-machine__header:hover .vending-machine__logo {
+    transform: rotate(-8deg);
+}
+
+.vending-machine__brand {
+    display: block;
+    min-width: 0;
+}
+
+.vending-machine__brand strong {
+    color: var(--white);
+    font-size: clamp(13px, 4.2cqw, 21px);
+    line-height: 1;
+}
+
+.vending-machine__body {
+    display: grid;
+    min-height: 0;
+    grid-template-columns: 68.5% 28.5%;
+    gap: 3%;
+}
+
+.vending-login-screen {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    justify-content: center;
+    border: 3px solid #091F1A;
+    border-radius: 12px;
+    padding: 4.5% 5%;
+    background: var(--login-paper);
+    box-shadow: 4px 4px 0 #091F1A;
+    color: var(--login-ink);
+    overflow: hidden;
+}
+
+.vending-login-screen__top {
+    display: flex;
+    flex: 0 0 auto;
     align-self: stretch;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.vending-login-screen__led {
+    width: 9px;
+    height: 9px;
+    border: 1.5px solid var(--login-dark);
+    border-radius: 50%;
+    background: #77BA91;
+}
+
+.vending-login-screen__copy {
+    flex: 0 0 auto;
+    display: grid;
+    gap: 2px;
+    margin: 7px 0 9px;
+}
+
+.vending-login-screen h1 {
+    margin: 0 0 1.5%;
+    color: var(--login-ink);
+    font-size: clamp(17px, 5cqw, 27px);
+    line-height: 1.08;
+}
+
+.vending-login-screen__copy p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: clamp(9px, 2.2cqw, 12px);
+    line-height: 1.35;
+}
+
+.login-form {
+    display: flex;
+    min-height: 0;
+    flex: 0 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(7px, 1.2cqw, 11px);
+}
+
+.login-form__field {
+    display: grid;
+    flex: 0 0 auto;
+    gap: clamp(2px, .5cqw, 4px);
+}
+
+.login-form__field > label {
+    color: var(--login-dark);
+    font-size: clamp(8px, 1.9cqw, 10px);
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+.login-input {
+    display: flex;
+    min-height: clamp(46px, 7.4cqw, 54px);
+    align-items: center;
+    border: 2px solid var(--login-dark);
+    border-radius: 8px;
+    background: var(--card);
+}
+
+.login-input:focus-within {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--login-gold) 35%, transparent);
+}
+
+.login-input.is-focused {
+    border-color: var(--login-gold);
+}
+
+.login-input.is-focused + .login-inline-error,
+.login-form__field:focus-within > label {
+    color: var(--login-gold);
+    font-weight: 900;
+}
+
+.login-form__field.has-error .login-input {
+    border-color: var(--critical);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--critical) 18%, transparent);
+    animation: login-field-shake 320ms ease-in-out;
+}
+
+.login-inline-error {
+    margin: 2px 0 0;
+    color: var(--critical);
+    font-size: clamp(9px, 2cqw, 11px);
+}
+
+.vending-login-screen__led.is-pulsing,
+.vending-login-screen__led.is-focused {
+    box-shadow: 0 0 10px var(--login-gold);
+}
+
+.login-input__icon {
+    display: grid;
+    width: 34px;
+    flex: 0 0 34px;
+    place-items: center;
+}
+
+.login-input__icon svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--text-muted);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+}
+
+.login-input input {
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
     border: 0;
-    border-left: var(--border-width) solid var(--border-light);
-    padding: 0 11px;
-    background: var(--brand-primary-light);
-    color: var(--brand-primary);
-    font-size: 11px;
+    outline: 0;
+    padding: 0 5px 0 0;
+    background: transparent;
+    color: var(--login-ink);
+    font-size: clamp(14px, 3.4cqw, 16px);
+}
+
+.login-input input::placeholder {
+    color: var(--placeholder);
+    font-size: clamp(12px, 3cqw, 14px);
+}
+
+.login-field__toggle {
+    min-height: 28px;
+    border: 0;
+    border-radius: 6px;
+    margin-right: 5px;
+    background: var(--gold-soft);
+    color: var(--gold-soft-text);
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.login-submit {
+    display: flex;
+    width: 100%;
+    min-height: clamp(46px, 8cqw, 54px);
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid var(--login-dark);
+    border-radius: 8px;
+    padding: 0 12px;
+    background: var(--login-gold);
+    box-shadow: 3px 3px 0 var(--login-dark);
+    color: var(--login-dark);
+    font-size: clamp(9px, 2.2cqw, 12px);
+    font-weight: 900;
+}
+
+.login-submit svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+}
+
+.login-submit svg {
+    transition: transform 180ms var(--motion-ease);
+}
+
+.login-submit:hover:not(:disabled) svg {
+    transform: translateX(4px);
+}
+
+.login-field__toggle.is-changing {
+    opacity: 0;
+    transform: translateY(3px);
+}
+
+.login-submit:active:not(:disabled) {
+    box-shadow: 1px 1px 0 var(--login-dark);
+    transform: translate(2px, 2px);
+}
+
+.login-submit:disabled {
+    cursor: wait;
+    opacity: .78;
+}
+
+.login-error {
+    margin: 0;
+    color: var(--critical);
+    font-size: clamp(9px, 2cqw, 11px);
+}
+
+.vending-side-panel {
+    display: grid;
+    min-height: 0;
+    grid-template-rows: 20% 38% 18% 1fr;
+    align-items: center;
+    justify-items: center;
+    border: 3px solid #091F1A;
+    border-radius: 12px;
+    padding: 8% 7%;
+    background: var(--login-gold);
+}
+
+.vending-side-panel__reader {
+    width: 82%;
+    height: 72%;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--login-dark);
+    border-radius: 999px;
+    background: var(--white);
+    transition: transform 180ms var(--motion-ease);
+}
+
+.vending-side-panel__reader:hover {
+    transform: translateY(-3px);
+}
+
+.vending-side-panel__reader:hover span {
+    animation: card-reader-blink 300ms ease-in-out 1;
+}
+
+@keyframes card-reader-blink {
+    50% { background: var(--login-gold); }
+}
+
+.vending-side-panel__reader span {
+    width: 72%;
+    height: 28%;
+    border: 2px solid var(--login-dark);
+    border-radius: 999px;
+    background: #E64A34;
+}
+
+.vending-side-panel__keypad {
+    display: grid;
+    width: 78%;
+    height: 78%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8%;
+    border: 2px solid var(--login-dark);
+    border-radius: 7px;
+    padding: 8%;
+    background: var(--login-paper);
+}
+
+.vending-side-panel__keypad i {
+    border: 1.5px solid var(--login-dark);
+    border-radius: 3px;
+    background: #DDE7DE;
+    transition: transform 140ms ease-out, background-color 140ms ease-out;
+}
+
+.vending-side-panel__keypad i:hover,
+.vending-side-panel__keypad i:active {
+    background: var(--login-gold);
+    transform: translateY(2px) scale(.96);
+}
+
+.vending-side-panel__keypad i.is-active {
+    background: var(--login-gold);
+    transform: translateY(2px) scale(.94);
+}
+
+.vending-side-panel__coin {
+    width: 68%;
+    aspect-ratio: 2.2;
+    border: 2px solid var(--login-dark);
+    border-radius: 6px;
+    background: #2E6253;
+    transition: transform 180ms var(--motion-ease);
+}
+
+.vending-side-panel__coin:hover {
+    animation: coin-jitter 260ms ease-in-out 1;
+}
+
+@keyframes coin-jitter {
+    25% { transform: translateX(-2px) rotate(-2deg); }
+    75% { transform: translateX(2px) rotate(2deg); }
+}
+
+.vending-side-panel__led {
+    width: 15%;
+    aspect-ratio: 1;
+    border: 2px solid var(--login-dark);
+    border-radius: 50%;
+    background: #77BA91;
+    box-shadow: 0 0 8px #77BA91;
+}
+
+.vending-machine__front:hover .vending-side-panel__led {
+    animation: vending-led-fast 700ms ease-in-out infinite;
+}
+
+@keyframes vending-led-fast {
+    50% { opacity: .45; box-shadow: 0 0 14px #77BA91; }
+}
+
+.caps-lock-badge {
+    position: absolute;
+    z-index: 8;
+    right: 5%;
+    top: 5%;
+    border: 1.5px solid var(--warning-border);
+    border-radius: 999px;
+    padding: 4px 8px;
+    background: var(--warning-light);
+    color: var(--warning-text);
+    font-size: 9px;
+    font-weight: 800;
+    animation: caps-lock-enter 180ms var(--motion-ease) both;
+}
+
+@keyframes caps-lock-enter {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes login-field-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+.vending-machine__tray {
+    position: relative;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    border: 3px solid #091F1A;
+    border-radius: 10px;
+    padding: 5% 7%;
+    background: var(--login-gold);
+}
+
+.vending-machine__tray-flap {
+    position: absolute;
+    z-index: 2;
+    top: 13%;
+    width: 78%;
+    height: 8%;
+    border: 2px solid #091F1A;
+    border-radius: 999px;
+    background: #FFF7D7;
+    transition: transform 180ms var(--motion-ease);
+}
+
+.vending-machine:has(.login-submit:hover) .vending-machine__tray-flap {
+    transform: translateY(-3px) rotateX(8deg);
+}
+
+.vending-machine__tray-outlet {
+    display: grid;
+    width: 82%;
+    height: 58%;
+    place-content: center;
+    gap: 1px;
+    border: 3px solid #091F1A;
+    border-radius: 7px;
+    background: var(--login-dark-deep);
+    box-shadow: inset 0 7px 12px rgb(9 31 26 / 42%);
+    color: var(--white);
+    text-align: center;
+}
+
+.vending-machine__tray:hover .vending-machine__tray-flap {
+    transform: translateY(-4px) rotateX(10deg);
+}
+
+.vending-machine__feet {
+    position: absolute;
+    z-index: 0;
+    left: 8%;
+    right: 8%;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.vending-machine__feet span {
+    width: 11%;
+    height: 4.5%;
+    min-height: 18px;
+    border: 2px solid var(--login-dark);
+    border-radius: 0 0 6px 6px;
+    background: var(--login-dark-deep);
+}
+
+.vending-login.is-shaking .vending-machine {
+    animation: vending-login-shake 420ms ease-in-out;
+}
+
+@keyframes vending-login-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-7px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(3px); }
+}
+
+:root[data-theme="dark"] .guest-layout {
+    --login-ink: var(--text-primary);
+    --login-paper: var(--card);
+    --login-canvas: var(--canvas);
+}
+
+@media (max-width: 760px) {
+    .vending-machine {
+        width: min(470px, calc((100svh - 16px) * .58), calc(100vw - 16px));
+    }
+
+    .vending-machine__header {
+        grid-template-columns: 12% 1fr;
+    }
+
+    .vending-machine__body {
+        grid-template-columns: 72% 25%;
+        gap: 3%;
+    }
+
+    .vending-side-panel {
+        grid-template-rows: 18% 42% 20% 1fr;
+        padding: 7% 5%;
+    }
+
+    .vending-login-screen {
+        padding: 4% 4.5%;
+    }
+}
+
+@media (max-height: 720px) {
+    .guest-layout,
+    .vending-login {
+        padding: 6px;
+    }
+
+    .vending-login {
+        height: calc(100svh - 12px);
+    }
+
+    .vending-machine {
+        width: min(520px, calc((100svh - 12px) * .58), calc(100vw - 12px));
+    }
+
+    .vending-login-screen {
+        padding-block: 3.5%;
+    }
+
+    .login-input {
+        min-height: 44px;
+    }
+
+    .login-submit {
+        min-height: 46px;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+    .vending-machine {
+        width: min(370px, calc((100svh - 12px) * .58), calc(100vw - 12px));
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vending-machine {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+    }
+
+    .vending-machine__header:hover *,
+    .vending-side-panel__reader:hover,
+    .vending-side-panel__keypad i:hover,
+    .vending-side-panel__coin:hover,
+    .vending-machine__tray:hover * {
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+@media (pointer: coarse) {
+    .vending-machine__header:hover *,
+    .vending-side-panel__reader:hover,
+    .vending-side-panel__keypad i:hover,
+    .vending-side-panel__coin:hover,
+    .vending-machine__tray:hover * {
+        animation: none !important;
+        transform: none !important;
+    }
 }
