@@ -1,4 +1,52 @@
 /* Judul dashboard dan ringkasan utama kondisi mesin/stok. */
+.dashboard__content {
+    display: grid;
+    gap: var(--space-grid);
+}
+
+.dashboard__toolbar,
+.dashboard__meta {
+    display: flex;
+    align-items: center;
+}
+
+.dashboard__toolbar {
+    justify-content: space-between;
+    gap: var(--space-grid);
+}
+
+.dashboard__meta {
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    color: var(--text-secondary);
+    font-size: var(--type-label);
+}
+
+.dashboard__report-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    text-decoration: none;
+}
+
+@media (max-width: 640px) {
+    .dashboard__toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .dashboard__meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: var(--space-sm);
+    }
+
+    .dashboard__report-link {
+        align-self: flex-start;
+    }
+}
+
 .dashboard__heading {
     display: flex;
     align-items: center;
@@ -234,4 +282,235 @@
         padding: 16px;
     }
 
+}
+
+.dashboard__split-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: var(--space-grid);
+}
+
+.dashboard__panel {
+    min-width: 0;
+    padding: var(--space-card);
+}
+
+.dashboard__panel--slots {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard__filter select {
+    min-height: 36px;
+    border: var(--border-width) solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm) var(--space-md);
+    background: var(--card);
+    font-size: var(--type-label);
+}
+
+.dashboard__sales-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-grid);
+    margin-bottom: var(--space-grid);
+}
+
+.dashboard__sales-summary > div {
+    display: grid;
+    gap: var(--space-xs);
+}
+
+.dashboard__sales-summary span {
+    color: var(--text-secondary);
+    font-size: var(--type-label);
+}
+
+.dashboard__sales-summary strong {
+    font-size: var(--type-stat);
+}
+
+.dashboard__sales-chart {
+    height: 240px;
+    min-height: 220px;
+}
+
+.dashboard__empty-state {
+    display: grid;
+    min-height: 150px;
+    align-content: center;
+    justify-items: center;
+    gap: var(--space-md);
+    border: var(--border-width) dashed var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: var(--space-card);
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.dashboard__empty-state .icon {
+    color: var(--text-muted);
+}
+
+.dashboard__empty-state p {
+    max-width: 36ch;
+    margin: 0;
+    font-size: var(--font-size-xs);
+}
+
+.dashboard__chart-empty {
+    min-height: 220px;
+}
+
+.dashboard__panel-link {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    margin-top: var(--space-md);
+    color: var(--brand-primary);
+    font-size: var(--type-label);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.dashboard__panel-link:hover {
+    text-decoration: underline;
+}
+
+.dashboard__action-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.dashboard__table-empty {
+    padding: var(--space-4) var(--space-md) !important;
+    color: var(--text-secondary);
+    text-align: center;
+    white-space: normal !important;
+}
+
+.dashboard__inventory-product {
+    display: grid;
+    gap: var(--space-xs);
+}
+
+.dashboard__inventory-product span,
+.dashboard__expiry-unavailable,
+.dashboard__inventory-note {
+    color: var(--text-secondary);
+    font-size: var(--type-label);
+}
+
+.dashboard__inventory-note {
+    margin: var(--space-sm) 0 0;
+}
+
+.dashboard__slot-description {
+    margin: 0 0 var(--space-md);
+    color: var(--text-secondary);
+    font-size: var(--type-label);
+}
+
+.dashboard__slot-total {
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
+}
+
+.dashboard__slot-grid {
+    display: grid;
+    flex: 1;
+    grid-auto-rows: minmax(36px, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-xs);
+}
+
+.dashboard__slot {
+    display: grid;
+    min-width: 0;
+    min-height: 36px;
+    align-content: center;
+    justify-items: center;
+    overflow: hidden;
+    border: var(--border-width) solid var(--border-light);
+    border-radius: var(--radius-sm);
+    background: var(--card);
+    font-size: var(--type-label);
+    line-height: 1.2;
+    text-align: center;
+}
+
+.dashboard__slot--aman {
+    border-color: var(--safe);
+    background: var(--safe-light);
+    color: var(--safe);
+}
+
+.dashboard__slot--kritis {
+    border-color: var(--warning-border);
+    background: var(--warning-light);
+    color: var(--warning-text);
+}
+
+.dashboard__slot--habis {
+    border-color: var(--stock-empty);
+    background: var(--stock-empty-light);
+    color: var(--stock-empty);
+}
+
+.dashboard__slot-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-md);
+    margin: var(--space-md) 0 0;
+    padding: 0;
+    color: var(--text-secondary);
+    font-size: var(--type-label);
+    list-style: none;
+}
+
+.dashboard__slot-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.dashboard__legend-marker {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 9px;
+    border: var(--border-width) solid currentColor;
+    border-radius: 50%;
+}
+
+.dashboard__legend-marker--aman {
+    background: var(--safe);
+    color: var(--safe);
+}
+
+.dashboard__legend-marker--kritis {
+    background: var(--warning);
+    color: var(--warning);
+}
+
+.dashboard__legend-marker--habis {
+    background: var(--stock-empty);
+    color: var(--stock-empty);
+}
+
+@media (max-width: 900px) {
+    .dashboard__split-grid {
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .dashboard__split-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dashboard__sales-summary {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
