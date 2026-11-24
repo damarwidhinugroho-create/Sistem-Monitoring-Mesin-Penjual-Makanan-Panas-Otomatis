@@ -306,20 +306,42 @@ document.querySelectorAll('[data-password-toggle]').forEach((button) => {
     });
 });
 
-document.querySelectorAll('[data-open-slot]').forEach((button) => {
-    button.addEventListener('click', () => {
-        document.querySelector(`#slot-dialog-${button.dataset.openSlot}`)?.showModal();
-    });
-});
+const slotDialog = document.querySelector('[data-slot-dialog]');
 
-document.querySelectorAll('[data-slot-dialog]').forEach((dialog) => {
-    dialog.querySelector('[data-close-slot]')?.addEventListener('click', () => {
-        dialog.close();
+if (slotDialog) {
+    const slotForm = slotDialog.querySelector('[data-slot-form]');
+    const slotTitle = slotDialog.querySelector('[data-slot-dialog-title]');
+    const slotId = slotDialog.querySelector('[data-slot-id]');
+    const slotProduct = slotDialog.querySelector('[data-slot-product]');
+    const slotPrice = slotDialog.querySelector('[data-slot-price]');
+    const stockInput = slotDialog.querySelector('[name="stock"]');
+    const filledAtInput = slotDialog.querySelector('[name="filled_at"]');
+
+    document.querySelectorAll('[data-open-slot]').forEach((button) => {
+        button.addEventListener('click', () => {
+            if (!slotForm || !slotTitle || !slotId || !slotProduct || !slotPrice || !stockInput || !filledAtInput) {
+                return;
+            }
+
+            slotForm.action = button.dataset.updateUrl;
+            slotTitle.textContent = 'Edit Stok';
+            slotId.textContent = button.dataset.openSlot;
+            slotProduct.textContent = button.dataset.slotProduct;
+            slotPrice.textContent = button.dataset.slotPrice;
+            stockInput.value = button.dataset.slotStock;
+            stockInput.max = button.dataset.slotCapacity;
+            filledAtInput.value = button.dataset.filledAt;
+            slotDialog.showModal();
+        });
     });
 
-    dialog.addEventListener('click', (event) => {
-        if (event.target === dialog) {
-            dialog.close();
+    slotDialog.querySelectorAll('[data-close-slot]').forEach((button) => {
+        button.addEventListener('click', () => slotDialog.close());
+    });
+
+    slotDialog.addEventListener('click', (event) => {
+        if (event.target === slotDialog) {
+            slotDialog.close();
         }
     });
-});
+}

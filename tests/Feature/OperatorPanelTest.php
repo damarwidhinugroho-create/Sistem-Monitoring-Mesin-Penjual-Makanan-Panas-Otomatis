@@ -317,14 +317,31 @@ class OperatorPanelTest extends TestCase
         ]);
 
         $this->patch('/inventory/slots/A1', [
-            'product' => 'Mie Tarempa',
+            'stock' => 7,
+            'filled_at' => '10/09/2026 09:00',
+        ])->assertRedirect('/inventory')
+            ->assertSessionHas('operator.slot_updates.A1.stock', 7)
+            ->assertSessionHas('operator.slot_updates.A1.filled_at', '10/09/2026 09:00')
+            ->assertSessionMissing('operator.slot_updates.A1.product')
+            ->assertSessionMissing('operator.slot_updates.A1.price');
+
+        $this->get('/inventory')->assertOk()->assertSee('7/10');
+    }
+
+    public function test_slot_refill_date_must_use_day_month_year_and_24_hour_time(): void
+    {
+        $this->fakeInventoryApi();
+
+        $this->post('/login', [
+            'username' => 'Budi',
+            'password' => 'budi123',
+        ]);
+
+        $this->patchJson('/inventory/slots/A1', [
             'stock' => 7,
             'filled_at' => '10 Sep 2026 09.00',
-            'price' => 30000,
-        ])->assertRedirect('/inventory')
-            ->assertSessionHas('operator.slot_updates.A1.stock', 7);
-
-        $this->get('/inventory')->assertOk()->assertDontSee('7/10');
+        ])->assertUnprocessable()
+            ->assertJsonValidationErrors('filled_at');
     }
 
     private function fakeInventoryApi(): void
