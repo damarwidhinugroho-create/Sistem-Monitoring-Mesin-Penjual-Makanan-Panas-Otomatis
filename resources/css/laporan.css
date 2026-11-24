@@ -1,10 +1,15 @@
 @import './period-picker.css';
 
-/* Judul laporan dan tombol untuk memilih rentang periode. */
+.report-page {
+    display: grid;
+    gap: var(--space-lg);
+}
+
+/* Filter periode dan aksi ekspor laporan. */
 .report__heading {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 16px;
 }
 
@@ -13,6 +18,7 @@
     align-items: center;
     justify-content: flex-end;
     gap: 14px;
+    flex-wrap: wrap;
 }
 
 .report__periods {
@@ -55,6 +61,124 @@
     border-right-color: var(--brand-primary);
 }
 
+.report__period-caption {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+}
+
+.report__history-error {
+    margin: var(--space-xs) 0 0;
+    color: var(--critical);
+    font-size: var(--font-size-xs);
+}
+
+.report__history-error[hidden] {
+    display: none;
+}
+
+.report__summary {
+    gap: var(--space-grid);
+}
+
+.report__summary .stat-card {
+    min-width: 0;
+}
+
+.report__preview {
+    min-width: 0;
+    overflow: hidden;
+}
+
+.report__preview-header {
+    padding: var(--space-card) var(--space-card) var(--space-md);
+}
+
+.report__preview-header .panel__description {
+    margin-top: var(--space-xs);
+}
+
+.report__table {
+    min-width: 760px;
+}
+
+.report__table td {
+    white-space: nowrap;
+}
+
+.report__history-download {
+    min-height: 34px;
+    border: var(--border-width) solid var(--brand-primary);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    background: var(--brand-primary);
+    color: var(--white);
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+}
+
+.report__history-download:hover {
+    filter: brightness(.94);
+}
+
+.report__history-download:disabled {
+    cursor: wait;
+    opacity: .65;
+}
+
+.report__table .report__empty {
+    height: 90px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.report__table-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    border-top: var(--border-width) solid var(--border-light);
+    padding: var(--space-sm) var(--space-card);
+}
+
+.report__table-footer[hidden] {
+    display: none;
+}
+
+.report__table-count {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+}
+
+.report__pagination {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.report__pagination button {
+    min-width: 30px;
+    min-height: 30px;
+    border: var(--border-width) solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: 3px 7px;
+    background: var(--card);
+    color: var(--text-primary);
+    font-size: var(--font-size-xs);
+}
+
+.report__pagination button[aria-current="page"] {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary);
+    color: var(--white);
+}
+
+.report__pagination button:disabled {
+    cursor: not-allowed;
+    opacity: .5;
+}
+
 /* Pop-up untuk memilih tanggal mulai dan tanggal akhir laporan. */
 .date-range-picker {
     position: relative;
@@ -75,6 +199,10 @@
     padding: 16px;
     background: var(--card);
     box-shadow: 0 8px 24px rgb(31 41 55 / 14%);
+}
+
+.date-range-picker__panel[hidden] {
+    display: none;
 }
 
 .date-range-picker__field {
@@ -110,6 +238,41 @@
     font-size: var(--font-size-xs);
 }
 
+.date-range-picker__group {
+    display: grid;
+    min-width: 0;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-xs);
+}
+
+.date-range-picker__group > span {
+    grid-column: 1 / -1;
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+}
+
+.date-range-picker__group label {
+    min-width: 0;
+}
+
+.date-range-picker__group select {
+    width: 100%;
+    min-height: 38px;
+    border: var(--border-width) solid var(--border-light);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xs) var(--space-sm);
+    background: var(--card);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: var(--font-size-xs);
+}
+
+.date-range-picker__panel [data-clear-period] {
+    grid-column: 1 / -1;
+    justify-self: end;
+}
+
 /* Tombol ekspor, area isi laporan, dan dialog konfirmasi ekspor. */
 .report__export-button {
     position: relative;
@@ -126,6 +289,11 @@
     color: var(--white);
     font-size: var(--font-size-xs);
     white-space: nowrap;
+}
+
+.report__export-button:disabled {
+    cursor: not-allowed;
+    opacity: .55;
 }
 
 .report__export-button svg {
@@ -173,11 +341,18 @@
     font-size: var(--font-size-sm);
 }
 
+.report-dialog__content .report-dialog__empty-note {
+    margin-top: -12px;
+    color: var(--text-secondary);
+    font-size: var(--font-size-xs);
+}
+
 .report-dialog__actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 14px;
+    flex-wrap: wrap;
 }
 
 .report-dialog__actions button {
@@ -194,6 +369,16 @@
 .report-dialog__actions button:disabled {
     cursor: wait;
     opacity: .65;
+}
+
+.report-dialog__actions .report-dialog__cancel {
+    background: var(--card);
+    color: var(--text-primary);
+}
+
+.report-dialog__actions .report-dialog__confirm {
+    background: var(--brand-primary);
+    color: var(--white);
 }
 
 .report-dialog__error {
@@ -213,6 +398,20 @@
         width: 100%;
         flex-wrap: wrap;
         justify-content: flex-start;
+    }
+
+    .report__periods {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    .report__heading {
+        gap: var(--space-sm);
+    }
+
+    .report__table-footer {
+        align-items: flex-start;
+        flex-direction: column;
     }
 }
 
@@ -238,4 +437,9 @@
         gap: 10px;
         padding: 12px;
     }
+
+    .report__preview-header {
+        padding: var(--space-md);
+    }
+
 }
