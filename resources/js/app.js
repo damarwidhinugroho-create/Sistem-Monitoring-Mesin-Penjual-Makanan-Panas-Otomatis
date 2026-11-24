@@ -32,6 +32,20 @@ Chart.defaults.animation = reduceMotion
 
 const charts = new Map();
 
+function getBarBackground(data, highlightLatest) {
+    if (!highlightLatest) {
+        return colors.bar;
+    }
+
+    return data.map((_, index) => (
+        index === data.length - 1 ? colors.brand : colors.bar
+    ));
+}
+
+function formatCurrency(value) {
+    return `Rp${new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(value)}`;
+}
+
 function updateTheme() {
     const isDark = document.documentElement.dataset.theme === 'dark';
     const theme = getComputedStyle(document.documentElement);
@@ -49,7 +63,9 @@ function updateTheme() {
             dataset.borderColor = index === 0
                 ? (isBarChart ? colors.bar : colors.brand)
                 : colors.secondary;
-            dataset.backgroundColor = index === 0 && isBarChart ? colors.bar : 'transparent';
+            dataset.backgroundColor = index === 0 && isBarChart
+                ? getBarBackground(dataset.data, chart.canvas.dataset.chartHighlightLatest === 'true')
+                : 'transparent';
         });
 
         chart.options.scales.x.border.color = colors.border;
@@ -70,11 +86,12 @@ document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
     const values = JSON.parse(canvas.dataset.chartValues ?? '[]');
     const secondary = JSON.parse(canvas.dataset.chartSecondary ?? '[]');
     const isLine = canvas.dataset.chartType === 'line';
+    const highlightLatest = canvas.dataset.chartHighlightLatest === 'true';
     const primaryChartColor = isLine ? colors.brand : colors.bar;
     const datasets = [{
         data: values,
         borderColor: primaryChartColor,
-        backgroundColor: isLine ? 'transparent' : colors.bar,
+        backgroundColor: isLine ? 'transparent' : getBarBackground(values, highlightLatest),
         borderWidth: 1.5,
         pointRadius: 0,
         pointHoverRadius: 2,
@@ -120,6 +137,11 @@ document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
                     padding: 10,
                     cornerRadius: 8,
                     displayColors: false,
+                    callbacks: canvas.dataset.chartValueFormat === 'currency'
+                        ? {
+                            label: (context) => formatCurrency(context.parsed.y),
+                        }
+                        : undefined,
                     animation: reduceMotion ? false : { duration: 180 },
                 },
             },
@@ -225,6 +247,43 @@ document.querySelectorAll('[data-chart-period]').forEach((button) => {
         chartCard.querySelectorAll('[data-chart-period]').forEach((control) => {
             control.classList.toggle('chart-card__control--active', control === button);
         });
+    });
+});
+
+document.querySelectorAll('[data-dashboard-chart-period]').forEach((select) => {
+    select.addEventListener('change', () => {
+        const chart = charts.get(select.dataset.chartTarget);
+        const selectedOption = select.selectedOptions[0];
+        const panel = select.closest('.dashboard__panel');
+
+        if (!chart || !selectedOption || !panel) {
+            return;
+        }
+
+        const canvas = chart.canvas;
+        const useWeeklyData = select.value === 'week';
+        const labels = JSON.parse(useWeeklyData
+            ? canvas.dataset.chartAltLabels ?? '[]'
+            : canvas.dataset.chartLabels ?? '[]');
+        const values = JSON.parse(useWeeklyData
+            ? canvas.dataset.chartAltValues ?? '[]'
+            : canvas.dataset.chartValues ?? '[]');
+
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = values;
+        chart.data.datasets[0].backgroundColor = getBarBackground(
+            values,
+            canvas.dataset.chartHighlightLatest === 'true',
+        );
+        chart.update(reduceMotion ? 'none' : undefined);
+
+        panel.querySelector('[data-dashboard-sales-total]').textContent = selectedOption.dataset.total;
+        panel.querySelector('[data-dashboard-sales-change]').textContent = selectedOption.dataset.change;
+        panel.querySelector('[data-dashboard-sales-comparison]').textContent = selectedOption.dataset.comparison;
+        canvas.setAttribute(
+            'aria-label',
+            useWeeklyData ? 'Grafik penjualan simulasi 7 hari terakhir' : 'Grafik penjualan simulasi per jam',
+        );
     });
 });
 
