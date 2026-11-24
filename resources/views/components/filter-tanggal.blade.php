@@ -1,7 +1,7 @@
 @php
-    $today = now()->format('Y-m-d');
+    $today = now('Asia/Jakarta')->format('Y-m-d');
     [$todayYear, $todayMonth, $todayDay] = array_map('intval', explode('-', $today));
-    $availableYears = [2026];
+    $availableYears = range($todayYear - 2, $todayYear);
     $months = [
         'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',

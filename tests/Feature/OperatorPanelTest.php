@@ -54,7 +54,7 @@ class OperatorPanelTest extends TestCase
         $this->get('/reports')->assertRedirect('/login');
     }
 
-    public function test_selected_pages_keep_the_shared_layout_but_render_no_page_content(): void
+    public function test_dashboard_and_inventory_keep_the_shared_shell_while_reports_render_export_controls(): void
     {
         $this->fakeInventoryApi();
 
@@ -63,7 +63,7 @@ class OperatorPanelTest extends TestCase
             'password' => 'budi123',
         ]);
 
-        foreach (['/dashboard', '/inventory', '/reports'] as $path) {
+        foreach (['/dashboard', '/inventory'] as $path) {
             $this->get($path)
                 ->assertOk()
                 ->assertSee('id="operator-sidebar"', false)
@@ -81,6 +81,16 @@ class OperatorPanelTest extends TestCase
                 ->assertDontSee('data-open-export', false)
                 ->assertDontSee('Mie Tarempa');
         }
+
+        $this->get('/reports')
+            ->assertOk()
+            ->assertSee('Laporan Penjualan')
+            ->assertSee('data-open-export', false)
+            ->assertSee('data-report-history-table', false)
+            ->assertSee('TANGGAL EKSPOR')
+            ->assertDontSee('data-report-tab', false)
+            ->assertSee('History Alert')
+            ->assertSee('data-export-empty-note', false);
 
         $this->get('/sales?period=jam')->assertOk()->assertSee('Rp. 120.000')->assertSee('Online')->assertSee('pageMotion-', false);
         $this->get('/sales?period=hari')->assertOk()->assertSee('Senin')->assertSee('Online');
