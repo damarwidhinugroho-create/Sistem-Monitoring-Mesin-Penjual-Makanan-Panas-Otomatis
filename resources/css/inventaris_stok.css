@@ -1,3 +1,8 @@
+/* ============================================================
+   Inventaris stok: summary cards, masa simpan, slot grid,
+   riwayat restok, dialog edit.
+   ============================================================ */
+
 /* Judul inventaris, kartu ringkasan, dan ringkasan progress umur stok. */
 .inventory__heading {
     margin: 0 0 16px;
@@ -166,8 +171,6 @@
     border-radius: var(--radius-card);
     padding: 14px;
     background: rgb(255 255 255 / 38%);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
     box-shadow: 0 4px 16px rgb(31 41 55 / 8%);
     color: var(--text-primary);
 }
@@ -315,16 +318,16 @@
     max-height: none;
     margin: 0;
     overflow-y: auto;
-    transform: translateX(100%);
+    transform: translateX(24px);
     border: 0;
     border-left: var(--border-width) solid var(--border);
     border-radius: var(--radius-card) 0 0 var(--radius-card);
     padding: 0;
     background: var(--card);
     color: var(--text-primary);
-    box-shadow: -16px 0 48px rgb(15 23 42 / 16%);
+    box-shadow: -8px 0 24px rgb(15 23 42 / 12%);
     opacity: 0;
-    transition: transform 420ms cubic-bezier(.22, 1, .36, 1), opacity 260ms ease, display 420ms allow-discrete, overlay 420ms allow-discrete;
+    transition: transform 220ms var(--motion-ease), opacity 160ms ease;
 }
 
 .dialog[open] {
@@ -334,22 +337,18 @@
 
 @starting-style {
     .dialog[open] {
-        transform: translateX(100%);
+        transform: translateX(24px);
         opacity: 0;
     }
 }
 
 .dialog::backdrop {
     background: transparent;
-    -webkit-backdrop-filter: blur(0);
-    backdrop-filter: blur(0);
-    transition: background-color 360ms ease, backdrop-filter 360ms ease;
+    transition: background-color 160ms ease;
 }
 
 .dialog[open]::backdrop {
     background: var(--ink-overlay);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
 }
 
 @starting-style {
@@ -377,7 +376,7 @@
 
 .dialog__title {
     margin: 0;
-    font-size: var(--font-size-sm);
+    font-size: 20px;
 }
 
 .dialog__close {
@@ -397,7 +396,7 @@
     gap: 12px;
     border-bottom: var(--border-width) solid var(--border-light);
     padding: 12px 0;
-    font-size: 11px;
+    font-size: 15px;
 }
 
 .dialog__row:last-child {
@@ -412,24 +411,67 @@
     text-align: right;
 }
 
+.dialog__info-row {
+    min-height: 48px;
+}
+
+.dialog__info-row .dialog__value {
+    max-width: 62%;
+    font-size: 15px;
+    overflow-wrap: anywhere;
+}
+
 .dialog__input {
-    width: 165px;
-    min-height: 34px;
+    width: min(230px, 62%);
+    min-height: 42px;
     border: var(--border-width) solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 7px;
+    padding: 8px 10px;
     background: var(--card);
-    font-size: 11px;
+    font-size: 15px;
     text-align: right;
 }
 
 .dialog__edit {
-    min-height: 34px;
+    min-height: 42px;
     border: var(--border-width) solid var(--brand-primary);
     border-radius: var(--radius-sm);
-    padding: 7px 12px;
+    padding: 8px 16px;
     background: var(--card);
     color: var(--brand-primary);
+    font-size: 15px;
+}
+
+.dialog__actions {
+    justify-content: flex-end !important;
+    gap: 10px;
+    border-bottom: 0;
+    padding-top: 16px;
+}
+
+.dialog__cancel {
+    min-height: 42px;
+    font-size: 15px;
+}
+
+.dialog .dialog__cancel:hover:not(:disabled),
+.dialog .dialog__cancel:active:not(:disabled) {
+    transform: none;
+}
+
+.dialog .dialog__cancel:hover:not(:disabled) {
+    border-color: var(--critical);
+    background: var(--critical-light);
+    color: var(--critical);
+}
+
+.dialog .dialog__edit:hover:not(:disabled),
+.dialog .dialog__edit:active:not(:disabled) {
+    transform: none;
+}
+
+.dialog .dialog__edit:hover:not(:disabled) {
+    background: var(--gold-hover);
 }
 
 :root[data-theme="dark"] .dialog__edit {
