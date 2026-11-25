@@ -104,32 +104,11 @@ document.querySelectorAll('.surface, .chart-card, .stat-card, .slot-card').forEa
 
 const loginForm = document.querySelector('.login-form');
 
-const loginMachine = document.querySelector('[data-vending-machine]');
 const usernameInput = document.querySelector('#username');
 const passwordInput = document.querySelector('#login-password');
 const loginLed = document.querySelector('.vending-login-screen__led');
 const keypadKeys = document.querySelectorAll('.vending-side-panel__keypad i');
 let keypadIndex = 0;
-
-if (loginMachine && window.matchMedia('(pointer: fine)').matches && !reduceMotion.matches) {
-    let parallaxFrame = null;
-    document.addEventListener('pointermove', (event) => {
-        if (loginForm?.dataset.submitting === 'true') return;
-        if (parallaxFrame) return;
-        parallaxFrame = window.requestAnimationFrame(() => {
-            const rect = loginMachine.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            const rotateY = Math.max(-3, Math.min(3, (event.clientX - centerX) / rect.width * 6));
-            const rotateX = Math.max(-2, Math.min(2, -(event.clientY - centerY) / rect.height * 4));
-            loginMachine.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            parallaxFrame = null;
-        });
-    });
-    document.addEventListener('pointerleave', () => {
-        loginMachine.style.transform = '';
-    });
-}
 
 function pulseLoginKeypad() {
     if (!keypadKeys.length) return;

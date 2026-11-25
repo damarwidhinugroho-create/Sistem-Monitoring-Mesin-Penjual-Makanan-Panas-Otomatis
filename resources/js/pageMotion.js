@@ -32,19 +32,23 @@ if (loginLayout) {
 }
 
 if (!reducedMotion) {
-    new Lenis({ autoRaf: true });
+    const lenis = new Lenis({ autoRaf: true });
+    window.addEventListener('operator:page-transition-start', () => lenis.stop());
+    window.addEventListener('pageshow', () => lenis.start());
 }
 
-document.querySelectorAll('.operator-content h2, .operator-content h3, .error-page h1, .error-page h2')
-    .forEach((heading) => {
-        inView(heading, (element) => {
-            animate(element, {
-                opacity: [0, 1],
-                y: reducedMotion ? [0, 0] : [8, 0],
-            }, {
-                duration: reducedMotion ? 0.12 : 0.36,
-                ease: 'easeOut',
-            });
-        }, { once: true });
-    });
+if (!document.querySelector('.dashboard__content')) {
+    document.querySelectorAll('.operator-content h2, .operator-content h3, .error-page h1, .error-page h2')
+        .forEach((heading) => {
+            inView(heading, (element) => {
+                animate(element, {
+                    opacity: [0, 1],
+                    y: reducedMotion ? [0, 0] : [8, 0],
+                }, {
+                    duration: reducedMotion ? 0.12 : 0.36,
+                    ease: 'easeOut',
+                });
+            }, { once: true });
+        });
+}
 

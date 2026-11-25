@@ -8,7 +8,36 @@
 
 .sales__periods {
     display: flex;
-    gap: var(--space-xs);
+    width: fit-content;
+    max-width: 100%;
+    overflow: hidden;
+    border: var(--border-card-width) solid var(--brand-primary);
+    border-radius: var(--radius-sm);
+}
+
+.sales__periods .chart-card__control {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-right: var(--border-card-width) solid var(--brand-primary);
+    border-radius: 0;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--card);
+    color: var(--brand-primary);
+    font-size: var(--font-size-xs);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.sales__periods .chart-card__control:last-child {
+    border-right: 0;
+}
+
+.sales__periods .chart-card__control--active {
+    background: var(--brand-primary);
+    color: var(--white);
 }
 
 /* Ringkasan penjualan, grafik, daftar produk, dan transaksi. */
