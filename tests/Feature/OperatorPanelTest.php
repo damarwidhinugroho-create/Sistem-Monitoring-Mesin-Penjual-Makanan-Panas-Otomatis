@@ -7,6 +7,7 @@ use App\Enums\StockStatus;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class OperatorPanelTest extends TestCase
@@ -70,7 +71,6 @@ class OperatorPanelTest extends TestCase
                 ->assertSee(route('dashboard'), false)
                 ->assertSee(route('inventory'), false)
                 ->assertSee(route('reports'), false)
-                ->assertDontSee('pageMotion-', false)
                 ->assertDontSee('VENDING MANAGEMENT')
                 ->assertDontSee('Administrator')
                 ->assertDontSee('TAMPILAN')
@@ -81,6 +81,8 @@ class OperatorPanelTest extends TestCase
                 ->assertDontSee('data-open-export', false)
                 ->assertDontSee('Mie Tarempa');
         }
+
+        $this->get('/dashboard')->assertOk()->assertSee('pageMotion-', false);
 
         $this->get('/reports')
             ->assertOk()
@@ -98,6 +100,88 @@ class OperatorPanelTest extends TestCase
         $this->get('/temperature')->assertNotFound();
         $this->get('/machine')->assertOk()->assertSee('VM - 001')->assertSee('Online')->assertSee('pageMotion-', false);
         $this->get('/alerts')->assertOk()->assertSee('History Alert')->assertSee('Online')->assertSee('pageMotion-', false);
+    }
+
+    public function test_dashboard_temperature_chart_switches_between_day_halves(): void
+    {
+        $this->fakeInventoryApi();
+        $this->post('/login', [
+            'username' => 'Budi',
+            'password' => 'budi123',
+        ]);
+
+        try {
+            foreach ([
+                ['2026-11-25 08:00:00', range(0, 12)],
+                ['2026-11-25 20:00:00', range(13, 23)],
+            ] as [$currentTime, $expectedHours]) {
+                Carbon::setTestNow(Carbon::parse($currentTime, 'Asia/Jakarta'));
+                $response = $this->get('/dashboard')->assertOk();
+                $response->assertSee('Data suhu VM - 12 jam terakhir')
+                    ->assertSee('data-chart-type="line"', false)
+                    ->assertSee('Riwayat suhu per jam · Data simulasi.');
+
+                preg_match('/<canvas\b(?=[^>]*\bid="dashboard-temperature-chart")([^>]*)>/s', $response->getContent(), $canvas);
+                $this->assertNotEmpty($canvas, 'Dashboard should render its temperature chart canvas.');
+
+                preg_match("/data-chart-labels='([^']+)'/", $canvas[1], $labelAttribute);
+                preg_match("/data-chart-values='([^']+)'/", $canvas[1], $valueAttribute);
+                $labels = json_decode(html_entity_decode($labelAttribute[1], ENT_QUOTES), true);
+                $values = json_decode(html_entity_decode($valueAttribute[1], ENT_QUOTES), true);
+                $expectedLabels = array_map(fn (int $hour): string => sprintf('%02d:00', $hour), $expectedHours);
+
+                $this->assertSame($expectedLabels, $labels);
+                $this->assertCount(count($expectedHours), $values);
+                $this->assertTrue(collect($values)->every(fn (float $value): bool => $value >= 50 && $value <= 70));
+            }
+        } finally {
+            Carbon::setTestNow();
+        }
+    }
+
+    public function test_dashboard_overview_warns_when_stock_is_below_three(): void
+    {
+        $this->fakeInventoryApi();
+        $this->post('/login', [
+            'username' => 'Budi',
+            'password' => 'budi123',
+        ]);
+
+        $this->get('/dashboard')
+            ->assertOk()
+            ->assertSee('dashboard__overview--rendah', false)
+            ->assertDontSee('Dashboard Overview')
+            ->assertDontSee('Selamat datang');
+    }
+
+    public function test_dashboard_overview_is_critical_when_any_slot_is_empty(): void
+    {
+        config(['app.api_vending_url' => 'https://vending.example.test/api/inventory']);
+        Http::fake([
+            '*' => Http::response([
+                'data' => [
+                    [
+                        'machine_id' => ApiController::MACHINE_ID,
+                        'status' => 'ONLINE',
+                        'quantity' => 0,
+                    ],
+                    [
+                        'machine_id' => ApiController::MACHINE_ID,
+                        'status' => 'ONLINE',
+                        'quantity' => 2,
+                    ],
+                ],
+            ], 200),
+        ]);
+        $this->post('/login', [
+            'username' => 'Budi',
+            'password' => 'budi123',
+        ]);
+
+        $this->get('/dashboard')
+            ->assertOk()
+            ->assertSee('dashboard__overview--habis', false)
+            ->assertDontSee('Ada 1 slot dengan stok habis.');
     }
 
     public function test_inventory_data_is_shared_with_the_dashboard(): void
@@ -250,7 +334,8 @@ class OperatorPanelTest extends TestCase
             ->assertOk()
             ->assertSee('id="operator-sidebar"', false)
             ->assertDontSee('data-dashboard-stage', false)
-            ->assertDontSee('Data masih belum ada');
+            ->assertDontSee('Data masih belum ada')
+            ->assertSee('dashboard__overview--tidak-tersedia', false);
 
         $this->assertSame([], app(ApiController::class)->getInventory());
     }

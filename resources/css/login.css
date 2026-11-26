@@ -156,11 +156,6 @@
     color: var(--login-gold);
     font-size: clamp(13px, 4cqw, 20px);
     font-weight: 900;
-    transition: transform 220ms var(--motion-ease);
-}
-
-.vending-machine__header:hover .vending-machine__logo {
-    transform: rotate(-8deg);
 }
 
 .vending-machine__brand {
@@ -413,19 +408,6 @@
     border: 2px solid var(--login-dark);
     border-radius: 999px;
     background: var(--white);
-    transition: transform 180ms var(--motion-ease);
-}
-
-.vending-side-panel__reader:hover {
-    transform: translateY(-3px);
-}
-
-.vending-side-panel__reader:hover span {
-    animation: card-reader-blink 300ms ease-in-out 1;
-}
-
-@keyframes card-reader-blink {
-    50% { background: var(--login-gold); }
 }
 
 .vending-side-panel__reader span {
@@ -455,7 +437,6 @@
     transition: transform 140ms ease-out, background-color 140ms ease-out;
 }
 
-.vending-side-panel__keypad i:hover,
 .vending-side-panel__keypad i:active {
     background: var(--login-gold);
     transform: translateY(2px) scale(.96);
@@ -472,16 +453,6 @@
     border: 2px solid var(--login-dark);
     border-radius: 6px;
     background: #2E6253;
-    transition: transform 180ms var(--motion-ease);
-}
-
-.vending-side-panel__coin:hover {
-    animation: coin-jitter 260ms ease-in-out 1;
-}
-
-@keyframes coin-jitter {
-    25% { transform: translateX(-2px) rotate(-2deg); }
-    75% { transform: translateX(2px) rotate(2deg); }
 }
 
 .vending-side-panel__led {
@@ -491,14 +462,6 @@
     border-radius: 50%;
     background: #77BA91;
     box-shadow: 0 0 8px #77BA91;
-}
-
-.vending-machine__front:hover .vending-side-panel__led {
-    animation: vending-led-fast 700ms ease-in-out infinite;
-}
-
-@keyframes vending-led-fast {
-    50% { opacity: .45; box-shadow: 0 0 14px #77BA91; }
 }
 
 .caps-lock-badge {
@@ -566,10 +529,6 @@
     box-shadow: inset 0 7px 12px rgb(9 31 26 / 42%);
     color: var(--white);
     text-align: center;
-}
-
-.vending-machine__tray:hover .vending-machine__tray-flap {
-    transform: translateY(-4px) rotateX(10deg);
 }
 
 .vending-machine__feet {
@@ -735,23 +694,4 @@
         transition-duration: .01ms !important;
     }
 
-    .vending-machine__header:hover *,
-    .vending-side-panel__reader:hover,
-    .vending-side-panel__keypad i:hover,
-    .vending-side-panel__coin:hover,
-    .vending-machine__tray:hover * {
-        animation: none !important;
-        transform: none !important;
-    }
-}
-
-@media (pointer: coarse) {
-    .vending-machine__header:hover *,
-    .vending-side-panel__reader:hover,
-    .vending-side-panel__keypad i:hover,
-    .vending-side-panel__coin:hover,
-    .vending-machine__tray:hover * {
-        animation: none !important;
-        transform: none !important;
-    }
 }

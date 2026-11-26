@@ -79,6 +79,11 @@
     border-color: var(--stock-empty);
 }
 
+.dashboard__overview--tidak-tersedia {
+    --dashboard-glow: rgb(113 128 118 / 14%);
+    border-color: var(--border-light);
+}
+
 .dashboard__overview > * {
     position: relative;
 }
@@ -290,12 +295,21 @@
     gap: var(--space-grid);
 }
 
+.dashboard__split-grid--charts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .dashboard__panel {
     min-width: 0;
     padding: var(--space-card);
 }
 
 .dashboard__panel--slots {
+    display: flex;
+    flex-direction: column;
+}
+
+.dashboard__panel--temperature {
     display: flex;
     flex-direction: column;
 }
@@ -335,6 +349,12 @@
     min-height: 220px;
 }
 
+.dashboard__temperature-chart {
+    height: auto;
+    flex: 1 1 auto;
+    min-height: 220px;
+}
+
 .dashboard__empty-state {
     display: grid;
     min-height: 150px;
@@ -371,10 +391,6 @@
     font-size: var(--type-label);
     font-weight: 600;
     text-decoration: none;
-}
-
-.dashboard__panel-link:hover {
-    text-decoration: underline;
 }
 
 .dashboard__action-link {
@@ -503,10 +519,18 @@
     .dashboard__split-grid {
         grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
     }
+
+    .dashboard__split-grid--charts {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 640px) {
     .dashboard__split-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dashboard__split-grid--charts {
         grid-template-columns: minmax(0, 1fr);
     }
 

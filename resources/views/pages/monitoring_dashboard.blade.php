@@ -1,8 +1,8 @@
 @extends('layouts.layout_dashboard')
 
-@section('title', 'Dashboard monitoring')
+@section('title', 'Dashboard')
 @section('breadcrumb', 'DASHBOARD')
-@section('page-heading', 'Dashboard monitoring')
+@section('page-heading', 'Dashboard OVERVIEW')
 @section('page-subtitle', 'SJI-001 · Grand Indonesia / Pantau sajian, jaga kualitas.')
 
 @section('content')
@@ -25,46 +25,47 @@
                     Halaman dimuat {{ $renderedAt->translatedFormat('l, d F Y · H.i') }} WIB
                 </time>
             </div>
-            <a class="button button--primary dashboard__report-link" href="{{ route('reports') }}">
-                <x-ikon name="report" size="15" />
-                Laporan
-            </a>
         </div>
 
-        <section class="stat-grid dashboard__summary" aria-label="Ringkasan dashboard">
-            <x-kartu-ringkasan
-                label="Penjualan hari ini"
-                :value="'Rp'.number_format($dashboard['sales']['today']['revenue'], 0, ',', '.')"
-                :detail="$dashboard['sales']['today']['change_label'].' dibanding kemarin · Data simulasi'"
-                icon-name="money"
-                class="dashboard__summary-card"
-            />
-            <x-kartu-ringkasan
-                label="Pesanan hari ini"
-                :value="number_format($dashboard['sales']['today']['orders'], 0, ',', '.')"
-                :detail="'Rata-rata Rp'.number_format($dashboard['sales']['today']['average_order'], 0, ',', '.').' · Data simulasi'"
-                icon-name="receipt"
-                class="dashboard__summary-card"
-            />
-            <x-kartu-ringkasan
-                label="Stok tersedia"
-                :value="$slotSummary['total'] > 0 ? $slotSummary['filled'].' / '.$slotSummary['total'] : '—'"
-                :detail="$slotSummary['percent'] !== null
-                    ? $slotSummary['percent'].'% terisi · '.$slotSummary['empty'].' slot kosong'
-                    : 'Data slot tidak tersedia dari API.'"
-                icon-name="box"
-                class="dashboard__summary-card"
-            />
-            <x-kartu-ringkasan
-                label="Suhu mesin"
-                :value="number_format($dashboard['sales']['temperature']['value'], 1, ',', '.').' °C'"
-                :detail="$dashboard['sales']['temperature']['status'].' · Data simulasi'"
-                icon-name="thermometer"
-                class="dashboard__summary-card"
-            />
+        <section
+            class="dashboard__overview dashboard__overview--{{ $slotSummary['overview_status'] }}"
+            aria-label="Ringkasan dashboard"
+        >
+            <div class="stat-grid dashboard__summary" aria-label="Statistik ringkasan">
+                <x-kartu-ringkasan
+                    label="Penjualan hari ini"
+                    :value="'Rp'.number_format($dashboard['sales']['today']['revenue'], 0, ',', '.')"
+                    :detail="$dashboard['sales']['today']['change_label'].' dibanding kemarin · Data simulasi'"
+                    icon-name="money"
+                    class="dashboard__summary-card"
+                />
+                <x-kartu-ringkasan
+                    label="Pesanan hari ini"
+                    :value="number_format($dashboard['sales']['today']['orders'], 0, ',', '.')"
+                    :detail="'Rata-rata Rp'.number_format($dashboard['sales']['today']['average_order'], 0, ',', '.').' · Data simulasi'"
+                    icon-name="receipt"
+                    class="dashboard__summary-card"
+                />
+                <x-kartu-ringkasan
+                    label="Stok tersedia"
+                    :value="$slotSummary['total'] > 0 ? $slotSummary['filled'].' / '.$slotSummary['total'] : '—'"
+                    :detail="$slotSummary['percent'] !== null
+                        ? $slotSummary['percent'].'% terisi · '.$slotSummary['empty'].' slot kosong'
+                        : 'Data slot tidak tersedia dari API.'"
+                    icon-name="box"
+                    class="dashboard__summary-card"
+                />
+                <x-kartu-ringkasan
+                    label="Suhu mesin"
+                    :value="number_format($dashboard['sales']['temperature']['value'], 1, ',', '.').' °C'"
+                    :detail="$dashboard['sales']['temperature']['status'].' · Data simulasi'"
+                    icon-name="thermometer"
+                    class="dashboard__summary-card"
+                />
+            </div>
         </section>
 
-        <section class="dashboard__split-grid" aria-label="Penjualan mingguan dan alert operasional">
+        <section class="dashboard__split-grid dashboard__split-grid--charts" aria-label="Penjualan mingguan dan riwayat suhu mesin">
             <x-panel
                 title="Penjualan mingguan"
                 description="Pendapatan simulasi · bukan data transaksi aktual."
@@ -123,19 +124,22 @@
             </x-panel>
 
             <x-panel
-                title="Alerts operasional"
-                description="SJI-001 · Grand Indonesia"
-                class="dashboard__panel dashboard__panel--alerts"
+                title="Data suhu VM - 24 jam terakhir"
+                description="Riwayat suhu per jam."
+                class="dashboard__panel dashboard__panel--temperature"
             >
-                <x-slot:actions>
-                    <x-lencana-status label="—" status="neutral" aria-label="Jumlah alert belum tersedia" />
-                </x-slot:actions>
-
-                <div class="dashboard__empty-state" role="status">
-                    <x-ikon name="bell" size="24" />
-                    <p>Data alert terbaru belum tersedia dari API.</p>
+                <div class="chart-card__plot dashboard__temperature-chart">
+                    <canvas
+                        id="dashboard-temperature-chart"
+                        class="chart-card__canvas"
+                        data-chart-type="line"
+                        data-chart-labels='@json($dashboard['sales']['temperature']['chart']['labels'])'
+                        data-chart-values='@json($dashboard['sales']['temperature']['chart']['values'])'
+                        data-chart-value-format="temperature"
+                        aria-label="Grafik riwayat suhu VM per jam pada rentang waktu yang sedang ditampilkan, dalam derajat Celsius"
+                        role="img"
+                    ></canvas>
                 </div>
-                <a class="dashboard__panel-link" href="{{ route('alerts') }}">Lihat semua alerts</a>
             </x-panel>
         </section>
 
@@ -201,7 +205,7 @@
                     </strong>
                 </x-slot:actions>
 
-                <p class="dashboard__slot-description">Peta ketersediaan berdasarkan stok dari API.</p>
+                <p class="dashboard__slot-description">Data ini berdasarkan stok dari API.</p>
                 @if (count($dashboard['slots']) > 0)
                     <div class="dashboard__slot-grid" role="list" aria-label="Ketersediaan slot mesin">
                         @foreach ($dashboard['slots'] as $slot)

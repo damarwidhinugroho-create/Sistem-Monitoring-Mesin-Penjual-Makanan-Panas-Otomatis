@@ -141,6 +141,13 @@ document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
                         ? {
                             label: (context) => formatCurrency(context.parsed.y),
                         }
+                        : canvas.dataset.chartValueFormat === 'temperature'
+                            ? {
+                                label: (context) => `${Number(context.parsed.y).toLocaleString('id-ID', {
+                                    minimumFractionDigits: 1,
+                                    maximumFractionDigits: 1,
+                                })} °C`,
+                            }
                         : undefined,
                     animation: reduceMotion ? false : { duration: 180 },
                 },
@@ -153,9 +160,20 @@ document.querySelectorAll('canvas[data-chart-type]').forEach((canvas) => {
                 },
                 y: {
                     beginAtZero: !isLine,
+                    min: canvas.dataset.chartValueFormat === 'temperature' ? 50 : undefined,
+                    max: canvas.dataset.chartValueFormat === 'temperature' ? 70 : undefined,
                     grid: { color: colors.border, drawTicks: false },
                     border: { display: false },
-                    ticks: { display: true, count: 4, color: colors.muted, font: { size: 12 } },
+                    ticks: {
+                        display: true,
+                        count: 4,
+                        stepSize: canvas.dataset.chartValueFormat === 'temperature' ? 5 : undefined,
+                        color: colors.muted,
+                        font: { size: 12 },
+                        callback: canvas.dataset.chartValueFormat === 'temperature'
+                            ? (value) => `${Number(value).toLocaleString('id-ID', { maximumFractionDigits: 1 })} °C`
+                            : undefined,
+                    },
                 },
             },
         },

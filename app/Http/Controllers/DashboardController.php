@@ -43,6 +43,11 @@ class DashboardController extends Controller
         $filledSlots = count(array_filter($slots, fn (array $slot): bool => $slot['stock'] > 0));
         $emptySlots = $totalSlots - $filledSlots;
         $slotStatusCounts = array_count_values(array_column($slots, 'status'));
+        $lowStockSlots = $slotStatusCounts['kritis'] ?? 0;
+        $emptyStockSlots = $slotStatusCounts['habis'] ?? 0;
+        $overviewStatus = $totalSlots === 0
+            ? 'tidak-tersedia'
+            : ($emptyStockSlots > 0 ? 'habis' : ($lowStockSlots > 0 ? 'rendah' : 'aman'));
 
         $todaySalesByHour = [75000, 125000, 180000, 225000, 260000, 220000, 165000];
         $weeklySales = [980000, 1120000, 1050000, 1450000, 1525000, 1800000, 1250000];
@@ -50,7 +55,12 @@ class DashboardController extends Controller
         $yesterdayRevenue = 1150000;
         $todayRevenue = array_sum($todaySalesByHour);
         $orderCount = 38;
-        $temperature = 64.5;
+        $temperature = 62.5;
+        $temperatureHistory = [
+            61.2, 62.8, 62.5, 62.1, 61.9, 62.3, 62.0, 62.1,
+            61.2, 63.0, 62.7, 62.8, 63.1, 63.9, 61.5, 63.3,
+            62.1, 63.0, 62.2, 63.4, 61.7, 62.2, 62.0, 64.5,
+        ];
 
         $percentageChange = static fn (int $current, int $previous): float => $previous > 0
             ? round((($current - $previous) / $previous) * 100, 1)
@@ -62,6 +72,11 @@ class DashboardController extends Controller
         $weeklyTotal = array_sum($weeklySales);
         $weeklyChange = $percentageChange($weeklyTotal, array_sum($previousWeekSales));
         $today = now('Asia/Jakarta')->locale('id');
+        $currentHour = (int) $today->format('G');
+        $temperatureRange = $currentHour <= 12 ? range(0, 12) : range(13, 23);
+        $temperatureLabels = collect($temperatureRange)
+            ->map(fn (int $hour): string => sprintf('%02d:00', $hour))
+            ->all();
         $weekLabels = collect(range(6, 0))
             ->map(fn (int $daysAgo): string => $today->copy()->subDays($daysAgo)->translatedFormat('D'))
             ->all();
@@ -80,6 +95,13 @@ class DashboardController extends Controller
                     'temperature' => [
                         'value' => $temperature,
                         'status' => $temperature >= 60 && $temperature <= 70 ? 'Normal' : 'Peringatan',
+                        'chart' => [
+                            'labels' => $temperatureLabels,
+                            'values' => array_map(
+                                fn (int $hour): float => $temperatureHistory[$hour],
+                                $temperatureRange,
+                            ),
+                        ],
                     ],
                     'chart' => [
                         'day' => [
@@ -110,9 +132,10 @@ class DashboardController extends Controller
                     'product_count' => count(array_unique(array_filter(array_column($slots, 'product')))),
                     'status_counts' => [
                         'aman' => $slotStatusCounts['aman'] ?? 0,
-                        'kritis' => $slotStatusCounts['kritis'] ?? 0,
-                        'habis' => $slotStatusCounts['habis'] ?? 0,
+                        'kritis' => $lowStockSlots,
+                        'habis' => $emptyStockSlots,
                     ],
+                    'overview_status' => $overviewStatus,
                 ],
             ],
         ]);

@@ -106,6 +106,9 @@ document.addEventListener('click', (event) => {
     loadingScreen.hidden = false;
     loadingScreen.setAttribute('aria-hidden', 'false');
     pageContent.setAttribute('aria-busy', 'true');
+    window.dispatchEvent(new Event('operator:page-transition-start'));
+    document.documentElement.classList.add('page-scroll-locked');
+    window.scrollTo(0, 0);
     try {
         const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         animate(loadingScreen, { opacity: [0, 1] }, {
@@ -133,6 +136,7 @@ window.addEventListener('pageshow', () => {
     loadingScreen.hidden = true;
     loadingScreen.setAttribute('aria-hidden', 'true');
     pageContent.removeAttribute('aria-busy');
+    document.documentElement.classList.remove('page-scroll-locked');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     getMotionTargets().forEach((target) => {
